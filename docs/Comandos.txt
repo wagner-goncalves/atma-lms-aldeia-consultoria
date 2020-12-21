@@ -1,0 +1,2 @@
+php artisan krlove:generate:model Empresas --output-path=Models --namespace=App\Models
+php artisan make:controller CertificadoController
