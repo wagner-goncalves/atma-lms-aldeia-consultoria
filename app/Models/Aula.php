@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * @property integer $id
@@ -22,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Aula extends Model
 {
+
+    use Sortable;
+
     /**
      * The "type" of the auto-incrementing ID.
      * 
@@ -32,7 +36,7 @@ class Aula extends Model
     /**
      * @var array
      */
-    protected $fillable = ['modulos_id', 'titulo', 'descricao', 'carga_horaria', 'link', 'ordem', 'created_at', 'updated_at', 'is_active'];
+    protected $fillable = ['modulo_id', 'titulo', 'descricao', 'carga_horaria', 'link', 'ordem', 'created_at', 'updated_at', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

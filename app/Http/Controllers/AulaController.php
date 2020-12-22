@@ -15,7 +15,6 @@ class AulaController extends Controller
 
     public function valida($curso, $pagina)
     {
-
         $user = auth()->user();
         $erros = [];
 
@@ -49,7 +48,7 @@ class AulaController extends Controller
             ->with('materiais')
             ->select('aulas.modulo_id', 'aulas.id', 'aulas.titulo', 'aulas.descricao', 'aulas.carga_horaria', 'aulas.link', 'aulas.ordem')
             ->simplePaginate(1); 
-//dd($aulas->items()[0]);
+
         $visualizacao = \App\Models\Visualizacao::create([
             'aula_id' => $aulas[0]->id,
             'user_id' => $user->id,

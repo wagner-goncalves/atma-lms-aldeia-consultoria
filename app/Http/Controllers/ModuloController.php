@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
     
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Material;
+use App\Models\Modulo;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -13,16 +13,13 @@ use Illuminate\Support\Facades\Auth;
 use JsValidator;
 use Illuminate\Support\Facades\Storage;
 
-class MaterialController extends Controller
+class ModuloController extends Controller
 {
 
     protected $validationRules = [
-        'titulo' => 'required',
-        'aula_id' => 'required',
-        //'email' => 'required|email|unique:users,email',
-        //'password' => 'required|same:confirm-password',
+        'nome' => 'required',
+        'curso_id' => 'required|integer',
         'ordem' => 'required',
-        'arquivo' => 'required|file|mimes:pdf',
     ];
 
     public function __construct()
@@ -38,42 +35,22 @@ class MaterialController extends Controller
     public function index(Request $request)
     {
             $filter = $request->query('filter');
-            $curso_id = $request->query('curso_id');
-            $modulo_id = $request->query('modulo_id');    
-            $aula_id = $request->query('aula_id');            
-            $materiais = "";
+            $modulos = "";
 
-            $materiais = Material::sortable()
-                    ->join("aulas", "aulas.id", "=", "materiais.aula_id")
-                    ->join("modulos", "modulos.id", "=", "aulas.modulo_id")
+            $modulos = Modulo::sortable()
                     ->join("cursos", "cursos.id", "=", "modulos.curso_id")
                     ->orderBy('id', 'desc')
-                    ->select("materiais.*", "cursos.nome as curso_nome");
-
-            if(intval($aula_id) > 0) $materiais->where('materiais.aula_id', '=', $aula_id);
-            if(intval($modulo_id) > 0) $materiais->where('aulas.modulo_id', '=', $modulo_id);
-            if(intval($curso_id) > 0) $materiais->where('modulos.curso_id', '=', $curso_id);                    
+                    ->select("modulos.*", "cursos.nome as curso_nome");
     
             if (!empty($filter)) {
-                $materiais = $materiais
-                ->where(function($query) use ($filter) {
-                    $query->where('materiais.titulo', 'like', '%'.$filter.'%')
-                    ->orWhere('aulas.titulo', 'like', '%'.$filter.'%')
-                    ->orWhere('modulos.nome', 'like', '%'.$filter.'%')
-                    ->orWhere('cursos.nome', 'like', '%'.$filter.'%');
-                })
+                $modulos = $modulos->where('modulos.titulo', 'like', '%'.$filter.'%')
+                ->orWhere('cursos.nome', 'like', '%'.$filter.'%')
                 ->orderBy('id', 'desc')->paginate(10);
             } else {
-                $materiais = $materiais->paginate(10);
+                $modulos = $modulos->paginate(10);
             }
-
-            //Filtros
-            $cursos = \App\Models\Curso::all()->sortBy("nome");
-            $modulos = intval($curso_id) > 0 ? \App\Models\Modulo::where("curso_id", "=", $curso_id)->orderBy("nome")->get() : [];
-            $aulas = intval($modulo_id) > 0 ? \App\Models\Aula::where("modulo_id", "=", $modulo_id)->orderBy("titulo")->get() : [];
-
     
-            return view('materiais.index',compact('materiais', 'cursos', 'curso_id', 'modulos', 'modulo_id', 'aulas', 'aula_id', 'filter'))
+            return view('modulos.index',compact('modulos', 'filter'))
                 ->with('i', (request()->input('page', 1) - 1) * 10);            
     }
     
@@ -85,14 +62,12 @@ class MaterialController extends Controller
     public function create()
     {
 
-        unset($this->validationRules["arquivo"]);
         $validator = JsValidator::make($this->validationRules);
 
-        $cursos = \App\Models\Curso::all()
-            ->sortBy("nome");
+        $cursos = \App\Models\Curso::all()->sortBy("nome");
 
-        $material = new Material();
-        return view('materiais.edit', compact('material', 'cursos'))->with([
+        $modulo = new Modulo();
+        return view('modulos.edit', compact('modulo', 'cursos'))->with([
             'validator' => $validator,
         ]);
     }
@@ -107,15 +82,11 @@ class MaterialController extends Controller
     {
         $this->validate($request, $this->validationRules);
         $requestData = $request->all();
-
-
-        $caminho = $request->file('arquivo')->store('materiais');
-        $requestData["arquivo"] = $caminho;
         
-        $user = Material::create($requestData);
+        $user = Modulo::create($requestData);
 
-        return redirect()->route('materiais.index')
-                        ->with('success','Material criado com sucesso.');
+        return redirect()->route('modulos.index')
+                        ->with('success','Módulo criado com sucesso.');
     }
     
     /**
@@ -126,8 +97,8 @@ class MaterialController extends Controller
      */
     public function show($id)
     {
-        $material = Material::find($id);
-        return view('materiais.show',compact('material'));
+        $modulo = Modulo::find($id);
+        return view('modulos.show',compact('modulo'));
     }
 
   
@@ -140,14 +111,13 @@ class MaterialController extends Controller
      */
     public function edit($id)
     {   
-        unset($this->validationRules["arquivo"]);
         $validator = JsValidator::make($this->validationRules);
 
         $cursos = \App\Models\Curso::all()
             ->sortBy("nome");
 
-        $material = Material::find($id);
-        return view('materiais.edit', compact('material', 'cursos'))->with([
+        $modulo = Modulo::find($id);
+        return view('modulos.edit', compact('modulo', 'cursos'))->with([
             'validator' => $validator,
         ]);
     }
@@ -165,20 +135,20 @@ class MaterialController extends Controller
         unset($this->validationRules["arquivo"]);
         $this->validate($request, $this->validationRules);
 
-        $material = Material::find($id);
+        $modulo = Modulo::find($id);
         $requestData = $request->all();
 
         if(isset($requestData->arquivo)){
-            $caminho = $request->file('arquivo')->store('materiais');
+            $caminho = $request->file('arquivo')->store('modulos');
             $requestData["arquivo"] = $caminho;
         }else{
-            $requestData["arquivo"] = $material->arquivo;
+            $requestData["arquivo"] = $modulo->arquivo;
         }
 
-        $material->update($requestData);
+        $modulo->update($requestData);
 
-        return redirect()->route('materiais.index')
-                        ->with('success','Material alterado com sucesso.');
+        return redirect()->route('modulos.index')
+                        ->with('success','Módulo alterado com sucesso.');
     }
     
     /**
@@ -189,17 +159,17 @@ class MaterialController extends Controller
      */
     public function destroy($id)
     {
-        $material = Material::find($id);
-        Storage::delete($material->arquivo);
-        $material->delete();
+        $modulo = Modulo::find($id);
+        Storage::delete($modulo->arquivo);
+        $modulo->delete();
         
-        return redirect()->route('materiais.index')
-                        ->with('success','Material excluído com sucesso.');
+        return redirect()->route('modulos.index')
+                        ->with('success','Módulo excluído com sucesso.');
     }
 
     public function download($id){
-        $material = Material::find($id);
-        return Storage::download($material->arquivo, ($material->titulo . "." . pathinfo($material->arquivo, PATHINFO_EXTENSION)));
+        $modulo = Modulo::find($id);
+        return Storage::download($modulo->arquivo, ($modulo->titulo . "." . pathinfo($modulo->arquivo, PATHINFO_EXTENSION)));
     }
 
     public function modulos(Request $request){

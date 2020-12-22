@@ -5,10 +5,10 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    @if(!isset($material->id) || intval($material->id) == 0)
-                    <i class="fas fa-plus"></i> Novo material
+                    @if(!isset($aula->id) || intval($aula->id) == 0)
+                    <i class="fas fa-plus"></i> Novo aula
                     @else
-                    <i class="fas fa-edit"></i> Editar material
+                    <i class="fas fa-edit"></i> Editar aula
                     @endif
                 </div>
             </div>
@@ -19,12 +19,12 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <div class="form-group">
-                        <a href="{{ route('materiais.index') }}"
+                        <a href="{{ route('aulas.index') }}"
                             class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
                                 class="fas fa-chevron-left"></i> Voltar</a> 
-                        @if(intval($material->id) > 0)
+                        @if(intval($aula->id) > 0)
                             {!! Form::open(['method' => 'DELETE', 'route' =>
-                            ['materiais.destroy', $material->id], 'style' => 'display:inline']) !!}
+                            ['aulas.destroy', $aula->id], 'style' => 'display:inline']) !!}
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                             {!! Form::close() !!}
                         @endif
@@ -44,16 +44,16 @@
             @endif
 
 
-            @if(!isset($material->id) || intval($material->id) == 0)
-                {!! Form::open(['route' => 'materiais.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
+            @if(!isset($aula->id) || intval($aula->id) == 0)
+                {!! Form::open(['route' => 'aulas.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
             @else
-                {!! Form::model($material, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
-                'route' => ['materiais.update', isset($material->id) ? $material->id : 0]]) !!}
+                {!! Form::model($aula, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
+                'route' => ['aulas.update', isset($aula->id) ? $aula->id : 0]]) !!}
             @endif
             @csrf
             <div class="row">
                 @php
-                $curso_id = intval($material->id) == 0 ? 0 : $material->aula->modulo->curso->id ;
+                $curso_id = intval($aula->id) == 0 ? 0 : $aula->modulo->curso->id ;
                 @endphp
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -72,8 +72,8 @@
                             <label for="modulo_id"><strong>Módulo</strong></label>
                             <select id="modulo_id" name="modulo_id" class="form-control">
                                 @if($curso_id > 0)
-                                <option value="{{ $material->aula->modulo->id }}" selected>
-                                    {{ $material->aula->modulo->nome }}
+                                <option value="{{ $aula->modulo->id }}" selected>
+                                    {{ $aula->modulo->nome }}
                                 </option>
                                 @endif
                             </select>
@@ -81,52 +81,40 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <strong>Aula:</strong>
-                        <select id="aula_id" name="aula_id" class="form-control">
-                            @if($curso_id > 0)
-                            <option value="{{ $material->aula_id }}" selected>{{ $material->aula->titulo }}</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <strong>Nome:</strong>
-                                {!! Form::text('titulo', $material->titulo, ['placeholder' => '', 'class' => 'form-control']) !!}
+                                {!! Form::text('titulo', $aula->titulo, ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             <div class="form-group">
-                                <strong>Arquivo:</strong>
-                                <div>
-                                    {!! Form::file('arquivo', null, ['class' => 'form-control']) !!}
-                                </div>
-                                <div class="mt-2">
-                                    @if (!empty($material->arquivo))
-                                        <a class="btn btn-secondary btn-sm"
-                                            href="{{ route('materiais.download', ['id' => $material->id]) }}"><i
-                                                class="fas fa-download"></i> Download</a>
-                                    @endif
-                                </div>
+                                <strong>Carga horária:</strong>
+                                {!! Form::input('number', 'carga_horaria', $aula->carga_horaria, ['placeholder' => '', 'class' => 'form-control col-12']) !!}
                             </div>
-                        </div>
+                        </div>   
+                        <div class="form-group col-md-3">
+                            <div class="form-group">
+                                <strong>Ordem de aparição:</strong>
+                                {!! Form::input('number', 'ordem', $aula->ordem, ['placeholder' => '', 'class' => 'form-control col-12']) !!}
+                            </div>
+                        </div>                     
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Descrição:</strong>
-                        {!! Form::textarea('descricao', $material->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
+                        {!! Form::textarea('descricao', $aula->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
                         'descricao']) !!}
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Ordem de aparição:</strong>
-                        {!! Form::input('number', 'ordem', $material->ordem, ['placeholder' => '', 'class' => 'form-control col-1']) !!}
+                        <strong>Link YOUTUBE:</strong>
+                        {!! Form::textarea('link', $aula->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
+                        'link']) !!}
                     </div>
                 </div>
             </div>
@@ -173,16 +161,6 @@
             initialize: true,
             initDepends: ['curso_id'],
         });
-
-        $("#aula_id").depdrop({
-            url: '/materiais/aulas',
-            depends: ['curso_id', 'modulo_id'],
-            loadingText: 'Carregando...',
-            placeholder: 'Escolha...',
-            initialize: false,
-            initDepends: ['modulo_id'],
-        });
-
     </script>
 
     <!-- Laravel Javascript Validation -->

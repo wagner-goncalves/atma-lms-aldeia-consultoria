@@ -11,6 +11,9 @@ use App\Http\Controllers\AulaController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\ModuloController;
+
+use App\Http\Controllers\AulaAdministracaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +51,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/materiais/download/{id}', [MaterialController::class, 'download'])->name('materiais.download');
     Route::post('/materiais/modulos', [MaterialController::class, 'modulos'])->name('materiais.modulos')->withoutMiddleware(['csrf']);
     Route::post('/materiais/aulas', [MaterialController::class, 'aulas'])->name('materiais.aulas')->withoutMiddleware(['csrf']);
+
+    Route::resource('modulos', ModuloController::class);
+
+    Route::resource('aulas', AulaAdministracaoController::class);
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
