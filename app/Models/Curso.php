@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
  * @property string $nome
  * @property string $descricao
  * @property string $certificado
- * @property int $tempoacesso
  * @property boolean $is_active
  * @property Feedback[] $feedbacks
  * @property Matricula[] $matriculas
@@ -29,7 +28,7 @@ class Curso extends Model
     /**
      * @var array
      */
-    protected $fillable = ['nome', 'descricao', 'certificado', 'tempoacesso', 'base_certificado', 'is_active'];
+    protected $fillable = ['nome', 'descricao', 'certificado', 'base_certificado', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -60,7 +59,7 @@ class Curso extends Model
      */
     public function planos()
     {
-        return $this->hasMany('App\Models\Plano');
+        return $this->belongsToMany(\App\Models\Plano::class, 'planos_has_cursos', 'curso_id', 'plano_id');
     }
 
 

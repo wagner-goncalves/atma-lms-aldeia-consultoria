@@ -12,8 +12,8 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModuloController;
-
 use App\Http\Controllers\AulaAdministracaoController;
+use App\Http\Controllers\MatriculaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +55,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('modulos', ModuloController::class);
 
     Route::resource('aulas', AulaAdministracaoController::class);
+
+    Route::resource('matriculas', MatriculaController::class);
+    Route::post('/matriculas/planos', [MatriculaController::class, 'planos'])->name('matriculas.planos')->withoutMiddleware(['csrf']);
+    Route::post('/matriculas/cursos', [MatriculaController::class, 'cursos'])->name('matriculas.cursos')->withoutMiddleware(['csrf']);
+
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

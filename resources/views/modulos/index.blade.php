@@ -14,19 +14,39 @@
     <div class="row">
         <div class="col-lg-12 mb-3">
             <div class="row">
-                <div class="col-lg-6 col-sm-12">
+                <div class="col-lg-12 col-sm-12">
                     <div class="form-group">
                         <a href="{{ route('modulos.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Modulo</a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-sm-12">
-                    <form class="form-inline" method="GET" action="{{ \Request::getRequestUri() }}">
-                        <div class="form-group mb-2">
-                            <input type="text" class="form-control form-control-sm" id="filter" name="filter"
-                                placeholder="Palavra-chave" value="{{ $filter }}">
+            </div>            
+            <div class="row">                
+                <div class="col-lg-12 col-sm-12">
+                    <form method="GET" action="{{ \Request::getRequestUri() }}">
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="modulo_id" class="small"><strong>Curso</strong></label>
+                                <select id="curso_id" name="curso_id" class="form-control form-control-sm">
+                                    @foreach ($cursos as $curso)
+                                        <option value="{{ $curso->id }}" {{ $curso_id == $curso->id ? 'selected' : '' }}>
+                                            {{ $curso->nome }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="modulo_id" class="small"><strong>Palavra-chave</strong></label>
+                                <input type="text" class="form-control form-control-sm" id="filter" name="filter"
+                                        placeholder="Palavra-chave" value="{{ $filter }}">
+                            </div>
+                            <div class="form-group col">
+                                <label for="modulo_id" class="small"><strong>&nbsp;</strong></label>
+                                <div>
+                                    <button type="submit" class="btn btn-sm btn-secondary mb-2">Filtrar</button>
+                                    &nbsp;<a href="{{ route('modulos.index') }}" class="btn btn-sm btn-link mb-2">limpar</a>
+                                </div>
+                            </div>                            
                         </div>
-                        &nbsp;<button type="submit" class="btn btn-sm btn-secondary mb-2">Filtrar</button>
-                        &nbsp;<a href="{{ route('modulos.index') }}" class="btn btn-sm btn-link mb-2">limpar</a>
                     </form>
                 </div>
             </div>

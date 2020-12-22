@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * @property integer $id
@@ -17,6 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Matricula extends Model
 {
+
+    use Sortable;
+
     /**
      * The "type" of the auto-incrementing ID.
      * 
@@ -27,7 +31,7 @@ class Matricula extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'curso_id', 'created_at', 'is_active', 'tempo_acesso', 'data_limite', 'data_conclusao'];
+    protected $fillable = ['user_id', 'curso_id', 'empresa_id', 'plano_id', 'created_at', 'is_active', 'tempo_acesso', 'data_limite', 'data_conclusao'];
 
     protected $casts = [
         'data_limite'  => 'datetime:d/m/Y',
@@ -40,6 +44,16 @@ class Matricula extends Model
     {
         return $this->belongsTo('App\Models\Curso');
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo('App\Models\Empresa');
+    }
+    
+    public function plano()
+    {
+        return $this->belongsTo('App\Models\Plano');
+    }    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

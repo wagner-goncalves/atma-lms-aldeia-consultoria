@@ -35,22 +35,31 @@ class ModuloController extends Controller
     public function index(Request $request)
     {
             $filter = $request->query('filter');
+            $curso_id = $request->query('curso_id');
             $modulos = "";
 
             $modulos = Modulo::sortable()
                     ->join("cursos", "cursos.id", "=", "modulos.curso_id")
                     ->orderBy('id', 'desc')
                     ->select("modulos.*", "cursos.nome as curso_nome");
+
+            if(intval($curso_id) > 0) $aulas->where('modulos.curso_id', '=', $curso_id);
     
             if (!empty($filter)) {
-                $modulos = $modulos->where('modulos.titulo', 'like', '%'.$filter.'%')
-                ->orWhere('cursos.nome', 'like', '%'.$filter.'%')
+                $modulos = $modulos
+                ->where(function($query) use ($filter) {
+                    $query->where('modulos.nome', 'like', '%'.$filter.'%')
+                    ->orWhere('cursos.nome', 'like', '%'.$filter.'%');
+                })
                 ->orderBy('id', 'desc')->paginate(10);
             } else {
                 $modulos = $modulos->paginate(10);
             }
+
+            //Filtros
+            $cursos = \App\Models\Curso::all()->sortBy("nome");            
     
-            return view('modulos.index',compact('modulos', 'filter'))
+            return view('modulos.index',compact('modulos', 'cursos', 'curso_id', 'filter'))
                 ->with('i', (request()->input('page', 1) - 1) * 10);            
     }
     

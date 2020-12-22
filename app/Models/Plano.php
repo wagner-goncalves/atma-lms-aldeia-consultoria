@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $nome
  * @property string $descricao
- * @property string $created_at
- * @property string $updated_at
+ * @property float $valor
  * @property boolean $is_active
+ * @property PlanosHasCurso[] $planosHasCursos
  * @property PlanosHasEmpresa[] $planosHasEmpresas
- * @property User[] $users
  */
-class Empresa extends Model
+class Plano extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
@@ -26,21 +25,26 @@ class Empresa extends Model
     /**
      * @var array
      */
-    protected $fillable = ['nome', 'descricao', 'created_at', 'updated_at', 'is_active'];
+    protected $fillable = ['nome', 'descricao', 'valor', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function planos()
+    public function planosHasCursos()
     {
-        return $this->belongsToMany(\App\Models\Plano::class, 'planos_has_empresas', 'empresa_id', 'plano_id');
+        return $this->hasMany('App\Models\PlanosHasCurso');
     }
 
+    public function cursos()
+    {
+        return $this->belongsToMany(\App\Models\Curso::class, 'planos_has_cursos', 'plano_id', 'curso_id');
+    }    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
+    public function planosHasEmpresas()
     {
-        return $this->hasMany('App\Models\User');
+        return $this->hasMany('App\Models\PlanosHasEmpresa');
     }
 }
