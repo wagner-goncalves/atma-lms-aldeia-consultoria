@@ -58,6 +58,8 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
                                   <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos do curso</a>
+                                  <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas do curso</a>
                                   <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais das aulas</a>
                                 </div>
                               </li>
