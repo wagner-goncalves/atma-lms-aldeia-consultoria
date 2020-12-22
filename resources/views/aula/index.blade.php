@@ -14,12 +14,12 @@
             <hr />
             <div>
                 <div class="row">
-                    <div class="col-12 col-md-9 col-sm-12">
+                    <div class="col-12 col-md-8 col-sm-12">
                         <h1>{{ $curso->nome }}</h1>
                     </div>
-                    <div class="col-12 col-md-3 col-sm-12 text-right">
-                        <button type="button" class="btn btn-danger pull-right"><i class="fa fa-users"></i> Fórum de
-                            discussão</button>
+                    <div class="col-12 col-md-4 col-sm-12 text-right">
+                        <a href="{{ route('home') }}" class="btn btn-success"><i class="fas fa-chevron-left"></i> Voltar</a>
+                        <button type="button" class="btn btn-danger"><i class="fa fa-users"></i> Fórum de discussão</button>
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@
                                         </div>
                                     </span>
                                     @forelse ($aula->materiais as $material)
-                                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <a href="{{ route('materiais.download', ['id' => $material->id]) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h5 class="mb-1">{{$material->titulo}}</h5>
                                                 <small class="text-muted"><i class="fas fa-download"></i></small>

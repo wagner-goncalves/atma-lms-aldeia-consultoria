@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\CertificadoController;
+use App\Http\Controllers\MaterialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,11 @@ Route::group(['middleware' => ['auth']], function() {
     //Route::get('foo/bar', 'FooController@bar');
     //Route::get('/users/edit-logged', [UserLoggedController::class, 'editLogged'])->name('users.edit-logged');
     //Route::post('/users/update-logged', [UserLoggedController::class, 'updateLogged'])->name('users.update-logged');
+
+    Route::resource('materiais', MaterialController::class);
+    Route::get('/materiais/download/{id}', [MaterialController::class, 'download'])->name('materiais.download');
+    Route::post('/materiais/modulos', [MaterialController::class, 'modulos'])->name('materiais.modulos')->withoutMiddleware(['csrf']);
+    Route::post('/materiais/aulas', [MaterialController::class, 'aulas'])->name('materiais.aulas')->withoutMiddleware(['csrf']);
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

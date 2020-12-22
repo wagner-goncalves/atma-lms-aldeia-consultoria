@@ -58,7 +58,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success rounded-pill pr-4 pl-4 text-dark font-weight-bold text-uppercase">
+                                <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase">
                                     {{ __('Redefinir senha') }}
                                 </button>
                             </div>

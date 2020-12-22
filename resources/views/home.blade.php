@@ -91,28 +91,40 @@
                                             @forelse ($modulo->aulas as $aula)
                                                 <tr>
                                                     <td class="pl-2">
-                                                        @if ($aula->ordem <= intval($ultimaOrdemVisualizada) + 1)
+                                                        @php
+                                                        $linkAberto = ($tempoRestanteCurso >=0 && $aula->ordem <= intval($ultimaOrdemVisualizada) + 1);
+                                                        @endphp
+                                                        @if ($linkAberto)
                                                             @if ($aula->ordem <= $ultimaOrdemVisualizada)
                                                                 <i class="fa fa-fw fa-check text-success"></i>
-                                                            @endif
-                                                            @if ($aula->ordem == intval($ultimaOrdemVisualizada) + 1)
+                                                            @elseif ($aula->ordem == intval($ultimaOrdemVisualizada) + 1)
                                                                 <i class="fa fa-fw fa-lock-open text-success"></i>
                                                             @endif
-
-                                                            <i class="fa fa-fw fa-video"></i> <a
-                                                                href="{{ route('aula', ['curso' => $curso->id, 'page' => $aula->ordem]) }}">{{ $aula->titulo }}</a>
-                                                            <span class="badge badge-secondary">{{ $aula->carga_horaria }}
-                                                                {{ Str::plural('hora', $aula->carga_horaria) }}</span>
+                                                            <i class="fa fa-fw fa-video"></i> <a href="{{ route('aula', ['curso' => $curso->id, 'page' => $aula->ordem]) }}">{{ $aula->titulo }}</a>
+                                                            <span class="badge badge-secondary">{{ $aula->carga_horaria }} {{ Str::plural('hora', $aula->carga_horaria) }}</span>
                                                         @else
-                                                            <i class="fa fa-fw fa-lock text-danger"></i> <i class="fa fa-video"></i>
-                                                            {{ $aula->titulo }} <span
-                                                                class="badge badge-secondary">{{ $aula->carga_horaria }}
-                                                                {{ Str::plural('hora', $aula->carga_horaria) }}</span>
+                                                            @if($tempoRestanteCurso < 0 && $aula->ordem <= $ultimaOrdemVisualizada)
+                                                                <i class="fa fa-fw fa-check text-success"></i>
+                                                            @else
+                                                                <i class="fa fa-fw fa-lock text-danger"></i> <i class="fa fa-video"></i>
+                                                            @endif
+                                                            {{ $aula->titulo }} <span class="badge badge-secondary">{{ $aula->carga_horaria }} {{ Str::plural('hora', $aula->carga_horaria) }}</span>
                                                         @endif
                                                     </td>
+                                                    @if ($linkAberto)
                                                     <td class="text-right">
-                                                        <a class="btn btn-sm btn-primary" href="#"><i class="fas fa-download" aria-hidden="true"></i></a>
+                                                        @php
+                                                            $materiais = $aula->materiais()->get();
+                                                        @endphp
+                                                        
+                                                        @if(count($materiais) > 1)
+                                                        <a class="btn btn-sm btn-primary" href="{{ route('aula', ['curso' => $curso->id, 'page' => $aula->ordem]) }}"><i class="fas fa-download" aria-hidden="true"></i> <i class="fas fa-ellipsis-h" aria-hidden="true"></i> </a>
+                                                        @elseif(count($materiais) == 1)
+                                                            <a class="btn btn-sm btn-primary" href="{{ route('materiais.download', ['id' => $materiais[0]->id]) }}"><i class="fas fa-download" aria-hidden="true"></i></a>
+                                                        @endif
+                                                        
                                                     </td>
+                                                    @endif
                                                 </tr>
                                             @empty
                                                 <p>Nenhuma aula.</p>
@@ -199,7 +211,7 @@
                                                 @endif
                                              </td>
                                             <td class="text-right">
-                                                <a class="btn btn-sm btn-primary" href="#"><i class="fas fa-download" aria-hidden="true"></i></a>
+                                                <a class="btn btn-sm btn-primary" href="{{ route('certificado.download', ['curso' => $curso->id]) }}"><i class="fas fa-download" aria-hidden="true"></i></a>
                                                 </form>
                                             </td>
                                         </tr>

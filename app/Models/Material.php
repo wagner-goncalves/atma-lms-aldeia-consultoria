@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * @property integer $id
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Material extends Model
 {
+
+    use Sortable;
 
     protected $table = 'materiais';
 

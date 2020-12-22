@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html lang="{{ app()->getLocale() }}" translate="no">
 
 <head>
@@ -14,10 +15,10 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/custon.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <meta name="google" content="notranslate">
     <script src="https://kit.fontawesome.com/2c7146b1c7.js" crossorigin="anonymous"></script>
-    
+
 </head>
 
 <body class="bg-banner">
@@ -26,16 +27,17 @@
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             @guest
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ URL::asset('/images/top-banner.png') }}" class="img-fluid">
-            </a>
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{ URL::asset('/images/top-banner.png') }}" class="img-fluid">
+                </a>
             @else
                 <a class="navbar-brand" href="{{ url('/home') }}">
                     <img src="{{ URL::asset('/images/top-banner.png') }}" class="img-fluid">
                 </a>
             @endguest
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div style="width: 100%">
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -45,31 +47,41 @@
                             <li><a class="nav-link " href="{{ route('login') }}">{{ __('Faça o login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Cadastre-se') }}</a></li>
                         @else
-                            <li><a class="nav-link font-weight-bold" href="{{ route('userslogged.index') }}">{{ Auth::user()->name }}</a></li>
+                            <li><a class="nav-link font-weight-bold"
+                                    href="{{ route('userslogged.index') }}">{{ Auth::user()->name }}</a></li>
 
                             @role('Admin')
-                            <li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Administração
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais das aulas</a>
+                                </div>
+                              </li>
+
                             @endrole
 
                             <li><a class="nav-link" href="{{ route('userslogged.index') }}">Meus dados</a></li>
                             <li><a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">Sair</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    style="display: none;">
+                                    document.getElementById('logout-form').submit();">Sair</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
-                                </form>                                
-                            </li>                                
+                                </form>
+                            </li>
 
 
                         @endguest
                     </ul>
                 </div>
-                @if(Request::path() == 'quizzes/responder' && isset($quizz))
-                <h4 class="pt-4 text-right">{!! $quizz->nome !!}</h4>
+                @if (Request::path() == 'quizzes/responder' && isset($quizz))
+                    <h4 class="pt-4 text-right">{!! $quizz->nome !!}</h4>
                 @endif
             </div>
-          </nav>
-        
+        </nav>
+
 
 
 
@@ -80,15 +92,15 @@
         </main>
 
         <!-- FOOTER -->
-        <footer>       
+        <footer>
             <div class="container-fluid bg-banner">
                 <div class="row">
                     <div class="col-md-12 py-3 px-3 text-white font-weight-bold text-center">
-                        Usiminas © {{date("Y")}} | Todos os direitos reservados.
+                        Usiminas © {{ date('Y') }} | Todos os direitos reservados.
                     </div>
                 </div>
             </div>
-        <footer>
+            <footer>
 
     </div>
 

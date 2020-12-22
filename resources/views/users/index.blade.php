@@ -18,7 +18,7 @@
       <div class="row">
           <div class="col-lg-6 col-sm-12">
               <div class="form-group">
-                  <a href="{{ route('users.create') }}" class="btn btn-success rounded-pill pr-4 pl-4 text-dark font-weight-bold text-uppercase">Criar usuário</a>
+                  <a href="{{ route('users.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Usuário</a>
               </div>  
           </div>
 

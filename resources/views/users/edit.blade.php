@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <div class="form-group">
-                        <a href="{{ route('users.index') }}" class="btn btn-success rounded-pill pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-chevron-left"></i> Voltar</a>
+                        <a href="{{ route('users.index') }}" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-chevron-left"></i> Voltar</a>
                     </div>  
                 </div>
             </div>
@@ -62,24 +62,11 @@
           </div>     
           
           <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Empresa</label>
-            <div class="col-sm-10">
-                {!! Form::text('enterprise', null, array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>   
-
-
-
-
-
-          
-          <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">Senha</label>
             <div class="col-sm-10">
                 {!! Form::password('password', array('placeholder' => '','class' => 'form-control')) !!}
             </div>
-          </div>       
-          
+          </div>
           
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">Confirmar Senha</label>
@@ -98,7 +85,7 @@
           
           <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-success rounded-pill pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-save"></i> Salvar</button>
+                <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-save"></i> Salvar</button>
             </div>
           </div>    
         

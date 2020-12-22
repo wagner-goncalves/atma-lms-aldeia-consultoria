@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 class AulaController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('role:Aluno|Admin');
+        $this->middleware('auth');
+    } 
+
     public function valida($curso, $pagina)
     {
 
@@ -28,8 +34,10 @@ class AulaController extends Controller
     {
         $aulas = [];
         $curso = \App\Models\Curso::find($curso);
+
         $erros = $this->valida($curso, request()->input('page', 1));
-        if($erros) return view('aula.index',compact('aulas'))->withErrors($erros);
+
+        if($erros) return view('aula.index',compact('aulas', 'curso'))->withErrors($erros);
 
         $user = auth()->user();
         

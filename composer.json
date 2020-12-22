@@ -13,11 +13,13 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "kartik-v/dependent-dropdown": "@dev",
         "kyslik/column-sortable": "^6.0",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
         "laravelcollective/html": "^6.2",
+        "proengsoft/laravel-jsvalidation": "^4.4",
         "spatie/laravel-permission": "^3.18"
     },
     "require-dev": {

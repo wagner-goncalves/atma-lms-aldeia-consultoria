@@ -7,6 +7,12 @@ use App\Models\Empresa;
 class CertificadoController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('role:Aluno|Admin');
+        $this->middleware('auth');
+    }    
+
     private function dadosCertificado($curso)
     {
         $info = [];
