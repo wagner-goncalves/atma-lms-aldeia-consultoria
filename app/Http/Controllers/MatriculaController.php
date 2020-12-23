@@ -22,7 +22,7 @@ class MatriculaController extends Controller
         'empresa_id' => 'required|integer',
         'plano_id' => 'required|integer',
         'tempo_acesso' => 'required|integer',
-        'data_limite' => 'required',
+        'data_limite' => 'required|regex:/\d{2}\/\d{2}\/\d{4}/',
         'name' => 'required',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|same:confirm-password',
@@ -90,15 +90,16 @@ class MatriculaController extends Controller
      */
     public function create()
     {
-
-        unset($this->validationRules["arquivo"]);
+        unset($this->validationRules["user_id"]);
         $validator = JsValidator::make($this->validationRules);
 
         $empresas = \App\Models\Empresa::all()
             ->sortBy("nome");
 
         $matricula = new Matricula();
-        return view('matriculas.edit', compact('matricula', 'empresas'))->with([
+        $user = new \App\Models\User();
+        
+        return view('matriculas.edit', compact('matricula', 'user', 'empresas'))->with([
             'validator' => $validator,
         ]);
     }
@@ -111,17 +112,22 @@ class MatriculaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, $this->validationRules);
         $requestData = $request->all();
+        unset($this->validationRules["user_id"]);
 
+        $this->validate($request, $this->validationRules);
 
-        $caminho = $request->file('arquivo')->store('matriculas');
-        $requestData["arquivo"] = $caminho;
+        $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->format('Y-m-d 23:59:59');
         
-        $user = Matricula::create($requestData);
+        $user = \App\Models\User::create($requestData);
+        $user->assignRole("Aluno");
+        $requestData["user_id"] = $user->id;
+        $matricula = Matricula::create($requestData);
 
-        return redirect()->route('matriculas.index')
-                        ->with('success','Matricula criado com sucesso.');
+        if(isset($requestData["continuar"]))
+            return redirect()->route('matriculas.create')->with('success','Matricula anterior criada com sucesso.');
+        else
+            return redirect()->route('matriculas.index')->with('success','Matricula criada com sucesso.');
     }
     
     /**
@@ -146,14 +152,18 @@ class MatriculaController extends Controller
      */
     public function edit($id)
     {   
-        unset($this->validationRules["arquivo"]);
+
+        $this->validationRules["email"] = 'required|email';
+        $this->validationRules["password"] = 'same:confirm-password';
+
         $validator = JsValidator::make($this->validationRules);
 
         $empresas = \App\Models\Empresa::all()
             ->sortBy("nome");
 
         $matricula = Matricula::find($id);
-        return view('matriculas.edit', compact('matricula', 'empresas'))->with([
+        $user = $matricula->user;
+        return view('matriculas.edit', compact('matricula', 'user', 'empresas'))->with([
             'validator' => $validator,
         ]);
     }
@@ -168,17 +178,38 @@ class MatriculaController extends Controller
     public function update(Request $request, $id)
     {
 
-        unset($this->validationRules["arquivo"]);
+        //Validar
+        //Somente ADM está liberado
+        //Gestor só altera matrículas e usuários da sua empresa
+
+        $this->validationRules["email"] = 'required|email';
+        $this->validationRules["password"] = 'same:confirm-password';
+        
         $this->validate($request, $this->validationRules);
+        
+        $requestData = $request->all();
+        $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->format('Y-m-d 23:59:59');
 
         $matricula = Matricula::find($id);
-        $requestData = $request->all();
-
         $matricula->update($requestData);
 
+        //Usuário
+        if(!empty($requestData['password'])){ 
+            $requestData['password'] = Hash::make($requestData['password']);
+        }else{
+            $requestData = Arr::except($requestData,array('password'));    
+        }
+        
+        $user = \App\Models\User::find($requestData['user_id']);
+        $user->update($requestData);
+        //DB::table('model_has_roles')->where('model_id',$user_id)->delete();
+        $user->assignRole("Aluno");
+
         return redirect()->route('matriculas.index')
-                        ->with('success','Matricula alterada com sucesso.');
+                        ->with('success','Matrícula alterada com sucesso.');
     }
+
+
     
     /**
      * Remove the specified resource from storage.

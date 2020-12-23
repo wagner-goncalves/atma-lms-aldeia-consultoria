@@ -91,8 +91,8 @@
                     <th>@sortablelink('empresa_nome', 'Empresa') / @sortablelink('plano_nome', 'Plano') / @sortablelink('curso_nome', 'Curso')</th>
                     <th>Matrícula</th>
                     <th>Aluno</th>
-                    <th>Data limite</th>
-                    <th>Data de conclusão</th>
+                    <th>@sortablelink('data_limite', 'Data limite')</th>
+                    <th>@sortablelink('data_conclusao', 'Data de conclusão')</th>
                     <th>Ações</th>
                 </tr>
                 @forelse ($matriculas as $matricula)
@@ -104,7 +104,7 @@
                         <td><a href="{{ route('matriculas.edit', $matricula->id) }}">{{ $matricula->id }}</a></td>
                         <td>{{ $matricula->user->name }}</td>
                         <td>{{ \Carbon\Carbon::parse($matricula->data_limite)->format('d/m/Y')}}</td>
-                        <td>{{ empty($matricula->data_conclusao) ?: \Carbon\Carbon::parse($matricula->data_conclusao)->format('d/m/Y') }}</td>
+                        <td>{{ empty($matricula->data_conclusao) ? "Não concluído": \Carbon\Carbon::parse($matricula->data_conclusao)->format('d/m/Y') }}</td>
                         <td nowrap>
                             <a class="btn btn-sm btn-primary" href="{{ route('matriculas.edit', $matricula->id) }}"><i
                                     class="fas fa-edit"></i></a>

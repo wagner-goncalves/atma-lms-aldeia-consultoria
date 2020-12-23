@@ -43,6 +43,11 @@
                 </div>
             @endif
 
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
+                </div>
+            @endif            
 
             @if(!isset($matricula->id) || intval($matricula->id) == 0)
                 {!! Form::open(['route' => 'matriculas.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
@@ -61,6 +66,7 @@
                         <div class="form-group col-md-6">
                             <label for="empresa_id"><strong>Empresa</strong></label>
                             <select id="empresa_id" name="empresa_id" class="form-control">
+                                <option value="">Escolha... </option>
                                 @foreach ($empresas as $empresa)
                                     <option value="{{ $empresa->id }}" {{ $empresa_id == $empresa->id ? 'selected' : '' }}>
                                         {{ $empresa->nome }}
@@ -94,7 +100,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <div class="form-group">
-                                <strong>Tempo de acesso:</strong>
+                                <strong>Dias de acesso:</strong>
                                 {!! Form::input('number', 'tempo_acesso', $matricula->tempo_acesso, ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
@@ -102,7 +108,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <strong>Data limite do curso:</strong>
-                                    {!! Form::text('data_limite', $matricula->data_limite, ['placeholder' => '', 'class' => 'form-control', 'id' =>
+                                    {!! Form::text('data_limite', \Carbon\Carbon::parse($matricula->data_limite)->format('d/m/Y'), ['placeholder' => '', 'class' => 'form-control data_limite', 'id' =>
                                     'descricao']) !!}
                                 </div>
                             </div>
@@ -111,8 +117,8 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <h4><i class="fas fa-user"></i> Dados do aluno</h4>
-                    {!! Form::hidden('user_id', $matricula->user->id) !!}
+                    <h4><i class="fas fa-user"></i> Dados do @if(!isset($matricula->id) || intval($matricula->id) == 0) novo @endif aluno</h4>
+                    {!! Form::hidden('user_id', $user->id) !!}
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -120,14 +126,14 @@
                         <div class="form-group col-md-4">
                             <div class="form-group">
                                 <strong>Nome:</strong>
-                                {!! Form::text('name', $matricula->user->name, array('placeholder' => '','class' => 'form-control')) !!}
+                                {!! Form::text('name', $user->name, array('placeholder' => '','class' => 'form-control')) !!}
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <div class="form-group">
                                 <div class="form-group">
                                     <strong>E-mail:</strong>
-                                    {!! Form::email('email', $matricula->user->email, array('placeholder' => '','class' => 'form-control')) !!}
+                                    {!! Form::email('email', $user->email, array('placeholder' => '','class' => 'form-control')) !!}
                                 </div>
                             </div>
                         </div>
@@ -135,7 +141,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <strong>Telefone:</strong>
-                                    {!! Form::text('phone', $matricula->user->phone, array('placeholder' => '','class' => 'form-control')) !!}
+                                    {!! Form::text('phone', $user->phone, array('placeholder' => '','class' => 'form-control phone')) !!}
                                 </div>
                             </div>
                         </div>                        
@@ -163,43 +169,68 @@
 
             <div class="form-group row">
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
-                            class="fas fa-save"></i> Salvar</button>
+                    <button name="sair" value="sair" type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
+                            class="fas fa-save"></i> Salvar e sair</button>
+
+                    @if(!isset($matricula->id) || intval($matricula->id) == 0)
+                        <button name="continuar" value="continuar" type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
+                            class="fas fa-save"></i> Salvar e continuar</button>
+                    @endif
                 </div>
             </div>
             {!! Form::close() !!}
         </div>
     </div>
 
-    <link href="{{ asset('vendor/kartik-v/dependent-dropdown/css/dependent-dropdown.min.css') }}" media="all"
-        rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="{{ asset('vendor/kartik-v/dependent-dropdown/js/dependent-dropdown.min.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('vendor/kartik-v/dependent-dropdown/js/locales/pt-BR.js') }}"></script>
 
-    <script>
-        $("#modulo_id").depdrop({
-            url: '/matriculas/modulos',
-            depends: ['empresa_id'],
-            loadingText: 'Carregando...',
-            placeholder: 'Escolha...',
-            initialize: true,
-            initDepends: ['empresa_id'],
-        });
+        <link href="{{ asset('vendor/kartik-v/dependent-dropdown/css/dependent-dropdown.min.css') }}" media="all"
+            rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="{{ asset('vendor/kartik-v/dependent-dropdown/js/dependent-dropdown.min.js') }}">
+        </script>
+        <script type="text/javascript" src="{{ asset('vendor/kartik-v/dependent-dropdown/js/locales/pt-BR.js') }}"></script>
 
-        $("#aula_id").depdrop({
-            url: '/matriculas/aulas',
-            depends: ['empresa_id', 'modulo_id'],
-            loadingText: 'Carregando...',
-            placeholder: 'Escolha...',
-            initialize: false,
-            initDepends: ['modulo_id'],
-        });
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 
-    </script>
+        <script>
+            $("#plano_id").depdrop({
+                url: '/matriculas/planos',
+                depends: ['empresa_id'],
+                loadingText: 'Carregando...',
+                placeholder: 'Escolha...',
+                initialize: false,
+                initDepends: ['empresa_id'],
+            });
 
-    <!-- Laravel Javascript Validation -->
-    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
-    {!! $validator->selector('#edit-form') !!}
+            $("#curso_id").depdrop({
+                url: '/matriculas/cursos',
+                depends: ['empresa_id', 'plano_id'],
+                loadingText: 'Carregando...',
+                placeholder: 'Escolha...',
+                initialize: false,
+                initDepends: ['modulo_id'],
+            });
+
+            $(document).ready(function(){
+                $("input.phone")
+                .mask("(99) 9999-9999?9")
+                .focusout(function (event) {  
+                    var target, phone, element;  
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);  
+                    element.unmask();  
+                    if(phone.length > 10) {  
+                        element.mask("(99) 99999-999?9");  
+                    } else {  
+                        element.mask("(99) 9999-9999?9");  
+                    }  
+                });
+                $("input.data_limite").mask("99/99/9999")
+            });
+        </script>
+        
+        <!-- Laravel Javascript Validation -->
+        <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+        {!! $validator->selector('#edit-form') !!}
 
 @endsection
