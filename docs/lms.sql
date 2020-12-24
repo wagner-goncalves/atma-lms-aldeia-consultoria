@@ -25,14 +25,18 @@ CREATE TABLE `acessos` (
   `material_id` bigint NOT NULL,
   `user_id` bigint unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_downloads_materiais1_idx` (`material_id`),
   KEY `fk_downloads_users1_idx` (`user_id`),
   CONSTRAINT `fk_downloads_materiais1` FOREIGN KEY (`material_id`) REFERENCES `materiais` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_downloads_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `acessos` */
+
+insert  into `acessos`(`id`,`material_id`,`user_id`,`created_at`,`updated_at`) values (1,1,1,'2020-12-24 01:33:27','2020-12-24 01:33:27');
+insert  into `acessos`(`id`,`material_id`,`user_id`,`created_at`,`updated_at`) values (2,1,1,'2020-12-24 01:34:06','2020-12-24 01:34:06');
 
 /*Table structure for table `aulas` */
 
@@ -220,20 +224,24 @@ CREATE TABLE `matriculas` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_matricula` (`user_id`,`curso_id`,`empresa_id`),
   KEY `fk_matriculas_users1_idx` (`user_id`),
   KEY `fk_matriculas_cursos1_idx` (`curso_id`),
   KEY `fk_matriculas_empresas1_idx` (`empresa_id`),
   KEY `fk_matriculas_planos1_idx` (`plano_id`),
-  CONSTRAINT `fk_matriculas_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_matriculas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_matriculas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `ix_data_limite` (`data_limite`),
+  CONSTRAINT `fk_matriculas_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_matriculas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_matriculas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 /*Data for the table `matriculas` */
 
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (1,1,1,1,1,1,1,'2020-12-22 23:59:59','2020-12-21 00:50:19','2020-12-18 17:26:07','2020-12-23 12:36:21');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (7,7,1,1,1,1,12,'2020-12-23 23:59:59',NULL,'2020-12-23 13:56:26','2020-12-23 13:56:26');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (1,1,1,1,1,1,1,'2020-12-25 23:59:59','2020-12-21 00:50:19','2020-12-18 17:26:07','2020-12-23 12:36:21');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (7,7,1,1,1,1,12,'2020-12-25 23:59:59',NULL,'2020-12-23 13:56:26','2020-12-23 13:56:26');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (28,39,1,1,1,1,30,NULL,'2021-01-23 01:15:37','2020-12-24 01:15:37','2020-12-24 01:15:37');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (29,40,1,1,1,1,30,NULL,'2021-01-23 01:15:38','2020-12-24 01:15:38','2020-12-24 01:15:38');
 
 /*Table structure for table `migrations` */
 
@@ -287,6 +295,22 @@ insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',1);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',6);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',7);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',11);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',12);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',14);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',15);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',16);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',17);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',18);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',20);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',32);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',33);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',35);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',36);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',37);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',38);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',39);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',40);
 
 /*Table structure for table `modulos` */
 
@@ -418,7 +442,7 @@ CREATE TABLE `planos_has_cursos` (
 
 /*Data for the table `planos_has_cursos` */
 
-insert  into `planos_has_cursos`(`plano_id`,`curso_id`,`usuarios`,`tempo_acesso`) values (1,1,0,0);
+insert  into `planos_has_cursos`(`plano_id`,`curso_id`,`usuarios`,`tempo_acesso`) values (1,1,0,30);
 
 /*Table structure for table `planos_has_empresas` */
 
@@ -558,6 +582,7 @@ CREATE TABLE `users` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
+  `cpf` char(14) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -568,12 +593,14 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `fk_users_empresas1_idx` (`empresa_id`),
   CONSTRAINT `fk_users_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'(31) 9825-86122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','ZfI33hPlzCRmnOEJ5E0cN60V4wDT3dQEVbpBXUbpNmFbQNoPAaoX44ogYlJR','2020-12-17 23:28:18','2020-12-23 12:43:33',1);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (7,1,'Wagner Gomes Gonçalves','wagnerggg@gmail.co',NULL,'(55) 3199-84771','1',NULL,'2020-12-23 13:56:25','2020-12-23 13:56:25',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'','(31) 9825-86122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','ZfI33hPlzCRmnOEJ5E0cN60V4wDT3dQEVbpBXUbpNmFbQNoPAaoX44ogYlJR','2020-12-17 23:28:18','2020-12-23 12:43:33',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (7,1,'Wagner Gomes Gonçalves','wagnerggg@gmail.co',NULL,'','(55) 3199-84771','1',NULL,'2020-12-23 13:56:25','2020-12-23 13:56:25',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (39,1,'Teste 1','teste1@teste.com.br',NULL,'1111','123456','$2y$10$.7PCmbaWtGi3alNei7Vh4eyQvfytNE8L2sCn.XVWQU5DDkozRtZrq',NULL,'2020-12-24 01:15:37','2020-12-24 01:15:37',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (40,1,'Teste 2','teste2@teste.com.br',NULL,'2222','123456','$2y$10$y/.NGTi1DWvg5vlG2FI2fOditQfk6QlnfSTAL6GgWlDS55jaMaYa.',NULL,'2020-12-24 01:15:38','2020-12-24 01:15:38',1);
 
 /*Table structure for table `v_historicos` */
 
@@ -611,7 +638,7 @@ CREATE TABLE `visualizacoes` (
   KEY `fk_visualizacoes_aulas1_idx` (`aula_id`),
   CONSTRAINT `fk_visualizacoes_aulas1` FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_visualizacoes_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 /*Data for the table `visualizacoes` */
 
@@ -659,6 +686,7 @@ insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`)
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (44,1,1,'2020-12-21 20:57:40','2020-12-21 20:57:40');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (45,2,1,'2020-12-21 20:57:47','2020-12-21 20:57:47');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (46,3,1,'2020-12-21 20:57:54','2020-12-21 20:57:54');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (47,1,1,'2020-12-24 01:32:25','2020-12-24 01:32:25');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

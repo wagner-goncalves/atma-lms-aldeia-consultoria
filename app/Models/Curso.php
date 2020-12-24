@@ -59,7 +59,7 @@ class Curso extends Model
      */
     public function planos()
     {
-        return $this->belongsToMany(\App\Models\Plano::class, 'planos_has_cursos', 'curso_id', 'plano_id');
+        return $this->belongsToMany(\App\Models\Plano::class, 'planos_has_cursos', 'curso_id', 'plano_id')->withPivot('usuarios', 'tempo_acesso');;
     }
 
 

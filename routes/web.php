@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('aulas', AulaAdministracaoController::class);
 
     Route::resource('matriculas', MatriculaController::class);
+    Route::post('/matriculas/importar', [MatriculaController::class, 'importar'])->name('matriculas.importar');
     Route::post('/matriculas/planos', [MatriculaController::class, 'planos'])->name('matriculas.planos')->withoutMiddleware(['csrf']);
     Route::post('/matriculas/cursos', [MatriculaController::class, 'cursos'])->name('matriculas.cursos')->withoutMiddleware(['csrf']);
 

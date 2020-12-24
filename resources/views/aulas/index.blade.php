@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    <i class="fas fa-file-alt"></i> Gerenciar aulas
+                    <i class="fas fa-chalkboard-teacher"></i> Gerenciar aulas
                 </div>
             </div>
         </div>

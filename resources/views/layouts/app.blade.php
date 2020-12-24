@@ -52,23 +52,25 @@
 
                             @role('Admin')
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Administração
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Administração
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos do curso</a>
-                                  <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas do curso</a>
-                                  <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais das aulas</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
+                                    <a class="dropdown-item" href="{{ route('matriculas.index') }}">Matrículas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos do curso</a>
+                                    <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas do curso</a>
+                                    <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais das aulas</a>
                                 </div>
-                              </li>
+                            </li>
 
                             @endrole
 
                             <li><a class="nav-link" href="{{ route('userslogged.index') }}">Meus dados</a></li>
                             <li><a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">Sair</a>
+                                        document.getElementById('logout-form').submit();">Sair</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>

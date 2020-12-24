@@ -149,13 +149,23 @@
                 </div>                
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <strong>CPF:</strong>
+                                    {!! Form::text('cpf', $user->cpf, array('placeholder' => '','class' => 'form-control cpf')) !!}
+                                </div>
+                            </div>
+                        </div>    
+
+                        <div class="form-group col-md-4">
                             <div class="form-group">
                                 <strong>Senha:</strong> <span class="small">Deixe o campo de senha vazio para não alterar a senha atual.</span>
                                 {!! Form::password('password', array('placeholder' => '','class' => 'form-control')) !!}
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <div class="form-group">
                                 <div class="form-group">
                                     <strong>Confirma senha:</strong>
@@ -225,7 +235,8 @@
                         element.mask("(99) 9999-9999?9");  
                     }  
                 });
-                $("input.data_limite").mask("99/99/9999")
+                $("input.data_limite").mask("99/99/9999");
+                $("input.cpf").mask("999.999.999-99")
             });
         </script>
         
