@@ -76,6 +76,27 @@ insert  into `aulas`(`id`,`modulo_id`,`titulo`,`descricao`,`carga_horaria`,`link
 insert  into `aulas`(`id`,`modulo_id`,`titulo`,`descricao`,`carga_horaria`,`link`,`ordem`,`created_at`,`updated_at`,`is_active`) values (14,3,'Curabitur luctus lectus diam, nec efficitur arcu gravida a.',NULL,1,'<iframe class=\"embed-responsive-item\" src=\"https://www.youtube.com/embed/nHSa45qAgIM?controls=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>',14,'2020-12-18 19:39:00',NULL,1);
 insert  into `aulas`(`id`,`modulo_id`,`titulo`,`descricao`,`carga_horaria`,`link`,`ordem`,`created_at`,`updated_at`,`is_active`) values (15,3,'Praesent quam sapien, tincidunt a semper nec',NULL,2,'<iframe class=\"embed-responsive-item\" src=\"https://www.youtube.com/embed/nHSa45qAgIM?controls=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>',15,'2020-12-18 19:39:08',NULL,1);
 
+/*Table structure for table `certificados` */
+
+DROP TABLE IF EXISTS `certificados`;
+
+CREATE TABLE `certificados` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `curso_id` bigint NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_certificados_users1_idx` (`user_id`),
+  KEY `fk_certificados_cursos1_idx` (`curso_id`),
+  CONSTRAINT `fk_certificados_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_certificados_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificados` */
+
+insert  into `certificados`(`id`,`user_id`,`curso_id`,`created_at`,`updated_at`) values (1,1,1,'2020-12-27 12:59:20','2020-12-27 12:59:20');
+
 /*Table structure for table `cursos` */
 
 DROP TABLE IF EXISTS `cursos`;
@@ -174,13 +195,15 @@ CREATE TABLE `feedbacks` (
   CONSTRAINT `fk_feedbacks_perguntas1` FOREIGN KEY (`pergunta_id`) REFERENCES `perguntas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_respostas_respostas1` FOREIGN KEY (`resposta_id`) REFERENCES `respostas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_respostas_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `feedbacks` */
 
 insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (25,1,1,1,2,'2020-12-21 00:50:19','2020-12-21 00:50:19');
 insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (26,1,1,2,4,'2020-12-21 00:50:19','2020-12-21 00:50:19');
-insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (27,1,1,3,9,'2020-12-21 00:50:19','2020-12-21 00:50:19');
+insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (32,65,1,1,1,'2020-12-27 12:01:45','2020-12-27 12:01:45');
+insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (33,65,1,2,4,'2020-12-27 12:01:45','2020-12-27 12:01:45');
+insert  into `feedbacks`(`id`,`user_id`,`curso_id`,`pergunta_id`,`resposta_id`,`created_at`,`updated_at`) values (34,65,1,3,10,'2020-12-27 12:01:45','2020-12-27 12:01:45');
 
 /*Table structure for table `materiais` */
 
@@ -234,14 +257,14 @@ CREATE TABLE `matriculas` (
   CONSTRAINT `fk_matriculas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 
 /*Data for the table `matriculas` */
 
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (1,1,1,1,1,1,1,'2020-12-25 23:59:59','2020-12-21 00:50:19','2020-12-18 17:26:07','2020-12-23 12:36:21');
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (7,7,1,1,1,1,12,'2020-12-25 23:59:59',NULL,'2020-12-23 13:56:26','2020-12-23 13:56:26');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (28,39,1,1,1,1,30,NULL,'2021-01-23 01:15:37','2020-12-24 01:15:37','2020-12-24 01:15:37');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (29,40,1,1,1,1,30,NULL,'2021-01-23 01:15:38','2020-12-24 01:15:38','2020-12-24 01:15:38');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (54,65,1,1,1,1,30,'2021-01-25 16:03:36','2020-12-27 12:03:48','2020-12-26 16:03:36','2020-12-27 12:03:48');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (55,66,1,1,1,1,30,'2021-01-30 23:59:59',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07');
 
 /*Table structure for table `migrations` */
 
@@ -311,6 +334,32 @@ insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',38);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',39);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',40);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',41);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',42);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',43);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',44);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',45);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',46);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',47);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',48);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',49);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',50);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',51);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',52);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',53);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',54);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',55);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',56);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',57);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',58);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',59);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',60);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',61);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',62);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',63);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',64);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',65);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',66);
 
 /*Table structure for table `modulos` */
 
@@ -442,7 +491,7 @@ CREATE TABLE `planos_has_cursos` (
 
 /*Data for the table `planos_has_cursos` */
 
-insert  into `planos_has_cursos`(`plano_id`,`curso_id`,`usuarios`,`tempo_acesso`) values (1,1,0,30);
+insert  into `planos_has_cursos`(`plano_id`,`curso_id`,`usuarios`,`tempo_acesso`) values (1,1,3,30);
 
 /*Table structure for table `planos_has_empresas` */
 
@@ -469,17 +518,17 @@ DROP TABLE IF EXISTS `posts`;
 
 CREATE TABLE `posts` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `aula_id` bigint NOT NULL,
   `user_id` bigint unsigned NOT NULL,
+  `curso_id` bigint NOT NULL,
   `post_id` bigint DEFAULT NULL,
   `post` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_active` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  KEY `fk_posts_aulas1_idx` (`aula_id`),
   KEY `fk_posts_users1_idx` (`user_id`),
   KEY `fk_posts_posts1_idx` (`post_id`),
-  CONSTRAINT `fk_posts_aulas1` FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `fk_posts_cursos1_idx` (`curso_id`),
+  CONSTRAINT `fk_posts_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_posts1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -516,7 +565,7 @@ CREATE TABLE `respostas` (
   PRIMARY KEY (`id`),
   KEY `fk_respostas_perguntas1_idx` (`pergunta_id`),
   CONSTRAINT `fk_respostas_perguntas1` FOREIGN KEY (`pergunta_id`) REFERENCES `perguntas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `respostas` */
 
@@ -526,9 +575,8 @@ insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (3,1,'Nul
 insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (4,2,'Donec mi justo, tincidunt at fermentum ut, sodales sit amet velit. ','A');
 insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (5,2,'Aenean sed augue egestas, eleifend nunc ut, mattis magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.','B');
 insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (6,2,'Vivamus pharetra, tortor a maximus semper','C');
-insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (7,3,'Duis euismod ex sem, in commodo dui interdum et.','A');
-insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (8,3,'Praesent vulputate sem ut sem commodo pellentesque.','B');
-insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (9,3,'Suspendisse volutpat arcu ut tellus feugiat tempor.','C');
+insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (10,3,'Vivamus pharetra, tortor a maximus semper','A');
+insert  into `respostas`(`id`,`pergunta_id`,`resposta`,`ordem`) values (11,3,'Aenean sed augue egestas, eleifend nunc ut, mattis magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.','B');
 
 /*Table structure for table `role_has_permissions` */
 
@@ -593,14 +641,14 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `fk_users_empresas1_idx` (`empresa_id`),
   CONSTRAINT `fk_users_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'','(31) 9825-86122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','ZfI33hPlzCRmnOEJ5E0cN60V4wDT3dQEVbpBXUbpNmFbQNoPAaoX44ogYlJR','2020-12-17 23:28:18','2020-12-23 12:43:33',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'','(31) 9825-86122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','Ik5EjZhc0rszi2sl1dobITn2aAeZH2fwjKXqhhHFlmjRL6VToOCV0XRxrGnm','2020-12-17 23:28:18','2020-12-23 12:43:33',1);
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (7,1,'Wagner Gomes Gonçalves','wagnerggg@gmail.co',NULL,'','(55) 3199-84771','1',NULL,'2020-12-23 13:56:25','2020-12-23 13:56:25',1);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (39,1,'Teste 1','teste1@teste.com.br',NULL,'1111','123456','$2y$10$.7PCmbaWtGi3alNei7Vh4eyQvfytNE8L2sCn.XVWQU5DDkozRtZrq',NULL,'2020-12-24 01:15:37','2020-12-24 01:15:37',1);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (40,1,'Teste 2','teste2@teste.com.br',NULL,'2222','123456','$2y$10$y/.NGTi1DWvg5vlG2FI2fOditQfk6QlnfSTAL6GgWlDS55jaMaYa.',NULL,'2020-12-24 01:15:38','2020-12-24 01:15:38',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (65,1,'Teste 2','alexandre@atma.com.br',NULL,'222222','123456','$2y$10$ChJ/ORXtPj.1JODv2P7khu//4guxzlSo7vs06KEah8WZGLUcLg2r.','LeR8dU5HceRdIcAU3HGepdMWsgeKwkwzDIq47gjvVdEP1JAsgzgkolYwjzC4','2020-12-26 16:03:36','2020-12-26 16:03:36',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (66,1,'Wagner Gomes Gonçalves','wagnergg@gmail.com',NULL,'000.000.000-00','(31) 9999-99999','123456',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07',1);
 
 /*Table structure for table `v_historicos` */
 
@@ -638,7 +686,7 @@ CREATE TABLE `visualizacoes` (
   KEY `fk_visualizacoes_aulas1_idx` (`aula_id`),
   CONSTRAINT `fk_visualizacoes_aulas1` FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_visualizacoes_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 
 /*Data for the table `visualizacoes` */
 
@@ -687,6 +735,57 @@ insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`)
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (45,2,1,'2020-12-21 20:57:47','2020-12-21 20:57:47');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (46,3,1,'2020-12-21 20:57:54','2020-12-21 20:57:54');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (47,1,1,'2020-12-24 01:32:25','2020-12-24 01:32:25');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (51,1,65,'2020-12-26 16:05:08','2020-12-26 16:05:08');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (52,2,65,'2020-12-26 16:05:50','2020-12-26 16:05:50');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (53,3,65,'2020-12-26 16:06:04','2020-12-26 16:06:04');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (54,4,65,'2020-12-26 16:06:51','2020-12-26 16:06:51');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (55,5,65,'2020-12-26 16:07:02','2020-12-26 16:07:02');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (56,6,65,'2020-12-26 16:07:09','2020-12-26 16:07:09');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (57,7,65,'2020-12-26 16:07:13','2020-12-26 16:07:13');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (58,8,65,'2020-12-26 16:07:19','2020-12-26 16:07:19');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (59,9,65,'2020-12-26 16:07:26','2020-12-26 16:07:26');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (60,10,65,'2020-12-26 16:07:29','2020-12-26 16:07:29');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (61,11,65,'2020-12-26 16:07:42','2020-12-26 16:07:42');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (62,12,65,'2020-12-26 16:07:49','2020-12-26 16:07:49');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (63,13,65,'2020-12-26 16:07:56','2020-12-26 16:07:56');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (64,14,65,'2020-12-26 16:08:03','2020-12-26 16:08:03');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (65,15,65,'2020-12-26 16:08:11','2020-12-26 16:08:11');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (66,1,65,'2020-12-27 11:56:29','2020-12-27 11:56:29');
+
+/*Table structure for table `v_performance` */
+
+DROP TABLE IF EXISTS `v_performance`;
+
+/*!50001 DROP VIEW IF EXISTS `v_performance` */;
+/*!50001 DROP TABLE IF EXISTS `v_performance` */;
+
+/*!50001 CREATE TABLE  `v_performance`(
+ `user_id` bigint unsigned ,
+ `empresa_id` bigint ,
+ `plano_id` bigint ,
+ `curso_id` bigint ,
+ `Aluno` varchar(255) ,
+ `E-mail` varchar(255) ,
+ `CPF` char(14) ,
+ `Telefone` varchar(15) ,
+ `Empresa` varchar(255) ,
+ `Plano` varchar(255) ,
+ `Curso` varchar(45) ,
+ `Aulas do curso` bigint ,
+ `Aulas assistidas` bigint ,
+ `Posts realizadoss` bigint ,
+ `Feedback realizado` varchar(3) ,
+ `Certificado emitido` varchar(3) ,
+ `Data limite curso` varchar(10) ,
+ `Data conclusão` varchar(10) 
+)*/;
+
+/*View structure for view v_performance */
+
+/*!50001 DROP TABLE IF EXISTS `v_performance` */;
+/*!50001 DROP VIEW IF EXISTS `v_performance` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_performance` AS select `m`.`user_id` AS `user_id`,`m`.`empresa_id` AS `empresa_id`,`m`.`plano_id` AS `plano_id`,`m`.`curso_id` AS `curso_id`,`u`.`name` AS `Aluno`,`u`.`email` AS `E-mail`,`u`.`cpf` AS `CPF`,`u`.`phone` AS `Telefone`,`e`.`nome` AS `Empresa`,`p`.`nome` AS `Plano`,`c`.`nome` AS `Curso`,(select count(`a1`.`id`) from (`aulas` `a1` join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where (`m1`.`curso_id` = `c`.`id`)) AS `Aulas do curso`,(select count(distinct `v1`.`aula_id`) from ((`visualizacoes` `v1` join `aulas` `a1` on((`a1`.`id` = `v1`.`aula_id`))) join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where ((`m1`.`curso_id` = `c`.`id`) and (`v1`.`user_id` = `u`.`id`))) AS `Aulas assistidas`,(select count(`p1`.`id`) from `posts` `p1` where ((`p1`.`user_id` = `u`.`id`) and (`p1`.`curso_id` = `c`.`id`))) AS `Posts realizadoss`,(select if((count(`f1`.`id`) > 0),'SIM','NÃO') from `feedbacks` `f1` where ((`f1`.`user_id` = `u`.`id`) and (`f1`.`curso_id` = `c`.`id`))) AS `Feedback realizado`,(select if((count(`c1`.`id`) > 0),'SIM','NÃO') from `certificados` `c1` where ((`c1`.`user_id` = `u`.`id`) and (`c1`.`curso_id` = `c`.`id`))) AS `Certificado emitido`,date_format(`m`.`data_limite`,'%d/%m/%Y') AS `Data limite curso`,date_format(`m`.`data_conclusao`,'%d/%m/%Y') AS `Data conclusão` from ((((`users` `u` join `matriculas` `m` on((`m`.`user_id` = `u`.`id`))) join `cursos` `c` on((`c`.`id` = `m`.`curso_id`))) join `empresas` `e` on((`e`.`id` = `m`.`empresa_id`))) join `planos` `p` on((`p`.`id` = `m`.`plano_id`))) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
