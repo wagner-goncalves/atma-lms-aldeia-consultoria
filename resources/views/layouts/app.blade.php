@@ -25,14 +25,14 @@
     <div id="app" style="background-color: white">
 
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             @guest
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ URL::asset('/images/top-banner.png') }}" class="img-fluid">
+                    LMS Aldeia Consultoria
                 </a>
             @else
                 <a class="navbar-brand" href="{{ url('/home') }}">
-                    <img src="{{ URL::asset('/images/top-banner.png') }}" class="img-fluid">
+                    LMS Aldeia Consultoria
                 </a>
             @endguest
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -100,27 +100,13 @@
             <div class="container-fluid bg-banner">
                 <div class="row">
                     <div class="col-md-12 py-3 px-3 text-white font-weight-bold text-center">
-                        Usiminas © {{ date('Y') }} | Todos os direitos reservados.
+                        Aldeia Consultoria © {{ date('Y') }} | Todos os direitos reservados.
                     </div>
                 </div>
             </div>
             <footer>
 
     </div>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B3S4N7KMDK"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-B3S4N7KMDK');
-
-    </script>
 
 </body>
 

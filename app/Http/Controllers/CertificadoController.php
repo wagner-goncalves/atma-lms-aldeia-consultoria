@@ -35,6 +35,10 @@ class CertificadoController extends Controller
 
     public function download($curso)
     {
+        $user = auth()->user();
+        $certificado = ["user_id" => $user->id, "curso_id" => $curso];
+        \App\Models\Certificado::create($certificado);
+
         $dadosCertificado = $this->dadosCertificado($curso);
         $pdf = new \Codedge\Fpdf\Fpdf\Fpdf();
 

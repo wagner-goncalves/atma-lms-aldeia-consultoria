@@ -25,7 +25,7 @@
 
                     @php
                     $percentualConclusao = $curso->percentualConclusao();
-                    $feedbackRespondido = $curso->feedbackRespondido($curso->id);
+                    $feedbackRespondido = $curso->feedbackRespondido();
                     $matricula = $curso->matricula();
                     $ultimaAulaVisualizada = $curso->ultimaAulaVisualizada();
                     $tempoRestanteCurso = $curso->tempoRestanteCurso();
@@ -145,8 +145,6 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-
-
                                 <div class="media mb-3">
                                     <i class="fa fa-2x fa-stack-exchange" aria-hidden="true"></i>
                                     <div class="media-body ml-3">
@@ -154,8 +152,6 @@
                                         visualização de todos os vídeos.
                                     </div>
                                 </div>
-
-
                                 <table class="table table-striped table-sm table-hover mb-0">
                                     <tbody>
                                         <tr>

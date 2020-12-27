@@ -24,7 +24,7 @@ class AulaController extends Controller
         $curso->tempoRestanteCurso() >= 0 ?: $erros["cursoNoPrazo"] = "O prazo para realização do curso expirou.";
 
         $ultimaAulaVisualizada = $curso->ultimaAulaVisualizada();
-        ($pagina) <= ($ultimaAulaVisualizada->ordem + 1) ?: $erros["aulaCorreta"] = "Você ainda não pode visualizar esta aula. Por favor, volte e siga a sequência correta.";
+        //($pagina) <= ($ultimaAulaVisualizada->ordem + 1) ?: $erros["aulaCorreta"] = "Você ainda não pode visualizar esta aula. Por favor, volte e siga a sequência correta.";
 
         return count($erros) > 0 ? $erros : false;
     }

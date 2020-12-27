@@ -99,7 +99,7 @@ class Curso extends Model
     
     public function percentualConclusao(){
         $info = $this->infoConclusao();
-        $percentual = $info->visualizadas / $info->total * 100;
+        $percentual = $info->total == 0 ? 0 : $info->visualizadas / $info->total * 100;
         return ceil($percentual);
     }
 
@@ -123,13 +123,13 @@ class Curso extends Model
         return $matricula;
     }
 
-    public function feedbackRespondido($curso_id = ""){
+    public function feedbackRespondido(){
         $user = auth()->user();
         $feedbacks = \App\Models\Questionario::join('perguntas', 'perguntas.questionario_id', '=', 'questionarios.id')
             ->join('respostas', 'perguntas.id', '=', 'respostas.pergunta_id')
             ->join('feedbacks', 'respostas.id', '=', 'feedbacks.resposta_id')
-            ->where('questionarios.curso_id', '=', $curso_id)
-            ->where('feedbacks.user_id', '=', $this->id)
+            ->where('questionarios.curso_id', '=', $this->id)
+            ->where('feedbacks.user_id', '=', $user->id)
             ->select('feedbacks.*')
             ->get();
 

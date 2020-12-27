@@ -60,7 +60,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/matriculas/importar', [MatriculaController::class, 'importar'])->name('matriculas.importar');
     Route::post('/matriculas/planos', [MatriculaController::class, 'planos'])->name('matriculas.planos')->withoutMiddleware(['csrf']);
     Route::post('/matriculas/cursos', [MatriculaController::class, 'cursos'])->name('matriculas.cursos')->withoutMiddleware(['csrf']);
-
+    Route::post('/matriculas/exportar', [MatriculaController::class, 'exportar'])->name('matriculas.exportar');
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

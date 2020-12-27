@@ -7,16 +7,18 @@
                 <div class="titulo-destaque">
                     <i class="fa fa-stack-exchange" aria-hidden="true"></i> Feedback
                 </div>
-            </div>
+            </div>           
             <hr />
-            <div>
-                <div class="row">
-                    <div class="col-12 col-md-9 col-sm-12">
-                        <h1>{{$curso->nome}}</h1>
-                    </div>
+            <div class="row">
+                <div class="col-12 col-md-8 col-sm-12">
+                    <h1>{{ $curso->nome }}</h1>
                 </div>
-                <hr />
-
+                <div class="col-12 col-md-4 col-sm-12 text-right">
+                    <a href="{{ route('home') }}" class="btn btn-success"><i class="fas fa-chevron-left"></i> Voltar</a>
+                    <button type="button" class="btn btn-danger"><i class="fa fa-users"></i> Fórum de discussão</button>
+                </div>
+            </div>
+            <div>
                 <div class="row mt-3">
                     <div class="col">
                         @if (count($errors) > 0)

@@ -61,7 +61,7 @@ class Matricula extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User');
-    }
+    }   
 
     public function alunoMatriculado(){
         $user = auth()->user();

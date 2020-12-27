@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MatriculaParser;
 use App\Models\Matricula;
-use App\Imports\MatriculasImport;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use JsValidator;
+
+use App\Exports\PerformanceExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\HeadingRowImport;
-use Illuminate\Support\Facades\DB;
 
 class MatriculaController extends Controller
 {
@@ -92,85 +92,25 @@ class MatriculaController extends Controller
     }
 
 
-    private function validaCabecalhos($excel, $cabecalhosMatricula){
-        $valid = true;
-        foreach($excel as $headings){
-            foreach($headings as $sheets){
-                for($i = 0 ; $i < count($cabecalhosMatricula); $i++){
-                    if(!in_array($sheets[$i], $cabecalhosMatricula)){
-                        $valid = false;
-                        break;
-                    } 
-                }
-            }
-        }
-        return $valid;
-    }
-
-    private function parseArquivo($caminho, $cabecalhosMatricula){
-        $excelHeadings = (new HeadingRowImport)->toArray($caminho);
-        if($this->validaCabecalhos($excelHeadings, $cabecalhosMatricula)){
-            return Excel::toArray(new MatriculasImport, $caminho);
-        }else{
-            return false;
-        }
-    }
 
     public function importar(Request $request)
     {
-        $logs = [];
-        $loggedUser = auth()->user();
+        
         $cabecalhosMatricula = ["cpf", "name", "email", "phone"];
 
-        //Validar
-        //Somente ADM está liberado para alterar todos as matrículas
-        //Gestor só altera matrículas e usuários da sua empresa
-
         if ($request->hasFile('arquivo')) {
+            $requestData = $request->all();
             $caminho = $request->file('arquivo')->store('matriculas');
-            $excel = $this->parseArquivo($caminho, $cabecalhosMatricula);
-            if($excel){
-                foreach($excel[0] as $linha){
-                    DB::beginTransaction();
-                    try{
-                        //Validar de CPF já existe, email já existe
-                        //Matricular (EMPRESA)
-                        //Valida se já excedeu limite de matrículas
 
-        //$logs = $this->parseMatricula($linha);
+            $matriculaParser = new MatriculaParser();
+            $excelOriginal = $matriculaParser->parseArquivo($caminho, $cabecalhosMatricula);          
 
-                        $requestData = $request->all();
-
-                        //Cria usuário
-                        if($linha["cpf"] != "" && $linha["name"] != "" && $linha["email"] != ""){
-                            $linha["password"] = Hash::make(substr(str_replace(".", "", $linha["cpf"]), 0, 6));
-
-                            if($loggedUser->hasRole('Admin')) $linha["empresa_id"] = $requestData["empresa_id"]; //Administrador pode escolher quaquer empresa
-                            else $linha["empresa_id"] =  $loggedUser->empresa_id;
-
-                            $user = \App\Models\User::create($linha);
-                            $user->assignRole("Aluno");
-
-                            //Cria matrícula
-                            $plano = \App\Models\Plano::find(intval($requestData["plano_id"]));
-                            $requestData["user_id"] = $user->id;
-                            $requestData["tempo_acesso"] = $plano->cursos()->find($requestData["curso_id"])->pivot->tempo_acesso;
-                            $data_conclusao = new \Carbon\Carbon();
-                            $requestData["data_conclusao"] = $data_conclusao->addDays(intval($requestData["tempo_acesso"]))->toDateTimeString();
-                            $matricula = \App\Models\Matricula::create($requestData);      
-                        }
-
-                        DB::commit();
-                    }catch(\Exception $e){
-                        throw new \Exception($e);
-                        DB::rollBack();
-                    }
-                }
-            }else{
-
+            if($excelOriginal){ //Sobraram registros "limpos"
+                $excelValidado = $matriculaParser->parseConteudo($excelOriginal, $cabecalhosMatricula, $requestData["curso_id"], $requestData["empresa_id"]);
+                $matriculaParser->import($excelValidado, $requestData);
             }
-            dd("LOGS");
-            //return view('matriculas.logs.importacao', compact('logs'));
+
+            return view('matriculas.logs', compact('matriculaParser'));
         }
     }
 
@@ -182,6 +122,9 @@ class MatriculaController extends Controller
     public function create()
     {
         unset($this->validationRules["user_id"]);
+        unset($this->validationRules["tempo_acesso"]);
+        unset($this->validationRules["data_limite"]);
+
         $validator = JsValidator::make($this->validationRules);
 
         $empresas = $this->empresasUsuario();
@@ -203,15 +146,22 @@ class MatriculaController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
+        unset($this->validationRules["tempo_acesso"]);
+        unset($this->validationRules["data_limite"]);
         unset($this->validationRules["user_id"]);
 
         $this->validate($request, $this->validationRules);
 
-        $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->format('Y-m-d 23:59:59');
-
+        //Cria novo usuário
         $user = \App\Models\User::create($requestData);
         $user->assignRole("Aluno");
         $requestData["user_id"] = $user->id;
+
+        //Cria matrícula
+        $plano = \App\Models\Plano::find(intval($requestData["plano_id"]));
+        $requestData["tempo_acesso"] = $plano->cursos()->find($requestData["curso_id"])->pivot->tempo_acesso;
+        $data_conclusao = new \Carbon\Carbon();
+        $requestData["data_limite"] = $data_conclusao->addDays(intval($requestData["tempo_acesso"]))->toDateTimeString();
         $matricula = Matricula::create($requestData);
 
         if (isset($requestData["continuar"])) {
@@ -272,7 +222,7 @@ class MatriculaController extends Controller
         //Gestor só altera matrículas e usuários da sua empresa
 
         $this->validationRules["email"] = 'required|email';
-        $this->validationRules["password"] = 'same:confirm-password';
+        $this->validationRules["password"] = 'same:confirm-password';    
 
         $this->validate($request, $this->validationRules);
 
@@ -347,4 +297,10 @@ class MatriculaController extends Controller
 
         return response()->json($retorno);
     }
+
+    public function exportar() 
+    {
+        return (new PerformanceExport)->filtro(1, 0, 0, "")->download('Performance.xlsx');
+    }
+
 }

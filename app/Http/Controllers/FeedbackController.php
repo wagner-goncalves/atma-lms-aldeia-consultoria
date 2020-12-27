@@ -41,28 +41,30 @@ class FeedbackController extends Controller
 
     public function store(Request $request, $curso)
     {
-        $user = auth()->user();
-        $perguntas = $this->getPerguntasCurso($curso); 
+        try{
+            $user = auth()->user();
+            $perguntas = $this->getPerguntasCurso($curso); 
 
-        $validationRules = [];
-        $customMessages = [];
-        $customMessages[('required')] = 'Responda todas as perguntas';
-        foreach($perguntas as $pergunta)  $validationRules[('pergunta_id_' . $pergunta->id)] = 'required|integer';
-        $this->validate($request, $validationRules, $customMessages);
+            $validationRules = [];
+            $customMessages = [];
+            $customMessages[('required')] = 'Responda todas as perguntas';
+            foreach($perguntas as $pergunta)  $validationRules[('pergunta_id_' . $pergunta->id)] = 'required|integer';
+            $this->validate($request, $validationRules, $customMessages);
 
-        foreach($request->all() as $key => $resposta_id){
-            if(strpos($key, 'pergunta_id_') !== false){
-                $pergunta_id = intval(str_replace("pergunta_id_", "", $key));
-                $feedback = \App\Models\Feedback::create([
-                    'curso_id' => $curso,
-                    'pergunta_id' => $pergunta_id,
-                    'resposta_id' => $resposta_id,
-                    'user_id' => $user->id,
-                ]);
+            foreach($request->all() as $key => $resposta_id){
+                if(strpos($key, 'pergunta_id_') !== false){
+                    $pergunta_id = intval(str_replace("pergunta_id_", "", $key));
+                    $feedback = \App\Models\Feedback::create([
+                        'curso_id' => $curso,
+                        'pergunta_id' => $pergunta_id,
+                        'resposta_id' => $resposta_id,
+                        'user_id' => $user->id,
+                    ]);
+                }
             }
+        }catch(\Exception $e){
+            
         }
-
-        
 
         $curso = \App\Models\Curso::find($curso);
         $curso->concluirCurso($curso->id);

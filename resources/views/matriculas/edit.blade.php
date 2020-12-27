@@ -96,6 +96,7 @@
                         </select>
                     </div>
                 </div>
+                @if(isset($matricula->id) && intval($matricula->id) > 0)
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -115,6 +116,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <h4><i class="fas fa-user"></i> Dados do @if(!isset($matricula->id) || intval($matricula->id) == 0) novo @endif aluno</h4>
@@ -161,7 +163,10 @@
 
                         <div class="form-group col-md-4">
                             <div class="form-group">
-                                <strong>Senha:</strong> <span class="small">Deixe o campo de senha vazio para não alterar a senha atual.</span>
+                                <strong>Senha:</strong> 
+                                @if(isset($matricula->id) && intval($matricula->id) > 0)
+                                <span class="small">Deixe o campo de senha vazio para não alterar a senha atual.</span>
+                                @endif
                                 {!! Form::password('password', array('placeholder' => '','class' => 'form-control')) !!}
                             </div>
                         </div>

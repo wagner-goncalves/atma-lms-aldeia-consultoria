@@ -34,7 +34,9 @@ class HomeController extends Controller
             ->where('matriculas.user_id', '=', $user->id)
             ->orderBy('matriculas.created_at','desc')
             ->with(['modulos'])
-            ->get();
+            ->get("cursos.*");
+
+            //dd($cursos);
 
         return view('home', compact('cursos'));
 

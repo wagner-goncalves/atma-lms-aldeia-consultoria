@@ -16,7 +16,7 @@ class UserLoggedController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin|Votante');
+        $this->middleware('role:Admin|Aluno|Gestor');
     }
 
     public function show()
