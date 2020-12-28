@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\Auth;
 use JsValidator;
 use Illuminate\Support\Facades\Storage;
 
+use App\Traits\HandleSqlError;
+
 class PlanoController extends Controller
 {
+
+    use \App\Traits\HandleSqlError;
 
     protected $validationRules = [
         'nome' => 'required',
@@ -169,12 +173,9 @@ class PlanoController extends Controller
         try{
             $plano->delete();
         } catch(\Illuminate\Database\QueryException $e) {
-            return redirect()->route('planos.index')
-                        ->with('error', sprintf('Não foi possível excluir o registro. <br /><br />%s', $e->getMessage()));
+            $mensagem = $this->formatSqlError($e->getPrevious()->getErrorCode(), $e->getMessage());
+            return redirect()->route('planos.index')->with('error', sprintf('Não foi possível excluir o registro. <br />%s', $mensagem));
         }
-
-        
-        
         
         return redirect()->route('planos.index')
                         ->with('success','Plano excluído com sucesso.');

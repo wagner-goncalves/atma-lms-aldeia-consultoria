@@ -21,6 +21,7 @@
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
         "proengsoft/laravel-jsvalidation": "^4.4",
+        "solodkiy/mysql-error-parser": "^0.1.5",
         "spatie/laravel-permission": "^3.18"
     },
     "require-dev": {

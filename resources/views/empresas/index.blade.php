@@ -59,6 +59,12 @@
                 </div>
             @endif
 
+            @if ($message = Session::get('error'))
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle fa-lg"></i> {!! $message !!}
+                </div>
+            @endif            
+
             <table class="table table-bordered">
                 <tr>
                     <th>#</th>

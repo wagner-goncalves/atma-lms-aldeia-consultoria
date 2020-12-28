@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 class ModuloController extends Controller
 {
 
+    use \App\Traits\HandleSqlError;
+
     protected $validationRules = [
         'nome' => 'required',
         'curso_id' => 'required|integer',
@@ -166,15 +168,21 @@ class ModuloController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         $modulo = Modulo::find($id);
-        Storage::delete($modulo->arquivo);
-        $modulo->delete();
+
+        try{
+            $modulo->delete();
+        } catch(\Illuminate\Database\QueryException $e) {
+            $mensagem = $this->formatSqlError($e->getPrevious()->getErrorCode(), $e->getMessage());
+            return redirect()->route('modulos.index')->with('error', sprintf('Não foi possível excluir o registro. <br />%s', $mensagem));
+        }
         
-        return redirect()->route('modulos.index')
+        return redirect()->route('planos.index')
                         ->with('success','Módulo excluído com sucesso.');
-    }
+    }    
 
     public function download($id){
         $modulo = Modulo::find($id);

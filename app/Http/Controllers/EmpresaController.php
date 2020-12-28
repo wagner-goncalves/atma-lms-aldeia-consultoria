@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 class EmpresaController extends Controller
 {
 
+    use \App\Traits\HandleSqlError;
+
     protected $validationRules = [
         'nome' => 'required',
     ];
@@ -164,11 +166,20 @@ class EmpresaController extends Controller
      */
     public function destroy($id)
     {
+
         $empresa = Empresa::find($id);
-        $empresa->delete();
+
+        try{
+            $empresa->delete();
+        } catch(\Illuminate\Database\QueryException $e) {
+            $mensagem = $this->formatSqlError($e->getPrevious()->getErrorCode(), $e->getMessage());
+            return redirect()->route('empresas.index')->with('error', sprintf('Não foi possível excluir o registro. <br />%s', $mensagem));
+        }
         
         return redirect()->route('empresas.index')
                         ->with('success','Empresa excluída com sucesso.');
     }
+
+    
 
 }

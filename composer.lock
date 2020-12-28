@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00737c9398ae47c085947d57c99c45c0",
+    "content-hash": "62a7fb9aaddf478fb0252641594af8fe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3280,6 +3280,53 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "solodkiy/mysql-error-parser",
+            "version": "0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/solodkiy/mysql-error-parser.git",
+                "reference": "0bae3b6feee7962305c0f49053ef1804c4620b0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/solodkiy/mysql-error-parser/zipball/0bae3b6feee7962305c0f49053ef1804c4620b0d",
+                "reference": "0bae3b6feee7962305c0f49053ef1804c4620b0d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.1"
+            },
+            "require-dev": {
+                "aza/phpgen": "^1.1",
+                "ext-dom": "*",
+                "phpunit/phpunit": "^7.5",
+                "symfony/console": "^4.3",
+                "symplify/easy-coding-standard": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solodkiy\\MysqlErrorsParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexey Solodkiy",
+                    "email": "alexey@solodkiy.by"
+                }
+            ],
+            "description": "Parsing MySQL error messages to structured format",
+            "support": {
+                "issues": "https://github.com/solodkiy/mysql-error-parser/issues",
+                "source": "https://github.com/solodkiy/mysql-error-parser/tree/0.1.5"
+            },
+            "time": "2019-08-26T10:37:41+00:00"
         },
         {
             "name": "spatie/laravel-permission",

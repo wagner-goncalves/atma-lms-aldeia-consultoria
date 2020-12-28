@@ -55,7 +55,7 @@ CREATE TABLE `aulas` (
   `is_active` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `fk_aulas_modulos1_idx` (`modulo_id`),
-  CONSTRAINT `fk_aulas_modulos1` FOREIGN KEY (`modulo_id`) REFERENCES `modulos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_aulas_modulos1` FOREIGN KEY (`modulo_id`) REFERENCES `modulos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `aulas` */
@@ -154,7 +154,7 @@ CREATE TABLE `empresas` (
 /*Data for the table `empresas` */
 
 insert  into `empresas`(`id`,`nome`,`descricao`,`created_at`,`updated_at`,`is_active`) values (1,'Atma Interativa',NULL,'2020-12-18 17:24:55',NULL,1);
-insert  into `empresas`(`id`,`nome`,`descricao`,`created_at`,`updated_at`,`is_active`) values (2,'Teste',NULL,'2020-12-28 12:13:32','2020-12-28 12:13:32',1);
+insert  into `empresas`(`id`,`nome`,`descricao`,`created_at`,`updated_at`,`is_active`) values (2,'Usiminas',NULL,'2020-12-28 12:13:32','2020-12-28 12:13:32',1);
 
 /*Table structure for table `failed_jobs` */
 
@@ -258,7 +258,7 @@ CREATE TABLE `matriculas` (
   CONSTRAINT `fk_matriculas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 /*Data for the table `matriculas` */
 
@@ -266,6 +266,7 @@ insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (7,7,1,1,1,1,12,'2020-12-25 23:59:59',NULL,'2020-12-23 13:56:26','2020-12-23 13:56:26');
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (54,65,1,1,1,1,30,'2021-01-25 16:03:36','2020-12-27 12:03:48','2020-12-26 16:03:36','2020-12-27 12:03:48');
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (55,66,1,1,1,1,30,'2021-01-30 23:59:59',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (56,67,1,2,1,1,30,'2021-01-27 19:06:33',NULL,'2020-12-28 19:06:33','2020-12-28 19:06:33');
 
 /*Table structure for table `migrations` */
 
@@ -360,7 +361,9 @@ insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',63);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',64);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',65);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (3,'App\\Models\\User',65);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',66);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',67);
 
 /*Table structure for table `modulos` */
 
@@ -488,8 +491,8 @@ CREATE TABLE `planos_has_cursos` (
   PRIMARY KEY (`plano_id`,`curso_id`),
   KEY `fk_planos_has_cursos_cursos1_idx` (`curso_id`),
   KEY `fk_planos_has_cursos_planos1_idx` (`plano_id`),
-  CONSTRAINT `fk_planos_has_cursos_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_planos_has_cursos_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `fk_planos_has_cursos_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_planos_has_cursos_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `planos_has_cursos` */
@@ -507,8 +510,8 @@ CREATE TABLE `planos_has_empresas` (
   PRIMARY KEY (`plano_id`,`empresa_id`),
   KEY `fk_planos_has_empresas_empresas1_idx` (`empresa_id`),
   KEY `fk_planos_has_empresas_planos1_idx` (`plano_id`),
-  CONSTRAINT `fk_planos_has_empresas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_planos_has_empresas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `fk_planos_has_empresas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_planos_has_empresas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `planos_has_empresas` */
@@ -620,12 +623,13 @@ CREATE TABLE `roles` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `roles` */
 
 insert  into `roles`(`id`,`name`,`guard_name`,`created_at`,`updated_at`) values (1,'Admin','web','2020-12-17 23:28:18','2020-12-17 23:28:18');
 insert  into `roles`(`id`,`name`,`guard_name`,`created_at`,`updated_at`) values (2,'Aluno','web','2020-12-17 23:28:18',NULL);
+insert  into `roles`(`id`,`name`,`guard_name`,`created_at`,`updated_at`) values (3,'Gestor','web',NULL,NULL);
 
 /*Table structure for table `users` */
 
@@ -647,15 +651,16 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `fk_users_empresas1_idx` (`empresa_id`),
-  CONSTRAINT `fk_users_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `fk_users_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'','(31) 9825-86122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','Ik5EjZhc0rszi2sl1dobITn2aAeZH2fwjKXqhhHFlmjRL6VToOCV0XRxrGnm','2020-12-17 23:28:18','2020-12-23 12:43:33',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'051.666.616-99','(31) 98258-6122','$2y$10$myArGDic4aLdG2B5gJ2pb.WgRX4u7Spe1XoEcnhqGj1roROX887AG','hum1gz5ZZ93p2FQMOsKT7RENvQP1BEadzAimCHnplQmrQAejZAytxRFEeCja','2020-12-17 23:28:18','2020-12-28 18:53:48',1);
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (7,1,'Wagner Gomes Gonçalves','wagnerggg@gmail.co',NULL,'','(55) 3199-84771','1',NULL,'2020-12-23 13:56:25','2020-12-23 13:56:25',1);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (65,1,'Teste 2','alexandre@atma.com.br',NULL,'222222','123456','$2y$10$ChJ/ORXtPj.1JODv2P7khu//4guxzlSo7vs06KEah8WZGLUcLg2r.','LeR8dU5HceRdIcAU3HGepdMWsgeKwkwzDIq47gjvVdEP1JAsgzgkolYwjzC4','2020-12-26 16:03:36','2020-12-26 16:03:36',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (65,2,'Alexandre','alexandre@atma.com.br',NULL,'222222','123456','$2y$10$ChJ/ORXtPj.1JODv2P7khu//4guxzlSo7vs06KEah8WZGLUcLg2r.','uCWu8xPkQ97e0ZHo9IePfJfGqrDdcz4KgwDvRmwn1zsNxwjaMVUnSvd6toRF','2020-12-26 16:03:36','2020-12-26 16:03:36',1);
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (66,1,'Wagner Gomes Gonçalves','wagnergg@gmail.com',NULL,'000.000.000-00','(31) 9999-99999','123456',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07',1);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`) values (67,2,'Wagner Gomes Gonçalves','wagner@gmail.com',NULL,'111.111.111-11','(11) 11111-1111','123456',NULL,'2020-12-28 19:06:33','2020-12-28 19:06:33',1);
 
 /*Table structure for table `v_historicos` */
 

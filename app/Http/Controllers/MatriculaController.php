@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use JsValidator;
-
+use Illuminate\Validation\Rule;
 use App\Exports\PerformanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -25,9 +25,9 @@ class MatriculaController extends Controller
         'plano_id' => 'required|integer',
         'tempo_acesso' => 'required|integer',
         'data_limite' => 'required|regex:/\d{2}\/\d{2}\/\d{4}/',
-        'cpf' => 'required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/',
-        'name' => 'required',
+        'cpf' => 'required|unique:users,cpf|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/',
         'email' => 'required|email|unique:users,email',
+        'name' => 'required',
         'password' => 'required|same:confirm-password',
         'tempo_acesso' => 'required|integer',
         //'data_conclusao' => 'required',
@@ -35,7 +35,7 @@ class MatriculaController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        $this->middleware('role:Admin|Gestor');
     }
 
     /**
@@ -45,6 +45,7 @@ class MatriculaController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         $requestData = $request->all();
 
         $filter = $request->query('filter');
@@ -64,9 +65,10 @@ class MatriculaController extends Controller
             ->where("planos_has_empresas.empresa_id", "=", DB::raw("matriculas.empresa_id"))
             ->where("planos_has_cursos.curso_id", "=", DB::raw("matriculas.curso_id"));
 
-            if(intval($empresa_id) > 0) $matriculas->where('empresas.id', '=', intval($empresa_id));
-            if(intval($plano_id) > 0) $matriculas->where('planos.id', '=', intval($plano_id));
-            
+        if(intval($empresa_id) > 0) $matriculas->where('empresas.id', '=', intval($empresa_id));
+        if(intval($plano_id) > 0) $matriculas->where('planos.id', '=', intval($plano_id));
+        if ($user->hasRole('Gestor')) $matriculas->where('empresas.id', '=', $user->empresa_id);
+        
         if (!empty($filter)) {
             $matriculas = $matriculas
                 ->where(function ($query) use ($filter) {
@@ -92,12 +94,10 @@ class MatriculaController extends Controller
     private function empresasUsuario(){
         $user = auth()->user();
         if($user->hasRole('Admin')) return \App\Models\Empresa::all()->sortBy("nome");
-        elseif($user->hasRole('Gestor') && intval($user->empresa_id) > 0){
-            return \App\Models\Empresa::where("id", "=", $user->empresa_id);
+        elseif($user->hasRole('Gestor')){
+            return \App\Models\Empresa::where("id", "=", $user->empresa_id)->get();
         }
     }
-
-
 
     public function importar(Request $request)
     {
@@ -130,6 +130,8 @@ class MatriculaController extends Controller
         unset($this->validationRules["user_id"]);
         unset($this->validationRules["tempo_acesso"]);
         unset($this->validationRules["data_limite"]);
+        $this->validationRules["email"] = "required|email";
+        $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";        
 
         $validator = JsValidator::make($this->validationRules);
 
@@ -155,7 +157,8 @@ class MatriculaController extends Controller
         unset($this->validationRules["tempo_acesso"]);
         unset($this->validationRules["data_limite"]);
         unset($this->validationRules["user_id"]);
-
+        $this->validationRules['email'] = Rule::unique('users');
+        $this->validationRules['cpf'] = Rule::unique('users', 'cpf');
         $this->validate($request, $this->validationRules);
 
         //Cria novo usuário
@@ -199,9 +202,9 @@ class MatriculaController extends Controller
     public function edit($id)
     {
 
-        $this->validationRules["email"] = 'required|email';
         $this->validationRules["password"] = 'same:confirm-password';
-
+        $this->validationRules["email"] = "required|email";
+        $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";
         $validator = JsValidator::make($this->validationRules);
 
         $empresas = $this->empresasUsuario();
@@ -227,8 +230,9 @@ class MatriculaController extends Controller
         //Somente ADM está liberado para alterar todos as matrículas
         //Gestor só altera matrículas e usuários da sua empresa
 
-        $this->validationRules["email"] = 'required|email';
         $this->validationRules["password"] = 'same:confirm-password';    
+        $this->validationRules['email'] = Rule::unique('users')->ignore($id);
+        $this->validationRules['cpf'] = Rule::unique('users', 'cpf')->ignore($id);
 
         $this->validate($request, $this->validationRules);
 

@@ -50,7 +50,7 @@
                             <li><a class="nav-link font-weight-bold"
                                     href="{{ route('userslogged.index') }}">{{ Auth::user()->name }}</a></li>
 
-                            @role('Admin')
+                            @role('Admin|Gestor')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,8 +58,12 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
+                                    @role('Gestor')
+                                    <a class="dropdown-item" href="{{ route('matriculas.index') }}">Matrículas</a>
+                                    @endrole
+                                    @role('Admin')
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item small"><strong>Gestão</strong></a>
+                                    <a class="dropdown-item small"><strong>Clientes</strong></a>
                                     <a class="dropdown-item" href="{{ route('planos.index') }}">Planos</a> 
                                     <a class="dropdown-item" href="{{ route('empresas.index') }}">Empresas</a>                                    
                                     <a class="dropdown-item" href="{{ route('matriculas.index') }}">Matrículas</a>
@@ -68,9 +72,9 @@
                                     <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos</a>
                                     <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas</a>
                                     <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais</a>
+                                    @endrole
                                 </div>
                             </li>
-
                             @endrole
 
                             <li><a class="nav-link" href="{{ route('userslogged.index') }}">Meus dados</a></li>

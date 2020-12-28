@@ -5,10 +5,10 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    @if(!isset($plano->id) || intval($plano->id) == 0)
-                    <i class="fas fa-plus"></i> Nova plano
+                    @if (!isset($plano->id) || intval($plano->id) == 0)
+                        <i class="fas fa-plus"></i> Nova plano
                     @else
-                    <i class="fas fa-edit"></i> Editar plano
+                        <i class="fas fa-edit"></i> Editar plano
                     @endif
                 </div>
             </div>
@@ -21,10 +21,10 @@
                     <div class="form-group">
                         <a href="{{ route('planos.index') }}"
                             class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
-                                class="fas fa-chevron-left"></i> Voltar</a> 
-                        @if(intval($plano->id) > 0)
-                            {!! Form::open(['method' => 'DELETE', 'route' =>
-                            ['planos.destroy', $plano->id], 'style' => 'display:inline']) !!}
+                                class="fas fa-chevron-left"></i> Voltar</a>
+                        @if (intval($plano->id) > 0)
+                            {!! Form::open(['method' => 'DELETE', 'route' => ['planos.destroy', $plano->id], 'style' =>
+                            'display:inline']) !!}
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                             {!! Form::close() !!}
                         @endif
@@ -44,8 +44,9 @@
             @endif
 
 
-            @if(!isset($plano->id) || intval($plano->id) == 0)
-                {!! Form::open(['route' => 'planos.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
+            @if (!isset($plano->id) || intval($plano->id) == 0)
+                {!! Form::open(['route' => 'planos.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' =>
+                'edit-form']) !!}
             @else
                 {!! Form::model($plano, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
                 'route' => ['planos.update', isset($plano->id) ? $plano->id : 0]]) !!}
@@ -64,7 +65,8 @@
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <strong>Empresas:</strong>
-                                {!! Form::select('empresa_id[]', $empresas, $planoEmpresas, array('class' => 'form-control','multiple')) !!}
+                                {!! Form::select('empresa_id[]', $empresas, $planoEmpresas, ['class' => 'form-control',
+                                'multiple']) !!}
                             </div>
                         </div>
                     </div>
@@ -72,8 +74,8 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Descrição:</strong>
-                        {!! Form::textarea('descricao', $plano->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
-                        'descricao']) !!}
+                        {!! Form::textarea('descricao', $plano->descricao, ['placeholder' => '', 'class' => 'form-control',
+                        'id' => 'descricao']) !!}
                     </div>
                 </div>
             </div>

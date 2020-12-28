@@ -2,15 +2,15 @@
 
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left pb-3">
-            <div class="titulo-destaque">
-                <i class="fas fa-edit"></i> Editar usuário
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left pb-3">
+                <div class="titulo-destaque">
+                    <i class="fas fa-edit"></i> Editar usuário
+                </div>
             </div>
         </div>
     </div>
-  </div>
 
 
 
@@ -20,79 +20,145 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <div class="form-group">
-                        <a href="{{ route('users.index') }}" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-chevron-left"></i> Voltar</a>
-                    </div>  
+                        <a href="{{ route('users.index') }}"
+                            class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
+                                class="fas fa-chevron-left"></i> Voltar</a>
+                    </div>
                 </div>
             </div>
 
 
             @if (count($errors) > 0)
-            <div class="alert alert-danger">
-            <p><strong>Whoops!</strong> Temos alguns problemas.</p>
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                <div class="alert alert-danger">
+                    <p><strong>Whoops!</strong> Temos alguns problemas.</p>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
+            {!! Form::model($user, ['id' => 'edit-form', 'method' => 'PATCH', 'route' => ['users.update', $user->id]]) !!}
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <strong>Nome:</strong>
+                                {!! Form::text('name', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <strong>E-mail:</strong>
+                                {!! Form::text('email', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <strong>Telefone:</strong>
+                                {!! Form::text('phone', null, ['placeholder' => '', 'class' => 'form-control phone']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <strong>Empresa:</strong>
+                                <select id="empresa_id" name="empresa_id" class="form-control">
+                                    <option value="">Escolha</option>
+                                    @foreach ($empresas as $empresa)
+                                        <option value="{{ $empresa->id }}" {{ $user->empresa_id == $empresa->id ? 'selected' : '' }}>
+                                            {{ $empresa->nome }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <strong>CPF:</strong>
+                                {!! Form::text('cpf', null, ['placeholder' => '', 'class' => 'form-control cpf']) !!}
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <strong>Senha:</strong>
+                                {!! Form::password('confirm-password', ['placeholder' => '', 'class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <strong>Confirma senha:</strong>
+                                {!! Form::password('confirm-password', ['placeholder' => '', 'class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="form-group">
+                                <strong>Papéis:</strong>
+                                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endif  
+
+
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
+                            class="fas fa-save"></i> Salvar</button>
+                </div>
+            </div>
 
 
 
-        {!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Nome</label>
-            <div class="col-sm-10">
-                {!! Form::text('name', null, array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>  
-          
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">E-mail</label>
-            <div class="col-sm-10">
-                {!! Form::text('email', null, array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>    
-          
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Telefone</label>
-            <div class="col-sm-10">
-                {!! Form::text('phone', null, array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>     
-          
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Senha</label>
-            <div class="col-sm-10">
-                {!! Form::password('password', array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>
-          
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Confirmar Senha</label>
-            <div class="col-sm-10">
-                {!! Form::password('confirm-password', array('placeholder' => '','class' => 'form-control')) !!}
-            </div>
-          </div>  
-        
-        
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Papéis</label>
-            <div class="col-sm-10">
-                {!! Form::select('roles[]', $roles, $userRole, array('class' => 'form-control','multiple')) !!}
-            </div>
-          </div>       
-          
-          <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-save"></i> Salvar</button>
-            </div>
-          </div>    
-        
-        
-        {!! Form::close() !!}        
 
+
+            {!! Form::close() !!}
+        </div>
     </div>
-</div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+            $("input.phone")
+            .mask("(99) 9999-9999?9")
+            .focusout(function (event) {  
+                var target, phone, element;  
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);  
+                element.unmask();  
+                if(phone.length > 10) {  
+                    element.mask("(99) 99999-999?9");  
+                } else {  
+                    element.mask("(99) 9999-9999?9");  
+                }  
+            });
+            $("input.cpf").mask("999.999.999-99")
+        });
+    </script>
+
+    <!-- Laravel Javascript Validation -->
+    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
+    {!! $validator->selector('#edit-form') !!}
 
 @endsection
