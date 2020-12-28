@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
+
 
 /**
  * @property integer $id
@@ -15,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plano extends Model
 {
+
+    use Sortable;
+
     /**
      * The "type" of the auto-incrementing ID.
      * 
@@ -38,7 +43,12 @@ class Plano extends Model
     public function cursos()
     {
         return $this->belongsToMany(\App\Models\Curso::class, 'planos_has_cursos', 'plano_id', 'curso_id')->withPivot('usuarios', 'tempo_acesso');
-    }    
+    } 
+    
+    public function empresas()
+    {
+        return $this->belongsToMany(\App\Models\Empresa::class, 'planos_has_empresas', 'plano_id', 'empresa_id');
+    }     
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

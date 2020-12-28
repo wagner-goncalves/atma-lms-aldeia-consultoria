@@ -58,11 +58,16 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item small"><strong>Gestão</strong></a>
+                                    <a class="dropdown-item" href="{{ route('planos.index') }}">Planos</a> 
+                                    <a class="dropdown-item" href="{{ route('empresas.index') }}">Empresas</a>                                    
                                     <a class="dropdown-item" href="{{ route('matriculas.index') }}">Matrículas</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos do curso</a>
-                                    <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas do curso</a>
-                                    <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais das aulas</a>
+                                    <a class="dropdown-item small"><strong>Conteúdo</strong></a>
+                                    <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos</a>
+                                    <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas</a>
+                                    <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais</a>
                                 </div>
                             </li>
 

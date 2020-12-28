@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    <i class="fas fa-puzzle-piece"></i> Gerenciar módulos
+                    <i class="fas fa-building"></i> Gerenciar empresas
                 </div>
             </div>
         </div>
@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
                     <div class="form-group">
-                        <a href="{{ route('modulos.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Modulo</a>
+                        <a href="{{ route('empresas.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Empresa</a>
                     </div>
                 </div>
             </div>            
@@ -25,26 +25,27 @@
                     <form method="GET" action="{{ \Request::getRequestUri() }}">
                         <div class="form-row">
                             <div class="form-group col">
-                                <label for="modulo_id" class="small"><strong>Curso</strong></label>
-                                <select id="curso_id" name="curso_id" class="form-control form-control-sm">
+                                <label for="plano_id" class="small"><strong>Plano</strong></label>
+                                <select id="plano_id" name="plano_id" class="form-control form-control-sm">
                                     <option value="">Todos</option>
-                                    @foreach ($cursos as $curso)
-                                        <option value="{{ $curso->id }}" {{ $curso_id == $curso->id ? 'selected' : '' }}>
-                                            {{ $curso->nome }}
+                                    @foreach ($planos as $plano)
+                                        <option value="{{ $plano->id }}" {{ $plano_id == $plano->id ? 'selected' : '' }}>
+                                            {{ $plano->nome }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group col">
-                                <label for="modulo_id" class="small"><strong>Palavra-chave</strong></label>
+                                <label for="empresa_id" class="small"><strong>Palavra-chave</strong></label>
                                 <input type="text" class="form-control form-control-sm" id="filter" name="filter"
                                         placeholder="Palavra-chave" value="{{ $filter }}">
                             </div>
                             <div class="form-group col">
-                                <label for="modulo_id" class="small"><strong>&nbsp;</strong></label>
+                                <label for="empresa_id" class="small"><strong>&nbsp;</strong></label>
                                 <div>
                                     <button type="submit" class="btn btn-sm btn-secondary mb-2">Filtrar</button>
-                                    &nbsp;<a href="{{ route('modulos.index') }}" class="btn btn-sm btn-link mb-2">limpar</a>
+                                    &nbsp;<a href="{{ route('empresas.index') }}" class="btn btn-sm btn-link mb-2">limpar</a>
+                                    
                                 </div>
                             </div>                            
                         </div>
@@ -61,28 +62,37 @@
             <table class="table table-bordered">
                 <tr>
                     <th>#</th>
-                    <th>@sortablelink('curso_nome', 'Curso')</th>
-                    <th>@sortablelink('titulo', 'nome')</th>
+                    
+                    <th>@sortablelink('nome', 'Empresa')</th>
+                    <th>Planos</th>
                     <th>@sortablelink('descricao', 'Descrição')</th>
                     <th>Ações</th>
                 </tr>
-                @forelse ($modulos as $modulo)
+
+                @forelse ($empresas as $empresa)
+                    @php
+                        $planos = $empresa->planos()->get();
+                    @endphp                
                     <tr>
                         <td>{{ ++$i }}</td>
-                        <td class="small"><b>Curso:</b> {{ $modulo->curso->nome }}</td>
-                        <td><a href="{{ route('modulos.edit', $modulo->id) }}">{{ $modulo->nome }}</a></td>
-                        <td>{!! $modulo->descricao !!}</td>
+                        <td><a href="{{ route('empresas.edit', $empresa->id) }}">{{ $empresa->nome }}</a></td>
+                        <td class="small"><b>Planos:</b> 
+                            @foreach ($planos as $plano)
+                                {{$plano->nome}} 
+                            @endforeach
+                        </td>
+                        
+                        <td>{!! $empresa->descricao !!}</td>
                         <td nowrap>
-                            <a class="btn btn-sm btn-primary" href="{{ route('modulos.edit', $modulo->id) }}"><i
+                            <a class="btn btn-sm btn-primary" href="{{ route('empresas.edit', $empresa->id) }}"><i
                                     class="fas fa-edit"></i></a>
-                            {!! Form::open(['method' => 'DELETE', 'route' => ['modulos.destroy', $modulo->id], 'style'
+                            {!! Form::open(['method' => 'DELETE', 'route' => ['empresas.destroy', $empresa->id], 'style'
                             => 'display:inline']) !!}
                             <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-
-                            <a class="btn btn-sm btn-secondary" href="{{ route('aulas.index', ['modulo_id' => $modulo->id, 'curso_id' => $modulo->curso->id]) }}">Aulas <i
-                                class="fas fa-arrow-right"></i></a>
   
                             {!! Form::close() !!}
+                            <a class="btn btn-sm btn-secondary" href="{{ route('matriculas.index', ['empresa_id' => $empresa->id]) }}">Matrículas <i
+                                class="fas fa-arrow-right"></i></a>
                         </td>
                     </tr>
                 @empty
@@ -96,7 +106,7 @@
 
     <div class="row">
         <div class="col-lg-12 mb-3">
-            {!! $modulos->appends(request()->query())->links() !!}
+            {!! $empresas->appends(request()->query())->links() !!}
         </div>
     </div>
 

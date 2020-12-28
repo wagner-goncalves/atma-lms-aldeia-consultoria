@@ -14,6 +14,8 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\AulaAdministracaoController;
 use App\Http\Controllers\MatriculaController;
+use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\PlanoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/materiais/aulas', [MaterialController::class, 'aulas'])->name('materiais.aulas')->withoutMiddleware(['csrf']);
 
     Route::resource('modulos', ModuloController::class);
+
+    Route::resource('empresas', EmpresaController::class);
+
+    Route::resource('planos', PlanoController::class);
 
     Route::resource('aulas', AulaAdministracaoController::class);
 

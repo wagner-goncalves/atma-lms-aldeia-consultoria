@@ -145,7 +145,7 @@
                     <div class="card">
                         <div class="card-body small">
                             <h5 class="card-title">Importar arquivo de matrículas</h5>
-                            <p class="card-text">Obrigatóriamente, use os filtros acima indicar em qual curso serão realizadas as matrículas.</p>
+                            <p class="card-text">Obrigatóriamente, use os filtros acima para indicar em qual curso serão realizadas as matrículas importadas. Veja o <a href="{{ asset('docs/Exemplo_Importacao_Matriculas.xlsx') }}">exemplo</a> de arquivo de matrículas.</p>
                             <p class="card-text"><input name="arquivo" type="file" id="arquivo_matricula"></p>
                             <button id="btn-importar" type="submit" class="btn btn-sm btn-primary mb-2"><i
                                     class="fas fa-file-import fa-lg"></i> Importar</button>

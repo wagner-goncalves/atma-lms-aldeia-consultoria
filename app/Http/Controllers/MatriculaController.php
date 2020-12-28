@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\MatriculaParser;
 use App\Models\Matricula;
 use Hash;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -58,9 +59,14 @@ class MatriculaController extends Controller
             ->join("planos", "planos_has_cursos.plano_id", "=", "planos.id")
             ->join("planos_has_empresas", "planos_has_empresas.plano_id", "=", "planos.id")
             ->join("empresas", "planos_has_empresas.empresa_id", "=", "empresas.id")
-            ->orderBy('matriculas.id', 'desc')
-            ->select("matriculas.*", "cursos.nome as curso_nome", "planos.nome as plano_nome", "empresas.nome as empresa_nome");
+            ->orderBy("matriculas.id", "desc")
+            ->select("matriculas.*", "cursos.nome as curso_nome", "planos.nome as plano_nome", "empresas.nome as empresa_nome")
+            ->where("planos_has_empresas.empresa_id", "=", DB::raw("matriculas.empresa_id"))
+            ->where("planos_has_cursos.curso_id", "=", DB::raw("matriculas.curso_id"));
 
+            if(intval($empresa_id) > 0) $matriculas->where('empresas.id', '=', intval($empresa_id));
+            if(intval($plano_id) > 0) $matriculas->where('planos.id', '=', intval($plano_id));
+            
         if (!empty($filter)) {
             $matriculas = $matriculas
                 ->where(function ($query) use ($filter) {

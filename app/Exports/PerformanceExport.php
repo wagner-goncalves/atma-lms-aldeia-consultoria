@@ -60,7 +60,11 @@ class PerformanceExport implements FromQuery, WithHeadings
             'Feedback realizado',
             'Certificado emitido',
             'Data limite curso',
-            'Data conclusão',
+            'Data conclusão',  
+            'user_id',
+            'empresa_id',
+            'plano_id',
+            'curso_id'
         ];
     } 
 
