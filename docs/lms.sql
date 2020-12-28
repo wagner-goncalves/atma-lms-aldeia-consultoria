@@ -149,11 +149,12 @@ CREATE TABLE `empresas` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_active` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `empresas` */
 
 insert  into `empresas`(`id`,`nome`,`descricao`,`created_at`,`updated_at`,`is_active`) values (1,'Atma Interativa',NULL,'2020-12-18 17:24:55',NULL,1);
+insert  into `empresas`(`id`,`nome`,`descricao`,`created_at`,`updated_at`,`is_active`) values (2,'Teste',NULL,'2020-12-28 12:13:32','2020-12-28 12:13:32',1);
 
 /*Table structure for table `failed_jobs` */
 
@@ -467,11 +468,13 @@ CREATE TABLE `planos` (
   `valor` double(10,2) NOT NULL DEFAULT '0.00',
   `is_active` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `planos` */
 
-insert  into `planos`(`id`,`nome`,`descricao`,`valor`,`is_active`) values (1,'Básico',NULL,0.00,1);
+insert  into `planos`(`id`,`nome`,`descricao`,`valor`,`is_active`) values (1,'Bronze',NULL,0.00,1);
+insert  into `planos`(`id`,`nome`,`descricao`,`valor`,`is_active`) values (2,'Prata',NULL,0.00,1);
+insert  into `planos`(`id`,`nome`,`descricao`,`valor`,`is_active`) values (3,'Ouro',NULL,0.00,1);
 
 /*Table structure for table `planos_has_cursos` */
 
@@ -485,8 +488,8 @@ CREATE TABLE `planos_has_cursos` (
   PRIMARY KEY (`plano_id`,`curso_id`),
   KEY `fk_planos_has_cursos_cursos1_idx` (`curso_id`),
   KEY `fk_planos_has_cursos_planos1_idx` (`plano_id`),
-  CONSTRAINT `fk_planos_has_cursos_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_planos_has_cursos_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_planos_has_cursos_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_planos_has_cursos_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `planos_has_cursos` */
@@ -504,13 +507,17 @@ CREATE TABLE `planos_has_empresas` (
   PRIMARY KEY (`plano_id`,`empresa_id`),
   KEY `fk_planos_has_empresas_empresas1_idx` (`empresa_id`),
   KEY `fk_planos_has_empresas_planos1_idx` (`plano_id`),
-  CONSTRAINT `fk_planos_has_empresas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_planos_has_empresas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_planos_has_empresas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_planos_has_empresas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `planos_has_empresas` */
 
 insert  into `planos_has_empresas`(`plano_id`,`empresa_id`,`created_at`) values (1,1,'2020-12-18 17:25:14');
+insert  into `planos_has_empresas`(`plano_id`,`empresa_id`,`created_at`) values (1,2,'2020-12-28 12:13:32');
+insert  into `planos_has_empresas`(`plano_id`,`empresa_id`,`created_at`) values (2,2,'2020-12-28 12:13:32');
+insert  into `planos_has_empresas`(`plano_id`,`empresa_id`,`created_at`) values (3,1,'2020-12-28 14:17:52');
+insert  into `planos_has_empresas`(`plano_id`,`empresa_id`,`created_at`) values (3,2,'2020-12-28 12:13:32');
 
 /*Table structure for table `posts` */
 
@@ -760,10 +767,6 @@ DROP TABLE IF EXISTS `v_performance`;
 /*!50001 DROP TABLE IF EXISTS `v_performance` */;
 
 /*!50001 CREATE TABLE  `v_performance`(
- `user_id` bigint unsigned ,
- `empresa_id` bigint ,
- `plano_id` bigint ,
- `curso_id` bigint ,
  `Aluno` varchar(255) ,
  `E-mail` varchar(255) ,
  `CPF` char(14) ,
@@ -777,7 +780,11 @@ DROP TABLE IF EXISTS `v_performance`;
  `Feedback realizado` varchar(3) ,
  `Certificado emitido` varchar(3) ,
  `Data limite curso` varchar(10) ,
- `Data conclusão` varchar(10) 
+ `Data conclusão` varchar(10) ,
+ `user_id` bigint unsigned ,
+ `empresa_id` bigint ,
+ `plano_id` bigint ,
+ `curso_id` bigint 
 )*/;
 
 /*View structure for view v_performance */
@@ -785,7 +792,7 @@ DROP TABLE IF EXISTS `v_performance`;
 /*!50001 DROP TABLE IF EXISTS `v_performance` */;
 /*!50001 DROP VIEW IF EXISTS `v_performance` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_performance` AS select `m`.`user_id` AS `user_id`,`m`.`empresa_id` AS `empresa_id`,`m`.`plano_id` AS `plano_id`,`m`.`curso_id` AS `curso_id`,`u`.`name` AS `Aluno`,`u`.`email` AS `E-mail`,`u`.`cpf` AS `CPF`,`u`.`phone` AS `Telefone`,`e`.`nome` AS `Empresa`,`p`.`nome` AS `Plano`,`c`.`nome` AS `Curso`,(select count(`a1`.`id`) from (`aulas` `a1` join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where (`m1`.`curso_id` = `c`.`id`)) AS `Aulas do curso`,(select count(distinct `v1`.`aula_id`) from ((`visualizacoes` `v1` join `aulas` `a1` on((`a1`.`id` = `v1`.`aula_id`))) join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where ((`m1`.`curso_id` = `c`.`id`) and (`v1`.`user_id` = `u`.`id`))) AS `Aulas assistidas`,(select count(`p1`.`id`) from `posts` `p1` where ((`p1`.`user_id` = `u`.`id`) and (`p1`.`curso_id` = `c`.`id`))) AS `Posts realizadoss`,(select if((count(`f1`.`id`) > 0),'SIM','NÃO') from `feedbacks` `f1` where ((`f1`.`user_id` = `u`.`id`) and (`f1`.`curso_id` = `c`.`id`))) AS `Feedback realizado`,(select if((count(`c1`.`id`) > 0),'SIM','NÃO') from `certificados` `c1` where ((`c1`.`user_id` = `u`.`id`) and (`c1`.`curso_id` = `c`.`id`))) AS `Certificado emitido`,date_format(`m`.`data_limite`,'%d/%m/%Y') AS `Data limite curso`,date_format(`m`.`data_conclusao`,'%d/%m/%Y') AS `Data conclusão` from ((((`users` `u` join `matriculas` `m` on((`m`.`user_id` = `u`.`id`))) join `cursos` `c` on((`c`.`id` = `m`.`curso_id`))) join `empresas` `e` on((`e`.`id` = `m`.`empresa_id`))) join `planos` `p` on((`p`.`id` = `m`.`plano_id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_performance` AS select `u`.`name` AS `Aluno`,`u`.`email` AS `E-mail`,`u`.`cpf` AS `CPF`,`u`.`phone` AS `Telefone`,`e`.`nome` AS `Empresa`,`p`.`nome` AS `Plano`,`c`.`nome` AS `Curso`,(select count(`a1`.`id`) from (`aulas` `a1` join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where (`m1`.`curso_id` = `c`.`id`)) AS `Aulas do curso`,(select count(distinct `v1`.`aula_id`) from ((`visualizacoes` `v1` join `aulas` `a1` on((`a1`.`id` = `v1`.`aula_id`))) join `modulos` `m1` on((`m1`.`id` = `a1`.`modulo_id`))) where ((`m1`.`curso_id` = `c`.`id`) and (`v1`.`user_id` = `u`.`id`))) AS `Aulas assistidas`,(select count(`p1`.`id`) from `posts` `p1` where ((`p1`.`user_id` = `u`.`id`) and (`p1`.`curso_id` = `c`.`id`))) AS `Posts realizadoss`,(select if((count(`f1`.`id`) > 0),'SIM','NÃO') from `feedbacks` `f1` where ((`f1`.`user_id` = `u`.`id`) and (`f1`.`curso_id` = `c`.`id`))) AS `Feedback realizado`,(select if((count(`c1`.`id`) > 0),'SIM','NÃO') from `certificados` `c1` where ((`c1`.`user_id` = `u`.`id`) and (`c1`.`curso_id` = `c`.`id`))) AS `Certificado emitido`,date_format(`m`.`data_limite`,'%d/%m/%Y') AS `Data limite curso`,date_format(`m`.`data_conclusao`,'%d/%m/%Y') AS `Data conclusão`,`m`.`user_id` AS `user_id`,`m`.`empresa_id` AS `empresa_id`,`m`.`plano_id` AS `plano_id`,`m`.`curso_id` AS `curso_id` from ((((`users` `u` join `matriculas` `m` on((`m`.`user_id` = `u`.`id`))) join `cursos` `c` on((`c`.`id` = `m`.`curso_id`))) join `empresas` `e` on((`e`.`id` = `m`.`empresa_id`))) join `planos` `p` on((`p`.`id` = `m`.`plano_id`))) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
