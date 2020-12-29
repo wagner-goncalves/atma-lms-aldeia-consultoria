@@ -19,7 +19,8 @@
                     </div>
                     <div class="col-12 col-md-4 col-sm-12 text-right">
                         <a href="{{ route('home') }}" class="btn btn-success"><i class="fas fa-chevron-left"></i> Voltar</a>
-                        <button type="button" class="btn btn-danger"><i class="fa fa-users"></i> Fórum de discussão</button>
+                        <a href="{{ route('posts.show', ['post' => $curso->id]) }}" class="btn btn-danger pull-right"><i class="fa fa-users"></i> Fórum de discussão</a>
+                        
                     </div>
                 </div>
 

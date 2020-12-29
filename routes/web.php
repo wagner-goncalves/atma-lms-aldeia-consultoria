@@ -16,6 +16,7 @@ use App\Http\Controllers\AulaAdministracaoController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PlanoController;
+use App\Http\Controllers\PostController;
 
 use App\Http\Controllers\Auth\ExpiredPasswordController;
 
@@ -102,6 +103,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('userslogged', UserLoggedController::class);
     Route::resource('products', ProductController::class);
     //Route::resource('participantes', ParticipanteController::class);
+
+    Route::resource('posts', PostController::class);
 
     Route::get('/password/expired', [ExpiredPasswordController::class, 'expired'])->name('password.expired');
     Route::post('/password/post_expired', [ExpiredPasswordController::class, 'postExpired'])->name('password.post_expired');

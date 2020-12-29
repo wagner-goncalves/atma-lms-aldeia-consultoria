@@ -18,8 +18,8 @@
                             <h1>{{ $curso->nome }}</h1>
                         </div>
                         <div class="col-3 text-right">
-                            <button type="button" class="btn btn-danger pull-right"><i class="fa fa-users"></i> Fórum de
-                                discussão</button>
+                            <a href="{{ route('posts.show', ['post' => $curso->id]) }}" class="btn btn-danger pull-right"><i class="fa fa-users"></i> Fórum de
+                                discussão</a>
                         </div>
                     </div>
 

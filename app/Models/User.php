@@ -111,6 +111,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Post');
     }
 
+    public function countPosts()
+    {
+        return $this->hasMany('App\Models\Post')->count();
+    }    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
