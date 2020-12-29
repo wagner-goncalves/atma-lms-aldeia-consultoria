@@ -2,6 +2,8 @@
 
 return [
 
+    'password_expires_days' => 365,
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults

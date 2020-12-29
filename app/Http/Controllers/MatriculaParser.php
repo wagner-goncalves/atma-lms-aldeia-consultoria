@@ -148,12 +148,10 @@ class MatriculaParser
             }else{
 
                 DB::beginTransaction();
+                $user = null;
                 try{
                     //Validar de CPF já existe, email já existe
                     //Matricular (EMPRESA)
-                    
-                    $user = null;
-
                     //Cria usuário
                     if($linha["cpf"] != "" && $linha["name"] != "" && $linha["email"] != ""){
                         $linha["password"] = Hash::make(substr(str_replace(".", "", $linha["cpf"]), 0, 6));
@@ -187,7 +185,7 @@ class MatriculaParser
                     $erro = new \stdClass;
                     $erro->linha = $index + 1;
                     $erro->exception = $e;
-                    $erro->mensagem = sprintf("Não foi possívei importar o usuário %s (CPF %s).", $user->name, $user->cpf);
+                    $erro->mensagem = sprintf("Não foi possívei importar a linha %s. Mensagem de erro: %s.", $erro->linha, $e->getMessage());
                     $this->erros[] = $erro;
                 }
             }

@@ -109,6 +109,7 @@ class UserController extends Controller
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        $input['password_changet_at'] = '2000-01-01 00:00:01';
 
         $user = User::create($input);
         if (!$user->hasRole('Admin')) unset($request->input('roles')["Admin"]);
@@ -188,14 +189,16 @@ class UserController extends Controller
         unset($this->validationRules['password']);
         $this->validate($request, $this->validationRules);
 
-        
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
+            $input['password_changed_at'] = "2000-01-01 00:00:01";
         } else {
             $input = Arr::except($input, array('password'));
         }
 
+        
         $user = User::find($id);
+        
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 
@@ -226,5 +229,9 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully');
+    }
+
+    public function resetPassword($id){
+
     }
 }

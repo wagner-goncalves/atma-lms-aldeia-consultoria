@@ -69,4 +69,5 @@ class Matricula extends Model
         ->where('user_id', '=', $user->id)->first();
         return $matricula ? $matricula : false;
     }
+
 }

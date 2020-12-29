@@ -28,7 +28,7 @@ class MatriculaController extends Controller
         'cpf' => 'required|unique:users,cpf|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/',
         'email' => 'required|email|unique:users,email',
         'name' => 'required',
-        'password' => 'required|same:confirm-password',
+        //'password' => 'required|same:confirm-password',
         'tempo_acesso' => 'required|integer',
         //'data_conclusao' => 'required',
     ];
@@ -162,6 +162,7 @@ class MatriculaController extends Controller
         $this->validate($request, $this->validationRules);
 
         //Cria novo usuário
+        $requestData["password"] = Hash::make(substr(str_replace(".", "", $requestData["cpf"]), 0, 6));
         $user = \App\Models\User::create($requestData);
         $user->assignRole("Aluno");
         $requestData["user_id"] = $user->id;
@@ -238,13 +239,14 @@ class MatriculaController extends Controller
 
         $requestData = $request->all();
         $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->format('Y-m-d 23:59:59');
-
+        
         $matricula = Matricula::find($id);
         $matricula->update($requestData);
 
         //Usuário
         if (!empty($requestData['password'])) {
-            $requestData['password'] = Hash::make($requestData['password']);
+            $requestData["password"] = Hash::make(substr(str_replace(".", "", $requestData["cpf"]), 0, 6));
+            //$requestData['password'] = Hash::make($requestData['password']);
         } else {
             $requestData = Arr::except($requestData, array('password'));
         }
@@ -308,9 +310,11 @@ class MatriculaController extends Controller
         return response()->json($retorno);
     }
 
-    public function exportar() 
+    public function exportar(Request $request) 
     {
-        return (new PerformanceExport)->filtro(1, 0, 0, "")->download('Performance.xlsx');
+        $requestData = $request->all();
+        $fileName = sprintf("Matrículas %s.xlsx", date("d-m-Y"));
+        return (new PerformanceExport)->filtro($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"], "")->download($fileName);
     }
 
 }

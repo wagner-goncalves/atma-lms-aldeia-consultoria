@@ -17,6 +17,8 @@ use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PlanoController;
 
+use App\Http\Controllers\Auth\ExpiredPasswordController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,10 +38,34 @@ Auth::routes();
   
 //Route::get('/', [LoginController::class, 'login'])->name('home');
 
+
+Route::get('mail', function () {
+    $matricula = new \App\Models\Matricula();
+
+    $matricula = $matricula->where('curso_id', '=', 1)
+        ->where('user_id', '=', 1)
+        ->where('empresa_id', '=', 1)
+        ->first();
+
+    $user = \App\Models\User::find(1);
+    $empresa = \App\Models\Empresa::find(1);
+    $curso = \App\Models\Curso::find(1);
+    //$user->notify(new \App\Notifications\AlunoCadastrado());
+
+    return (new \App\Notifications\AlunoCadastrado(
+            $user, 
+            $empresa, 
+            $curso
+            ))->toMail($user);
+});
   
 Route::group(['middleware' => ['auth']], function() {
+
+    Route::middleware(['password_expired'])->group(function () {
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
+    });    
     
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+   
     Route::get('/aula/{curso}', [AulaController::class, 'index'])->name('aula')->where('curso', '[0-9]+');
     Route::get('/feedback/{curso}', [FeedbackController::class, 'index'])->name('feedback')->where('curso', '[0-9]+');        
     Route::post('/feedback/{curso}', [FeedbackController::class, 'store'])->name('feedback.store')->where('curso', '[0-9]+');
@@ -70,8 +96,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    Route::get('/primeiro-acesso/{id}', [UserController::class, 'resetPassword'])->name('primeiro.acesso');
+
     Route::resource('userslogged', UserLoggedController::class);
     Route::resource('products', ProductController::class);
     //Route::resource('participantes', ParticipanteController::class);
+
+    Route::get('/password/expired', [ExpiredPasswordController::class, 'expired'])->name('password.expired');
+    Route::post('/password/post_expired', [ExpiredPasswordController::class, 'postExpired'])->name('password.post_expired');
 
 });

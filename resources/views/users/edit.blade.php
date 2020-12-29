@@ -95,7 +95,7 @@
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <strong>Senha:</strong>
-                                {!! Form::password('confirm-password', ['placeholder' => '', 'class' => 'form-control']) !!}
+                                {!! Form::password('password', ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group col-md-6">

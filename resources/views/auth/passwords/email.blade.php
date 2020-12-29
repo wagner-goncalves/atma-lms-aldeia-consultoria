@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-            <div >
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div>
 
                 <div class="card-body">
 
@@ -26,7 +26,8 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-mail') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -38,7 +39,8 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase">
+                                <button type="submit"
+                                    class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase">
                                     {{ __('Enviar link de redefinição no e-mail') }}
                                 </button>
                             </div>
