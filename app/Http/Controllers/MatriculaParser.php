@@ -7,6 +7,10 @@ use Maatwebsite\Excel\HeadingRowImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\MatriculasImport;
 use Illuminate\Support\Facades\DB;
+use App\Models\Matricula;
+use App\Models\Empresa;
+use App\Models\Curso;
+use App\Notifications\AlunoCadastrado;
 use Hash;
 
 class MatriculaParser
@@ -141,7 +145,7 @@ class MatriculaParser
             //Valida se já excedeu limite de matrículas
             $maximoAlunosPlano = $empresa->maximoAlunosPlano($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);
             $quantidadeAlunosMatriculados = $empresa->quantidadeAlunosMatriculados($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);                
-            if($quantidadeAlunosMatriculados == $maximoAlunosPlano){
+            if($quantidadeAlunosMatriculados >= $maximoAlunosPlano){
                 $erro->linha = $index + 1;
                 $erro->mensagem = sprintf("Usuário %s (CPF %s) não importado. Atingido limite de %s usuários do plano.", $linha["name"], $linha["cpf"], $maximoAlunosPlano);
                 $this->erros[] = $erro;
@@ -149,6 +153,7 @@ class MatriculaParser
 
                 DB::beginTransaction();
                 $user = null;
+                $matricula = null;
                 try{
                     //Validar de CPF já existe, email já existe
                     //Matricular (EMPRESA)
@@ -178,6 +183,9 @@ class MatriculaParser
                     $sucesso->linha = $index + 1;
                     $sucesso->mensagem = sprintf("Usuário %s (CPF %s) matriculado com sucesso! Restam %s usuários em seu plano.", $user->name, $user->cpf, ($maximoAlunosPlano - ($quantidadeAlunosMatriculados + 1)));
                     $this->sucessos[] = $sucesso;
+
+                    //Envia notificação
+                    $user->notify(new AlunoCadastrado($user, Empresa::find($matricula->empresa_id), Curso::find($matricula->curso_id)));
 
                 }catch(\Exception $e){
                     //throw new \Exception($e);

@@ -48,6 +48,7 @@ class UserLoggedController extends Controller
         $input = $request->all();
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
+            $input['password_changed_at'] = date("Y-m-d H:i:s");
         }else{
             $input = Arr::except($input,array('password'));    
         }

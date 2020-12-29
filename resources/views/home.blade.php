@@ -124,6 +124,8 @@
                                                         @endif
                                                         
                                                     </td>
+                                                    @else
+                                                    <td class="text-right">&nbsp;</td>
                                                     @endif
                                                 </tr>
                                             @empty

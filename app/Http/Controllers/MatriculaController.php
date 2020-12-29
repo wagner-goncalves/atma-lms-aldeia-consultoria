@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MatriculaParser;
 use App\Models\Matricula;
+use App\Models\Empresa;
+use App\Models\Curso;
+use App\Notifications\AlunoCadastrado;
 use Hash;
 use DB;
 use Illuminate\Http\Request;
@@ -67,7 +70,7 @@ class MatriculaController extends Controller
 
         if(intval($empresa_id) > 0) $matriculas->where('empresas.id', '=', intval($empresa_id));
         if(intval($plano_id) > 0) $matriculas->where('planos.id', '=', intval($plano_id));
-        if ($user->hasRole('Gestor')) $matriculas->where('empresas.id', '=', $user->empresa_id);
+        if (!$user->hasRole('Admin') && $user->hasRole('Gestor')) $matriculas->where('empresas.id', '=', $user->empresa_id);
         
         if (!empty($filter)) {
             $matriculas = $matriculas
@@ -154,16 +157,38 @@ class MatriculaController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
+
+        //Valida se já excedeu limite de matrículas
+        $empresa = Empresa::find(auth()->user()->empresa_id);
+        $maximoAlunosPlano = $empresa->maximoAlunosPlano($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);
+        $quantidadeAlunosMatriculados = $empresa->quantidadeAlunosMatriculados($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);                
+        if($quantidadeAlunosMatriculados >= $maximoAlunosPlano){
+            return redirect()->route('matriculas.create')->with('error', sprintf('Não foi possível realizar a matrícula. O limite de %s matrículas foi alcançado.', $maximoAlunosPlano));
+        }
+
         unset($this->validationRules["tempo_acesso"]);
         unset($this->validationRules["data_limite"]);
         unset($this->validationRules["user_id"]);
-        $this->validationRules['email'] = Rule::unique('users');
-        $this->validationRules['cpf'] = Rule::unique('users', 'cpf');
+
+        //Verifica de usuário já existe e não o cria.
+        $userVerified = \App\Models\User::where('cpf', '=', $requestData["cpf"])
+            ->orWhere('email', '=', $requestData["email"])
+            ->first();
+
+
+        if(is_object($userVerified)){
+            unset($this->validationRules['email']);
+            unset($this->validationRules['cpf']);
+        }else{
+            $this->validationRules['email'] = Rule::unique('users');
+            $this->validationRules['cpf'] = Rule::unique('users', 'cpf');
+        }
+
         $this->validate($request, $this->validationRules);
 
-        //Cria novo usuário
+        //Cria novo usuário com senha padrão e senha que expira
         $requestData["password"] = Hash::make(substr(str_replace(".", "", $requestData["cpf"]), 0, 6));
-        $user = \App\Models\User::create($requestData);
+        $user = is_object($userVerified) ? $userVerified : \App\Models\User::create($requestData);
         $user->assignRole("Aluno");
         $requestData["user_id"] = $user->id;
 
@@ -174,13 +199,16 @@ class MatriculaController extends Controller
         $requestData["data_limite"] = $data_conclusao->addDays(intval($requestData["tempo_acesso"]))->toDateTimeString();
         $matricula = Matricula::create($requestData);
 
+        //Envia notificação
+        if(!is_object($userVerified)) $user->notify(new AlunoCadastrado($user, Empresa::find($matricula->empresa_id), Curso::find($matricula->curso_id)));
+
         if (isset($requestData["continuar"])) {
             return redirect()->route('matriculas.create')->with('success', 'Matricula anterior criada com sucesso.');
         } else {
             return redirect()->route('matriculas.index')->with('success', 'Matricula criada com sucesso.');
         }
-
     }
+
 
     /**
      * Display the specified resource.
@@ -202,12 +230,10 @@ class MatriculaController extends Controller
      */
     public function edit($id)
     {
-
-        $this->validationRules["password"] = 'same:confirm-password';
         $this->validationRules["email"] = "required|email";
         $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";
-        $validator = JsValidator::make($this->validationRules);
 
+        $validator = JsValidator::make($this->validationRules);
         $empresas = $this->empresasUsuario();
 
         $matricula = Matricula::find($id);
@@ -227,33 +253,34 @@ class MatriculaController extends Controller
     public function update(Request $request, $id)
     {
 
-        //Validar
-        //Somente ADM está liberado para alterar todos as matrículas
-        //Gestor só altera matrículas e usuários da sua empresa
+        $matricula = Matricula::find($id); 
 
+        //Validação básica
         $this->validationRules["password"] = 'same:confirm-password';    
-        $this->validationRules['email'] = Rule::unique('users')->ignore($id);
-        $this->validationRules['cpf'] = Rule::unique('users', 'cpf')->ignore($id);
-
+        $this->validationRules['email'] = Rule::unique('users', 'email')->ignore($matricula->user_id);
+        $this->validationRules['cpf'] = Rule::unique('users', 'cpf')->ignore($matricula->user_id);
         $this->validate($request, $this->validationRules);
 
         $requestData = $request->all();
-        $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->format('Y-m-d 23:59:59');
-        
-        $matricula = Matricula::find($id);
+        //Se gestor: não alterar data limite do curso
+        if (auth()->user()->hasRole('Gestor') && !auth()->user()->hasRole('Admin')){
+            $requestData["tempo_acesso"] = $matricula->tempo_acesso;
+            $requestData["data_limite"] = $matricula->data_limite;
+        }elseif (auth()->user()->hasRole('Admin')){
+            $requestData["data_limite"] = \Carbon\Carbon::createFromFormat('d/m/Y', $requestData["data_limite"])->addDays(intval($requestData["tempo_acesso"]))->toDateTimeString();
+        }
         $matricula->update($requestData);
 
-        //Usuário
+        //Usuário com nova senha
         if (!empty($requestData['password'])) {
-            $requestData["password"] = Hash::make(substr(str_replace(".", "", $requestData["cpf"]), 0, 6));
-            //$requestData['password'] = Hash::make($requestData['password']);
+            $requestData['password'] = Hash::make($requestData['password']); //$requestData["password"] = Hash::make(substr(str_replace(".", "", $requestData["cpf"]), 0, 6));
+            $requestData['password_changed_at'] = null;
         } else {
             $requestData = Arr::except($requestData, array('password'));
         }
 
         $user = \App\Models\User::find($requestData['user_id']);
         $user->update($requestData);
-        //DB::table('model_has_roles')->where('model_id',$user_id)->delete();
         $user->assignRole("Aluno");
 
         return redirect()->route('matriculas.index')

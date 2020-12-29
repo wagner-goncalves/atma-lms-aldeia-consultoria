@@ -31,6 +31,7 @@ use App\Http\Controllers\Auth\ExpiredPasswordController;
 */
 
 Route::get('/', function () {
+    auth()->logout();
     return view('auth.login');
 });
   

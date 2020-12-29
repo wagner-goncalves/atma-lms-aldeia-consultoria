@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 
-class AlunoCadastrado extends Notification
+class UsuarioCadastrado extends Notification
 {
     use Queueable;
 
@@ -17,11 +17,11 @@ class AlunoCadastrado extends Notification
      *
      * @return void
      */
-    public function __construct($user, $empresa, $curso)
+    public function __construct($user, $empresa, $roles)
     {
         $this->user = $user;
         $this->empresa = $empresa;
-        $this->curso = $curso;
+        $this->roles = $roles;
     }
 
     /**
@@ -43,13 +43,20 @@ class AlunoCadastrado extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject('Cadastrado na plataforma Aldeia Consultoria')
+        $mail = new MailMessage;
+        $mail->subject('Administração da plataforma Aldeia Consultoria')
             ->greeting(sprintf("Olá, %s!", $this->user->name)) 
-            ->line(sprintf('Você foi cadastrado no curso %s pela %s.', $this->curso->nome, $this->empresa->nome))
+            ->line(sprintf('Você foi cadastrado para gerenciar alunos da %s.', $this->empresa->nome));
+        $papeis = [];
+        if(in_array("Admin", $this->roles) ) $papeis[] = "Administrador da plataforma";
+        if(in_array("Gestor", $this->roles) ) $papeis[] = "Gestor de alunos da empresa " . $this->empresa->nome;
+
+        $mail->line("Você recebeu o(s) papel(is) de: " . implode(', ', $papeis))
             ->line('Para acessar a plataforma, clique no link abaixo.')
-            ->action('Acessar curso',  url('/'))
+            ->action('Acessar plataforma',  url('/'))
             ->line('Em seu primeiro acesso, utilize seu E-MAIL e os SEIS PRIMEIROS DÍGITOS do seu CPF para acessar a plataforma.');
+
+        return $mail;
     }
 
     /**

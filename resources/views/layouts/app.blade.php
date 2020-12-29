@@ -47,9 +47,9 @@
                             <li><a class="nav-link " href="{{ route('login') }}">{{ __('Faça o login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Cadastre-se') }}</a></li>
                         @else
-                            <li><a class="nav-link font-weight-bold"
-                                    href="{{ route('userslogged.index') }}">{{ Auth::user()->name }}</a></li>
-
+                            
+                            <li><span class="nav-link font-weight-bold">{{ Auth::user()->name }}</span></li>
+                            <li><a class="nav-link" href="{{ route('home') }}">Acessar Curso</a></li>
                             @role('Admin|Gestor')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

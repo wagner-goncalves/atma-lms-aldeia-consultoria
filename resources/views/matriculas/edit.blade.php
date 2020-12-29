@@ -47,7 +47,13 @@
                 <div class="alert alert-success" role="alert">
                     <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
                 </div>
-            @endif            
+            @endif 
+            
+            @if ($message = Session::get('error'))
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
+                </div>
+            @endif             
 
             @if(!isset($matricula->id) || intval($matricula->id) == 0)
                 {!! Form::open(['route' => 'matriculas.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
@@ -101,15 +107,19 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <div class="form-group">
-                                <strong>Dias de acesso:</strong>
+                                <strong>Dias de acesso a partir de {{\Carbon\Carbon::parse($matricula->created_at)->format('d/m/Y')}}:</strong>
+                                @role('Admin')
                                 {!! Form::input('number', 'tempo_acesso', $matricula->tempo_acesso, ['placeholder' => '', 'class' => 'form-control']) !!}
+                                @else
+                                {!! Form::input('number', 'tempo_acesso', $matricula->tempo_acesso, ['placeholder' => '', 'class' => 'form-control', 'readonly']) !!}
+                                @endrole
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <div class="form-group">
                                     <strong>Data limite do curso:</strong>
-                                    {!! Form::text('data_limite', \Carbon\Carbon::parse($matricula->data_limite)->format('d/m/Y'), ['placeholder' => '', 'class' => 'form-control data_limite', 'id' =>
+                                    {!! Form::text('data_limite', \Carbon\Carbon::parse($matricula->data_limite)->format('d/m/Y'), ['placeholder' => '', 'class' => 'form-control data_limite', 'readonly', 'id' =>
                                     'descricao']) !!}
                                 </div>
                             </div>
@@ -160,7 +170,7 @@
                                 </div>
                             </div>
                         </div>    
-<!--
+                        @if(isset($matricula->id) && intval($matricula->id) > 0)
                         <div class="form-group col-md-4">
                             <div class="form-group">
                                 <strong>Senha:</strong> 
@@ -178,7 +188,7 @@
                                 </div>
                             </div>
                         </div>   
-                    -->                   
+                        @endif                  
                     </div>
                 </div>       
             </div>

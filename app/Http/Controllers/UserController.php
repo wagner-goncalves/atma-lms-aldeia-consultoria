@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use JsValidator;
 use Illuminate\Validation\Rule;
+use App\Models\Empresa;
+use App\Notifications\UsuarioCadastrado;
 
 class UserController extends Controller
 {
@@ -84,13 +86,18 @@ class UserController extends Controller
         if ($loggedUser->hasRole('Admin')) $roles = Role::pluck('name', 'name')->all();
         elseif ($user->hasRole('Gestor')){
             $roles = Role::whereNotIn('name', ["Admin"])->pluck('name', 'name')->all();
-        } 
+        }
+
         $empresas = $this->empresasUsuario();
+        unset($this->validationRules["password"]);
         $this->validationRules["email"] = "required|email";
         $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";
         $validator = JsValidator::make($this->validationRules);
+
+        $user = new User();
+        $userRole = [];
         
-        return view('users.create', compact('roles', 'empresas'))->with([
+        return view('users.edit', compact('user', 'roles', 'userRole', 'empresas'))->with([
             'validator' => $validator,
         ]);
     }
@@ -105,18 +112,26 @@ class UserController extends Controller
     {
         $this->validationRules['email'] = Rule::unique('users');
         $this->validationRules['cpf'] = Rule::unique('users', 'cpf');
+        unset($this->validationRules["password"]);
         $this->validate($request, $this->validationRules);
 
+        //Cria usuário com senha padrão
         $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $input['password_changet_at'] = '2000-01-01 00:00:01';
-
+        $input['password'] = Hash::make(substr(str_replace(".", "", $input["cpf"]), 0, 6)); //Hash::make($input['password']);
+        $input['password_changet_at'] = null;
         $user = User::create($input);
-        if (!$user->hasRole('Admin')) unset($request->input('roles')["Admin"]);
-        $user->assignRole($request->input('roles'));
+
+        //Cria papéis
+        $roles = $request->input('roles');
+        if (!$user->hasRole('Admin')) unset($roles["Admin"]);
+        $user->assignRole($roles);
+
+        //Envia notificação
+        $user->notify(new UsuarioCadastrado($user, Empresa::find($input["empresa_id"]), $roles));
+
 
         return redirect()->route('users.index')
-            ->with('success', 'User created successfully');
+            ->with('success', 'Usuário criado com sucesso.');
     }
 
     /**

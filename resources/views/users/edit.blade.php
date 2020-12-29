@@ -40,7 +40,13 @@
             @endif
 
 
-            {!! Form::model($user, ['id' => 'edit-form', 'method' => 'PATCH', 'route' => ['users.update', $user->id]]) !!}
+            @if(!isset($user->id) || intval($user->id) == 0)
+                {!! Form::open(['route' => 'users.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
+            @else
+                {!! Form::model($user, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
+                'route' => ['users.update', isset($user->id) ? $user->id : 0]]) !!}
+            @endif            
+
             <div class="row">
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -48,13 +54,13 @@
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <strong>Nome:</strong>
-                                {!! Form::text('name', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                                {!! Form::text('name', $user->name, ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <strong>E-mail:</strong>
-                                {!! Form::text('email', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                                {!! Form::text('email', $user->email, ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
                     </div>
@@ -65,7 +71,7 @@
                         <div class="form-group col-md-4">
                             <div class="form-group">
                                 <strong>Telefone:</strong>
-                                {!! Form::text('phone', null, ['placeholder' => '', 'class' => 'form-control phone']) !!}
+                                {!! Form::text('phone', $user->phone, ['placeholder' => '', 'class' => 'form-control phone']) !!}
                             </div>
                         </div>
                         <div class="form-group col-md-4">
@@ -84,12 +90,13 @@
                         <div class="form-group col-md-4">
                             <div class="form-group">
                                 <strong>CPF:</strong>
-                                {!! Form::text('cpf', null, ['placeholder' => '', 'class' => 'form-control cpf']) !!}
+                                {!! Form::text('cpf', $user->cpf, ['placeholder' => '', 'class' => 'form-control cpf']) !!}
                             </div>
                         </div>                        
                     </div>
                 </div>
 
+                @if(isset($user->id) && intval($user->id) > 0)
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -106,6 +113,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
@@ -119,17 +127,12 @@
                 </div>
             </div>
 
-
             <div class="form-group row">
                 <div class="col-sm-10">
                     <button type="submit" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
                             class="fas fa-save"></i> Salvar</button>
                 </div>
             </div>
-
-
-
-
 
             {!! Form::close() !!}
         </div>
