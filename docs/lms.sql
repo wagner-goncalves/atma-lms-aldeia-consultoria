@@ -258,18 +258,14 @@ CREATE TABLE `matriculas` (
   CONSTRAINT `fk_matriculas_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_planos1` FOREIGN KEY (`plano_id`) REFERENCES `planos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matriculas_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 /*Data for the table `matriculas` */
 
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (1,1,1,1,1,1,1,'2020-12-25 23:59:59','2020-12-21 00:50:19','2020-12-18 17:26:07','2020-12-23 12:36:21');
 insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (7,7,1,1,1,1,12,'2020-12-25 23:59:59',NULL,'2020-12-23 13:56:26','2020-12-23 13:56:26');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (54,65,1,1,1,1,30,'2021-01-25 16:03:36','2020-12-27 12:03:48','2020-12-26 16:03:36','2020-12-27 12:03:48');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (55,66,1,1,1,1,30,'2021-01-30 23:59:59',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (56,67,1,2,1,1,30,'2021-01-27 19:06:33',NULL,'2020-12-28 19:06:33','2020-12-28 19:06:33');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (57,72,1,2,1,1,30,'2021-01-27 19:23:21',NULL,'2020-12-28 19:23:21','2020-12-28 19:23:21');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (58,74,1,2,1,1,30,'2021-01-28 00:07:57',NULL,'2020-12-29 00:07:57','2020-12-29 00:07:57');
-insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (59,75,1,2,1,1,30,'2021-01-28 00:18:10',NULL,'2020-12-29 00:18:10','2020-12-29 00:18:10');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (66,82,1,1,1,1,30,'2021-02-27 12:59:38',NULL,'2020-12-29 12:58:23','2020-12-29 12:59:38');
+insert  into `matriculas`(`id`,`user_id`,`curso_id`,`empresa_id`,`plano_id`,`is_active`,`tempo_acesso`,`data_limite`,`data_conclusao`,`created_at`,`updated_at`) values (67,85,1,2,1,1,30,'2021-01-28 13:19:25',NULL,'2020-12-29 13:19:25','2020-12-29 13:19:25');
 
 /*Table structure for table `migrations` */
 
@@ -370,6 +366,21 @@ insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',72);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',74);
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',75);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',76);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App\\Models\\User',77);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App\\Models\\User',78);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',78);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',79);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',80);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',81);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',82);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App\\Models\\User',83);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (3,'App\\Models\\User',83);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App\\Models\\User',84);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (3,'App\\Models\\User',84);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (1,'App\\Models\\User',85);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (2,'App\\Models\\User',85);
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values (3,'App\\Models\\User',85);
 
 /*Table structure for table `modulos` */
 
@@ -540,6 +551,7 @@ CREATE TABLE `posts` (
   `post` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_active` tinyint NOT NULL DEFAULT '1',
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_posts_users1_idx` (`user_id`),
   KEY `fk_posts_posts1_idx` (`post_id`),
@@ -547,9 +559,27 @@ CREATE TABLE `posts` (
   CONSTRAINT `fk_posts_cursos1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_posts1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `posts` */
+
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (1,1,1,NULL,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin orci ac nunc consequat, ac imperdiet nisl sodales. ','2020-12-29 15:45:49',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (2,1,1,NULL,'Integer nisl felis, finibus et porta id, hendrerit sed massa. Vestibulum feugiat accumsan leo lacinia gravida. Quisque sed neque non arcu dapibus commodo. Nam pulvinar pharetra nibh in pretium.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (3,1,1,NULL,'Vivamus eget efficitur turpis. Suspendisse ac ligula vel urna lobortis posuere. Nunc at imperdiet nibh, at fermentum lectus. Maecenas justo sapien, dapibus a risus sit amet, dapibus rhoncus odio. Donec in odio porta, maximus elit accumsan, posuere quam. ','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (4,1,1,NULL,'Aliquam sodales dignissim quam, sit amet varius leo porta et. Suspendisse venenatis accumsan est vel elementum.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (5,1,1,NULL,'Nulla suscipit lacus ac condimentum dapibus. Pellentesque mollis blandit neque, quis pulvinar neque venenatis eget.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (6,1,1,NULL,'Suspendisse potenti. In hac habitasse platea dictumst. Sed sed aliquam est, ut tincidunt eros. In feugiat pharetra velit hendrerit pellentesque.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (7,1,1,NULL,'Curabitur lobortis turpis quam, at efficitur quam mollis nec. Praesent ante ligula, mollis eget nulla sit amet, pharetra sodales mi. ','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (8,1,1,NULL,'Integer luctus cursus nibh, luctus volutpat mi laoreet at. Nunc libero ex, vehicula nec nibh in, bibendum tempus ante. Aliquam et ante fermentum, interdum elit quis, mattis nisl. Suspendisse et congue dolor.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (9,1,1,NULL,'Sed vehicula, mi vitae cursus feugiat, elit ligula convallis leo, sit amet accumsan lacus elit nec mi. Pellentesque elit mauris, vulputate id purus sit amet, pharetra imperdiet lacus.','2020-12-29 15:47:25',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (10,1,1,NULL,'Nulla suscipit lacus ac condimentum dapibus. Pellentesque mollis blandit neque, quis pulvinar neque venenatis eget.','2020-12-29 16:06:29',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (11,1,1,NULL,'Suspendisse potenti. In hac habitasse platea dictumst. Sed sed aliquam est, ut tincidunt eros. In feugiat pharetra velit hendrerit pellentesque.','2020-12-29 16:06:29',1,NULL);
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (17,85,1,NULL,'sadasdsadsad','2020-12-29 17:02:07',1,'2020-12-29 17:02:07');
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (19,85,1,NULL,'Bla bla','2020-12-29 17:18:05',1,'2020-12-29 17:18:05');
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (20,85,1,19,'aaaaaaaa','2020-12-29 18:05:31',1,'2020-12-29 18:05:31');
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (21,85,1,19,'bbbbbbbbbb','2020-12-29 18:24:39',1,'2020-12-29 18:24:39');
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (22,82,1,19,'ccccccc','2020-12-29 18:51:57',1,'2020-12-29 18:51:57');
+insert  into `posts`(`id`,`user_id`,`curso_id`,`post_id`,`post`,`created_at`,`is_active`,`updated_at`) values (23,82,1,NULL,'dddddd','2020-12-29 18:52:08',1,'2020-12-29 18:52:08');
 
 /*Table structure for table `questionarios` */
 
@@ -657,20 +687,28 @@ CREATE TABLE `users` (
   `password_changed_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
+  UNIQUE KEY `users_cpf_unique` (`cpf`),
+  UNIQUE KEY `users_cpf_email_unique` (`cpf`,`email`),
   KEY `fk_users_empresas1_idx` (`empresa_id`),
   CONSTRAINT `fk_users_empresas1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'051.666.616-99','(31) 9825-86122','$2y$10$3dcJVpWR4BEbNHUfzHxd3ODyAqTCRnCIxhQvnavDy6FSEU9CiVUF6','KDJzaEU7WPQ5JE20DXGYvzEo3exRXE4PoHqyaA1jwtTbmFUYFnv9sKnkxx5z','2020-12-17 23:28:18','2020-12-29 00:05:48',1,'2020-12-29 00:05:48');
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (1,1,'Wagner Gonçalves','wagnerggg@gmail.com',NULL,'051.666.616-99','(31) 9825-86122','$2y$10$3dcJVpWR4BEbNHUfzHxd3ODyAqTCRnCIxhQvnavDy6FSEU9CiVUF6','bDuq2c2q8Qvz5VCCXWS1iVnUwjtluaRZQDGtvETuPdDWz2sBbLTcp5fvyywv','2020-12-17 23:28:18','2020-12-29 00:05:48',1,'2020-12-29 00:05:48');
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (7,1,'Wagner Gomes Gonçalves','wagnerggg@gmail.co',NULL,'','(55) 3199-84771','1',NULL,'2020-12-23 13:56:25','2020-12-23 13:56:25',1,NULL);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (65,2,'Alexandre','alexandre@atma.com.br',NULL,'222222','123456','$2y$10$ChJ/ORXtPj.1JODv2P7khu//4guxzlSo7vs06KEah8WZGLUcLg2r.','fw2X9i9BFiIXOw6ZUKhWRbFUL7Pbs8imjMRa1dLJ8MVeA2HYvWueTH78VHlr','2020-12-26 16:03:36','2020-12-26 16:03:36',1,NULL);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (65,2,'Alexandre','alexandre@atma.com.br',NULL,'999.999.999-99',NULL,'$2y$10$u527Y5V.GuNyx8UkTOQzwe93z2uLWQBkzJ6w9idZQKx2W.YBeJM1O','2g1SzjK35vpPaI43MrYSU9IkmTpPCfWDYv00Pp2cGTk0mDfS9bC27iCmCJ1k','2020-12-26 16:03:36','2020-12-29 11:31:10',1,'2020-12-29 11:31:10');
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (66,1,'Wagner Gomes Gonçalves','wagnergg@gmail.com',NULL,'000.000.000-00','(31) 9999-99999','123456',NULL,'2020-12-27 12:17:34','2020-12-27 12:20:07',1,NULL);
-insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (67,2,'Wagner Gomes Gonçalves','wagner@gmail.com',NULL,'111.111.111-11','(11) 11111-1111','123456',NULL,'2020-12-28 19:06:33','2020-12-28 19:06:33',1,NULL);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (67,2,'Wagner Gomes Gonçalves','wagner@gmail.com',NULL,'111.111.111-11','(11) 1111-11111','$2y$10$17mqpWfgrfSe1jph/qKZTetlW7/Mua0SGAaGpypZ7cC8ObY8iPAcS',NULL,'2020-12-28 19:06:33','2020-12-29 11:38:28',1,'2020-12-29 11:38:28');
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (72,2,'Teste 1','teste1@teste.com.br',NULL,'111111','123456','$2y$10$700kqadeoLF2.f0.twvUJ.x2UvUhlGMlk1fNCup4OpoI7chPNbTfe',NULL,'2020-12-28 19:23:21','2020-12-28 19:23:21',1,NULL);
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (74,2,'Teste','wagner1@gmail.com',NULL,'051.894.066-79','(55) 3199-84771','$2y$10$uKEAbAgTFxaIFRg/WZt4WeMJdrFxnFDJuXCKXzkhzo2heb.ofC00i',NULL,'2020-12-29 00:07:57','2020-12-29 00:11:13',1,'2020-12-29 00:11:13');
 insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (75,2,'Wagner Gomes Gonçalves','wa@gmail.com',NULL,'333.333.333-33','(55) 3199-84771','$2y$10$8mpj/EbsZukU/KE/5kHYfuJjjlXfAhJlGkLXamXns.IpFC8MNabu2',NULL,'2020-12-29 00:18:10','2020-12-29 00:19:16',1,'2020-12-29 00:19:16');
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (76,1,'Teste 10','teste10@teste.com.br',NULL,'222.222.222-22','(11) 1111-11111','$2y$10$1EsaamzuAZIp92GjnAedNuojmjYJ1daf0s1JjNttPJGfZKtckdDgi',NULL,'2020-12-29 11:04:41','2020-12-29 11:04:41',1,NULL);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (77,2,'Teste11','teste11@teste.com.br',NULL,'455.645.645-64','(99) 99999-9999','$2y$10$cHQObnUjTDNxTuPzKvszOuG33uno.lAYdYR0iyhCRPM3NNpdt6wy2',NULL,'2020-12-29 11:53:24','2020-12-29 11:53:24',1,NULL);
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (78,2,'Teste 12','teste12@teste.com.br',NULL,'123.456.111-11','(45) 45454-5455','$2y$10$U4ptNIdhFTNrBse57k4n4OZ5cY7oN4/d4AeuNMsM2BuW.BxCPPfV2','XNkO11asO7MpK4BeaxH9uPnXIaX3JXNigJBQaDlv3SOT8yfClnyBc01xEE8Q','2020-12-29 11:55:52','2020-12-29 11:56:28',1,'2020-12-29 11:56:28');
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (79,1,'Teste 13','teste13@teste.com.br',NULL,'853.245.695-15','(45) 46545-6646','$2y$10$cLrofpEYGwmX21EhQdqqW.JQ/G/HniWRHGKoaFXAzP.KtuCWP4cR.',NULL,'2020-12-29 12:25:34','2020-12-29 12:27:42',1,'2020-12-29 12:27:42');
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (82,1,'Wagner Gomes Gonçalves','x@gmail.com',NULL,'545.454.545-66','(55) 3199-84771','$2y$10$LDoOZNl1teyG8KxpMwYSAOEaTKquFVQB0f/WgZMZwAKF65MCdpnyO',NULL,'2020-12-29 12:58:23','2020-12-29 18:51:37',1,'2020-12-29 18:51:37');
+insert  into `users`(`id`,`empresa_id`,`name`,`email`,`email_verified_at`,`cpf`,`phone`,`password`,`remember_token`,`created_at`,`updated_at`,`is_active`,`password_changed_at`) values (85,1,'Wagner Gomes Gonçalves','f@gmail.com',NULL,'358.939.118-39','(55) 3199-84771','$2y$10$sT3jLTfA/JHn1x69GjKBt.ZSsgZc2PyNIjeo38eBuBOe0kwDyO4iS',NULL,'2020-12-29 13:15:47','2020-12-29 13:17:02',1,'2020-12-29 13:17:02');
 
 /*Table structure for table `v_historicos` */
 
@@ -708,7 +746,7 @@ CREATE TABLE `visualizacoes` (
   KEY `fk_visualizacoes_aulas1_idx` (`aula_id`),
   CONSTRAINT `fk_visualizacoes_aulas1` FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_visualizacoes_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
 
 /*Data for the table `visualizacoes` */
 
@@ -773,6 +811,11 @@ insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`)
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (64,14,65,'2020-12-26 16:08:03','2020-12-26 16:08:03');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (65,15,65,'2020-12-26 16:08:11','2020-12-26 16:08:11');
 insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (66,1,65,'2020-12-27 11:56:29','2020-12-27 11:56:29');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (67,1,85,'2020-12-29 15:28:50','2020-12-29 15:28:50');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (68,1,85,'2020-12-29 15:38:32','2020-12-29 15:38:32');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (69,1,85,'2020-12-29 15:39:01','2020-12-29 15:39:01');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (70,1,85,'2020-12-29 15:41:16','2020-12-29 15:41:16');
+insert  into `visualizacoes`(`id`,`aula_id`,`user_id`,`created_at`,`updated_at`) values (71,1,85,'2020-12-29 17:17:37','2020-12-29 17:17:37');
 
 /*Table structure for table `v_performance` */
 
