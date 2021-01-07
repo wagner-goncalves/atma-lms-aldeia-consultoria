@@ -200,7 +200,7 @@ class MaterialController extends Controller
     public function download($id){
         $user = auth()->user();
         $material = Material::find($id);
-        \App\Models\ACesso::create(["user_id" => $user->id, "material_id" => $material->id]);
+        \App\Models\Acesso::create(["user_id" => $user->id, "material_id" => $material->id]);
         return Storage::download($material->arquivo, ($material->titulo . "." . pathinfo($material->arquivo, PATHINFO_EXTENSION)));
     }
 

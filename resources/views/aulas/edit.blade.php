@@ -115,6 +115,12 @@
                         <strong>Link YOUTUBE:</strong>
                         {!! Form::textarea('link', $aula->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
                         'link']) !!}
+                        <p class="small">Exemplo de link (copie, cole e troque o link do vídeo indicado em negrito).</p>
+                        <p>
+
+                            {{ '<iframe class="embed-responsive-item"' }} {!!'src="<strong>https://www.youtube.com/embed/XXXXXXXXXX?controls=1</strong>" '!!} {{'frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' }}
+
+                        </p>
                     </div>
                 </div>
             </div>

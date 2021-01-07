@@ -180,7 +180,7 @@ class ModuloController extends Controller
             return redirect()->route('modulos.index')->with('error', sprintf('Não foi possível excluir o registro. <br />%s', $mensagem));
         }
         
-        return redirect()->route('planos.index')
+        return redirect()->route('modulos.index')
                         ->with('success','Módulo excluído com sucesso.');
     }    
 

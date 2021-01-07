@@ -4,6 +4,35 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
+
+
+            @role('Admin')
+                <div class="pull-left">
+                    <div class="titulo-destaque">
+                        <i class="fas fa-users"></i>
+                        Você é administrador da plataforma.
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    <p>Você está logado como administrador da plataforma e possui acesso irrestrito a todas as funcionalidades do sistema.</p>
+                </div>                
+            @endrole
+
+            @role('Gestor')
+                <div class="pull-left">
+                    <div class="titulo-destaque">
+                        <i class="fas fa-user"></i>
+                        Você é gestor da plataforma.
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    <p>Você está logado como gestor da plataforma para a empresa {{ auth()->user()->empresa->nome }}. Você pode gerenciar usuários de sua empresa.</p>
+                </div>                
+            @endrole            
+
+            @role('Aluno')
             <div class="pull-left">
                 <div class="titulo-destaque">
                     <i class="fas fa-chalkboard-teacher"></i>
@@ -222,6 +251,7 @@
                     <p>Nenhum curso.</p>
                 @endforelse
             </div>
+            @endrole
         </div>
     </div>
 @endsection

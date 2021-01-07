@@ -39,8 +39,8 @@ class EmpresaController extends Controller
             $empresas = "";
 
             $empresas = Empresa::sortable()
-                ->join("planos_has_empresas", "empresas.id", "=", "planos_has_empresas.empresa_id")
-                ->join("planos", "planos_has_empresas.plano_id", "=", "planos.id")
+                ->leftJoin("planos_has_empresas", "empresas.id", "=", "planos_has_empresas.empresa_id")
+                ->leftJoin("planos", "planos_has_empresas.plano_id", "=", "planos.id")
                 ->orderBy('empresas.id', 'desc')
                 ->select("empresas.*")
                 ->distinct();
@@ -96,7 +96,7 @@ class EmpresaController extends Controller
         $requestData = $request->all();
         
         $empresa = Empresa::create($requestData);
-        $empresa->planos()->sync($requestData["plano_id"]);
+        if(isset($requestData["plano_id"])) $empresa->planos()->sync($requestData["plano_id"]);
 
         return redirect()->route('empresas.index')
                         ->with('success','Empresa criada com sucesso.');
@@ -152,7 +152,7 @@ class EmpresaController extends Controller
         $requestData = $request->all();
 
         $empresa->update($requestData);
-        $empresa->planos()->sync($requestData["plano_id"]);
+        if(isset($requestData["plano_id"])) $empresa->planos()->sync($requestData["plano_id"]);
 
         return redirect()->route('empresas.index')
                         ->with('success','Empresa alterada com sucesso.');

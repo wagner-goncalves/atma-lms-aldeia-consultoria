@@ -45,7 +45,7 @@
 
 
             @if(!isset($material->id) || intval($material->id) == 0)
-                {!! Form::open(['route' => 'materiais.store', 'method' => 'POST', 'id' => 'edit-form']) !!}
+                {!! Form::open(['route' => 'materiais.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
             @else
                 {!! Form::model($material, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
                 'route' => ['materiais.update', isset($material->id) ? $material->id : 0]]) !!}

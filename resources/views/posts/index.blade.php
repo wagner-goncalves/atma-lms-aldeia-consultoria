@@ -45,7 +45,7 @@
                         <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
                     </div>
                 @endif
-
+                @if (count($errors) == 0)
                 <div class="row">
                     <div class="col-12 col-md-8 col-sm-12 mb-3">
                         <div class="mt-100">
@@ -186,7 +186,7 @@
 
 
                 </div>
-
+                @endif
 
 
 

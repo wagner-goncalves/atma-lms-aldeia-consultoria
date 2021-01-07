@@ -43,13 +43,16 @@ class UsuarioCadastrado extends Notification
      */
     public function toMail($notifiable)
     {
+
+        $empresa = is_object($this->empresa) ? $this->empresa->nome : "plataforma";
+
         $mail = new MailMessage;
         $mail->subject('Administração da plataforma Aldeia Consultoria')
             ->greeting(sprintf("Olá, %s!", $this->user->name)) 
-            ->line(sprintf('Você foi cadastrado para gerenciar alunos da %s.', $this->empresa->nome));
+            ->line(sprintf('Você foi cadastrado para gerenciar alunos da %s.', $empresa));
         $papeis = [];
         if(in_array("Admin", $this->roles) ) $papeis[] = "Administrador da plataforma";
-        if(in_array("Gestor", $this->roles) ) $papeis[] = "Gestor de alunos da empresa " . $this->empresa->nome;
+        if(in_array("Gestor", $this->roles) ) $papeis[] = "Gestor de alunos da " . $empresa;
 
         $mail->line("Você recebeu o(s) papel(is) de: " . implode(', ', $papeis))
             ->line('Para acessar a plataforma, clique no link abaixo.')

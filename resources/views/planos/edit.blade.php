@@ -53,7 +53,6 @@
             @endif
             @csrf
             <div class="row">
-
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -77,6 +76,44 @@
                         {!! Form::textarea('descricao', $plano->descricao, ['placeholder' => '', 'class' => 'form-control',
                         'id' => 'descricao']) !!}
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+
+                    <div class="form-group">
+                        <strong>Plano x Curso</strong>
+                        <table class="table table-bordered table-sm small">
+                            <tr>
+                                <th>Curso</th>
+                                <th>Quantidade de alunos</th>
+                                <th>Tempo de acesso (dias)</th>
+                            </tr>
+
+                            @forelse ($cursos as $curso)
+                                @php
+                                $plano_pivot = $plano->cursos()->find($curso->id);
+                                @endphp
+                                <tr>
+                                    <td>{{ $curso->nome }}
+                                        {!! Form::hidden('curso_id[]', $curso->id) !!}
+                                    </td>
+                                    <td class="small">{!! Form::number('usuarios[]', (is_object($plano_pivot) ? $plano_pivot->pivot->usuarios : ""),
+                                        ['placeholder' => '', 'class' => 'form-control text-right']) !!}</td>
+                                    <td>{!! Form::number('tempo_acesso[]', (is_object($plano_pivot) ? $plano_pivot->pivot->tempo_acesso : ""), ['placeholder' =>
+                                        '', 'class' => 'form-control text-right']) !!}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6"><i class="fas fa-frown"></i> Nenhum curso vinculado ao plano encontrado.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </table>
+                    </div>
+
+
+
                 </div>
             </div>
 

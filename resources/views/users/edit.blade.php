@@ -6,7 +6,12 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
+                @if(!isset($user->id) || intval($user->id) == 0)
+                    <i class="fas fa-user"></i> Criar usuário
+                @else
                     <i class="fas fa-edit"></i> Editar usuário
+                @endif  
+                    
                 </div>
             </div>
         </div>

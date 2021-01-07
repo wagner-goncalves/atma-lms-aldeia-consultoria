@@ -160,6 +160,10 @@ class MatriculaController extends Controller
 
         //Valida se já excedeu limite de matrículas
         $empresa = Empresa::find(auth()->user()->empresa_id);
+
+        //Tratar usuário sem empresa.
+        if(!is_object($empresa)) return redirect()->route('matriculas.create')->with('error', 'Este usuário existe em nossa base de dados, porém, não está vinculado a nenhuma empresa. Para matriculá-lo, vá na opção Usuários e escolha uma empresa para este usuário.');
+
         $maximoAlunosPlano = $empresa->maximoAlunosPlano($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);
         $quantidadeAlunosMatriculados = $empresa->quantidadeAlunosMatriculados($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);                
         if($quantidadeAlunosMatriculados >= $maximoAlunosPlano){
@@ -327,7 +331,8 @@ class MatriculaController extends Controller
     {
         $plano_id = $request->input('depdrop_all_params.plano_id');
         $plano = \App\Models\Plano::find($plano_id);
-        $cursos = !is_object($plano) ? null : $plano->cursos()->select("id", "nome as name")
+
+        $cursos = !is_object($plano) ? null : $plano->cursos()->select("id", DB::raw('CONCAT(nome, " (", usuarios, " restantes", ") ") as name'))
             ->orderBy("nome")
             ->get(['id', 'name']);
 

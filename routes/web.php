@@ -17,6 +17,9 @@ use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PlanoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\QuestionarioController;
+use App\Http\Controllers\PerguntaController;
+use App\Http\Controllers\RespostaController;
 
 use App\Http\Controllers\Auth\ExpiredPasswordController;
 
@@ -89,6 +92,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('planos', PlanoController::class);
 
     Route::resource('aulas', AulaAdministracaoController::class);
+
+    Route::resource('questionarios', QuestionarioController::class);
+    Route::resource('perguntas', PerguntaController::class);
+    Route::resource('respostas', RespostaController::class);
+
+    Route::post('/respostas/questionarios', [RespostaController::class, 'questionarios'])->name('respostas.questionarios')->withoutMiddleware(['csrf']);
+    Route::post('/respostas/perguntas', [RespostaController::class, 'perguntas'])->name('respostas.perguntas')->withoutMiddleware(['csrf']);
 
     Route::resource('matriculas', MatriculaController::class);
     Route::post('/matriculas/importar', [MatriculaController::class, 'importar'])->name('matriculas.importar');

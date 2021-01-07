@@ -83,13 +83,16 @@ class UserController extends Controller
     {
         $roles = [];
         $loggedUser = auth()->user();
-        if ($loggedUser->hasRole('Admin')) $roles = Role::pluck('name', 'name')->all();
-        elseif ($user->hasRole('Gestor')){
+        if ($loggedUser->hasRole('Admin')){
+            unset($this->validationRules["empresa_id"]);
+            $roles = Role::pluck('name', 'name')->all();
+        }elseif ($loggedUser->hasRole('Gestor')){
             $roles = Role::whereNotIn('name', ["Admin"])->pluck('name', 'name')->all();
         }
 
         $empresas = $this->empresasUsuario();
         unset($this->validationRules["password"]);
+        
         $this->validationRules["email"] = "required|email";
         $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";
         $validator = JsValidator::make($this->validationRules);
@@ -110,9 +113,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $loggedUser = auth()->user();
         $this->validationRules['email'] = Rule::unique('users');
         $this->validationRules['cpf'] = Rule::unique('users', 'cpf');
         unset($this->validationRules["password"]);
+
+        if ($loggedUser->hasRole('Admin')){
+            unset($this->validationRules["empresa_id"]);
+        }
+
         $this->validate($request, $this->validationRules);
 
         //Cria usuário com senha padrão
@@ -127,6 +136,7 @@ class UserController extends Controller
         $user->assignRole($roles);
 
         //Envia notificação
+        
         $user->notify(new UsuarioCadastrado($user, Empresa::find($input["empresa_id"]), $roles));
 
 
@@ -171,7 +181,10 @@ class UserController extends Controller
 
         $userRole = $user->roles->pluck('name', 'name')->all();
         $empresas = $this->empresasUsuario();
-
+        if($loggedUser->hasRole('Admin') ){
+            unset($this->validationRules['empresa_id']);
+        }
+        unset($this->validationRules["password"]);
         $this->validationRules["email"] = "required|email";
         $this->validationRules["cpf"] = "required|regex:/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)/";        
         $validator = JsValidator::make($this->validationRules);
@@ -197,6 +210,10 @@ class UserController extends Controller
         if ($loggedUser->hasRole('Gestor') && !$loggedUser->hasRole('Admin')  && $input["empresa_id"] != $loggedUser->empresa_id){
             return redirect()->route('users.index')
             ->with('error', 'Operação inválida.');
+        }
+
+        if($loggedUser->hasRole('Admin') ){
+            unset($this->validationRules['empresa_id']);
         }
 
         $this->validationRules['email'] = Rule::unique('users')->ignore($id);
@@ -243,7 +260,7 @@ class UserController extends Controller
 
         $user->delete();
         return redirect()->route('users.index')
-            ->with('success', 'User deleted successfully');
+            ->with('success', 'Usuário excluído com sucesso.');
     }
 
     public function resetPassword($id){

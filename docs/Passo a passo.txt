@@ -1,0 +1,40 @@
+CADASTRAR USUÁRIOS INICIAIS
+
+1 - Logar como Administrador MEGA MASTER
+wagner@gmail.com
+123456
+
+2 - Criar outro usuário MEGA MASTER
+Menu ADMINISTRAÇÃO -> USUÁRIOS
+Para usuarios ADM a empresa é opcional.
+Não pode repetir CPF nem email neste cadastro.
+Em "papéis" escolha "Admin" apenas. Evite misturar os perfis. Funciona, mas pode confundir a sua cabeça. :-)
+A senha não é cadastrada. Por padrão é os seis primeiros numeros do CPF, então lembre-se do CPF que vc cadastrou.
+
+3 - Verifique se chegou um email avisando do cadastro.
+Clique no link do email. 
+Conferir textos.
+
+4 - Faça login
+5 - Troque sua senha
+6 - Você será logado automaticamente
+
+CRIAR ESTRUTURA INICIAL
+
+1 - Criar planos - ADMINISTRAÇÃO -> PLANOS
+Não é necessário escolher empresas, pois, elas ainda não existem.
+1.1 - Informe quantos alunos e quanto tempo o curso "vale" neste plano. Lembre-se que não há tela para criação de curso nesta versão.
+
+2 - Criar empresas - ADMINISTRAÇÃO -> EMPRESAS
+Neste momento você pode indicar qual plano a empresa comprou. Você já cadastrou os planos.
+
+CADASTRAR GESTOR DA EMPRESA
+1 - Administração -> Usuários
+2 - Criar usuário, escolher a qual empresa ele é vinculado e escolher papel de GESTOR apenas. Ficar atento no papel. Se escolher ADMIN, ele pode acessar TUDO.
+3 - Depois logue como gestor, ele tem uma visão apenas da sua empresa e dos respectivos alunos/matrículas.
+
+CADASTRAR CONTEÚDO DOS CURSOS (AULAS)
+1 - Cadastrar módulos. Não esquecer de indicar a ordem de aparição.
+2 - Cadastrar aulas. 
+2.1 - Informe curso e módulo da aula. Atenção à ordem. Veja como cadastrar o link do youtube na tela.
+3 - Cadastrar material (PDF apenas). Uma aula pode ter mais de um PDF.

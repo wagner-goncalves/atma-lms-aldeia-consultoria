@@ -41,8 +41,8 @@ class PlanoController extends Controller
             $empresas = "";
 
             $planos = Plano::sortable()
-                ->join("planos_has_empresas", "planos.id", "=", "planos_has_empresas.plano_id")
-                ->join("empresas", "planos_has_empresas.empresa_id", "=", "empresas.id")
+                ->leftJoin("planos_has_empresas", "planos.id", "=", "planos_has_empresas.plano_id")
+                ->leftJoin("empresas", "planos_has_empresas.empresa_id", "=", "empresas.id")
                 ->orderBy('planos.id', 'desc')
                 ->select("planos.*")
                 ->distinct();
@@ -79,9 +79,10 @@ class PlanoController extends Controller
 
         $empresas = \App\Models\Empresa::pluck('nome', 'id')->all();
         $planoEmpresas = [];
+        $cursos = \App\Models\Curso::all()->sortBy("nome");  
 
         $plano = new Plano();
-        return view('planos.edit', compact('plano', 'empresas', 'planoEmpresas'))->with([
+        return view('planos.edit', compact('plano', 'cursos', 'empresas', 'planoEmpresas'))->with([
             'validator' => $validator,
         ]);
     }
@@ -98,7 +99,18 @@ class PlanoController extends Controller
         $requestData = $request->all();
         
         $plano = Plano::create($requestData);
-        $plano->empresas()->sync($requestData["empresa_id"]);
+        if(isset($requestData["empresa_id"])) $plano->empresas()->sync($requestData["empresa_id"]);
+
+        $cursos = [];
+        for($i = 0; $i < count($requestData["curso_id"]); $i++){
+            if(intval($requestData["usuarios"][$i]) > 0 && intval($requestData["tempo_acesso"][$i]) > 0){
+                $cursos[$requestData["curso_id"][$i]] = [
+                    'usuarios' => $requestData["usuarios"][$i],
+                    'tempo_acesso' => $requestData["tempo_acesso"][$i],
+                ];
+            }
+        }
+        $plano->cursos()->sync($cursos);        
 
         return redirect()->route('planos.index')
                         ->with('success','Plano criado com sucesso.');
@@ -131,9 +143,10 @@ class PlanoController extends Controller
         $plano = Plano::find($id);
 
         $empresas = \App\Models\Empresa::pluck('nome', 'id')->all();
+        $cursos = \App\Models\Curso::all()->sortBy("nome");  
         $planoEmpresas = $plano->empresas()->pluck('id')->all();       
         
-        return view('planos.edit', compact('plano', 'empresas', 'planoEmpresas'))->with([
+        return view('planos.edit', compact('plano', 'empresas', 'cursos', 'planoEmpresas'))->with([
             'validator' => $validator,
         ]);
     }
@@ -154,7 +167,18 @@ class PlanoController extends Controller
         $requestData = $request->all();
 
         $plano->update($requestData);
-        $plano->empresas()->sync($requestData["empresa_id"]);
+        if(isset($requestData["empresa_id"])) $plano->empresas()->sync($requestData["empresa_id"]);
+
+        $cursos = [];
+        for($i = 0; $i < count($requestData["curso_id"]); $i++){
+            if(intval($requestData["usuarios"][$i]) > 0 && intval($requestData["tempo_acesso"][$i]) > 0){
+                $cursos[$requestData["curso_id"][$i]] = [
+                    'usuarios' => $requestData["usuarios"][$i],
+                    'tempo_acesso' => $requestData["tempo_acesso"][$i],
+                ];
+            }
+        }
+        $plano->cursos()->sync($cursos);
 
         return redirect()->route('planos.index')
                         ->with('success','Plano alterado com sucesso.');

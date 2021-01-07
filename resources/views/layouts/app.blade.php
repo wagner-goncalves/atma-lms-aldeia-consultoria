@@ -45,7 +45,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a class="nav-link " href="{{ route('login') }}">{{ __('Faça o login') }}</a></li>
-                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Cadastre-se') }}</a></li>
+                            <!-- <li><a class="nav-link" href="{{ route('register') }}">{{ __('Cadastre-se') }}</a></li> -->
                         @else
                             
                             <li><span class="nav-link font-weight-bold">{{ Auth::user()->name }}</span></li>
@@ -72,6 +72,11 @@
                                     <a class="dropdown-item" href="{{ route('modulos.index') }}">Módulos</a>
                                     <a class="dropdown-item" href="{{ route('aulas.index') }}">Aulas</a>
                                     <a class="dropdown-item" href="{{ route('materiais.index') }}">Materiais</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item small"><strong>Feedbacks</strong></a>
+                                    <a class="dropdown-item" href="{{ route('questionarios.index') }}">Questionários</a>
+                                    <a class="dropdown-item" href="{{ route('perguntas.index') }}">Perguntas</a>
+                                    <a class="dropdown-item" href="{{ route('respostas.index') }}">Respostas</a>
                                     @endrole
                                 </div>
                             </li>

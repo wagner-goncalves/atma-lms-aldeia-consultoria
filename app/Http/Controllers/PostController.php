@@ -36,12 +36,15 @@ class PostController extends Controller
 
     public function show($curso)
     {
+        
         $aulas = [];
         $curso = \App\Models\Curso::find($curso);
+        
         $erros = $this->valida($curso);
+        
         $posts = [];
 
-        if($erros) return view('posts.index',compact('aulas', 'curso'))->withErrors($erros);
+        if($erros) return view('posts.index',compact('posts', 'curso'))->withErrors($erros);
         
         $posts = \App\Models\Post::whereNull("post_id")->orderBy('created_at', 'desc')
             ->paginate(10); 

@@ -47,7 +47,7 @@ class AulaController extends Controller
             ->with('modulo')
             ->with('materiais')
             ->select('aulas.modulo_id', 'aulas.id', 'aulas.titulo', 'aulas.descricao', 'aulas.carga_horaria', 'aulas.link', 'aulas.ordem')
-            ->simplePaginate(1); 
+            ->simplePaginate(10); 
 
         $visualizacao = \App\Models\Visualizacao::create([
             'aula_id' => $aulas[0]->id,
@@ -55,7 +55,7 @@ class AulaController extends Controller
         ]);
 
         return view('aula.index',compact('aulas', 'curso'))
-            ->with('i', (request()->input('page', 1) - 1) * 2);
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
 

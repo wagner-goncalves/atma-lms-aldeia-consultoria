@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * @property integer $id
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Questionario extends Model
 {
+    use Sortable;
+    
     /**
      * The "type" of the auto-incrementing ID.
      * 
