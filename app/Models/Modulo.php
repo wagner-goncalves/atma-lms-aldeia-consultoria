@@ -47,9 +47,17 @@ class Modulo extends Model
         return $this->hasMany('App\Models\Aula', 'modulo_id');
     }
 
+    public function materiais()
+    {
+        return $this->hasMany('App\Models\Material', 'modulo_id');
+    }    
+
     public function cargaHoraria(){
         $carga = \App\Models\Aula::where('modulo_id', '=', $this->id)
         ->sum('carga_horaria');
+
+        $carga = round($carga / 60, 2);
+
         return $carga;
     }
 }

@@ -13,10 +13,13 @@ use Spatie\Permission\Models\Role;
 use JsValidator;
 use Illuminate\Validation\Rule;
 use App\Models\Empresa;
+
 use App\Notifications\UsuarioCadastrado;
 
 class UserController extends Controller
 {
+    use \App\Traits\HandleSqlError;
+
     protected $validationRules = [
         'name' => 'required',
         'password' => 'required|same:confirm-password',
@@ -133,15 +136,55 @@ class UserController extends Controller
         //Cria papéis
         $roles = $request->input('roles');
         if (!$user->hasRole('Admin')) unset($roles["Admin"]);
+        //Todos os usuários também são alunos, por padrão.
+        if(!in_array("Aluno", $roles)) $roles[] = "Aluno";
         $user->assignRole($roles);
 
+        //Matricula usuário automaticamente em todos os cursos da empresa
+        if(intval($input["empresa_id"]) > 0){
+            $this->matriculaUsuario($user->id, $input["empresa_id"]);
+        }
+       
         //Envia notificação
-        
         $user->notify(new UsuarioCadastrado($user, Empresa::find($input["empresa_id"]), $roles));
 
 
         return redirect()->route('users.index')
             ->with('success', 'Usuário criado com sucesso.');
+    }
+
+    private function matriculaUsuario($user_id, $empresa_id = null){
+
+        $empresas = intval($empresa_id) > 0 ? \App\Models\Empresa::where("id", "=", $empresa_id)->get() : \App\Models\Empresa::all();
+        if($empresas){
+            foreach($empresas as $empresa){
+                $planos = $empresa->planos();
+                if($planos){
+                    foreach($planos->get() as $plano){
+                        $cursos = $plano->cursos();
+                        if($cursos){
+                            foreach($cursos->get() as $curso){
+                                $data_conclusao = new \Carbon\Carbon();
+                                $tempo_acesso = $curso->pivot->tempo_acesso;
+                                $data_limite = $data_conclusao->addDays(intval($tempo_acesso))->toDateTimeString();
+                                $matricula = \App\Models\Matricula::updateOrCreate(
+                                    [
+                                        "user_id" => $user_id, 
+                                        "plano_id" => $plano->id, 
+                                        "curso_id" => $curso->id, 
+                                        "empresa_id" => $empresa->id
+                                    ],
+                                    [
+                                        "tempo_acesso" => $tempo_acesso, 
+                                        "data_limite" => $data_limite
+                                    ]
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -258,7 +301,21 @@ class UserController extends Controller
             ->with('error', 'Operação inválida.');
         }
 
-        $user->delete();
+        DB::beginTransaction();
+        try{
+
+            if($user->hasRole('Admin')){
+                $user->feedbacks()->delete();
+            }
+
+            $user->delete();
+            DB::commit();
+        } catch(\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            $mensagem = $this->formatSqlError($e->getPrevious()->getErrorCode(), $e->getMessage());
+            return redirect()->route('users.index')->with('error', sprintf('Não foi possível excluir o registro. <br />%s', $mensagem));
+        }
+
         return redirect()->route('users.index')
             ->with('success', 'Usuário excluído com sucesso.');
     }

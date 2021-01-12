@@ -34,7 +34,7 @@ class Material extends Model
     /**
      * @var array
      */
-    protected $fillable = ['aula_id', 'titulo', 'descricao', 'arquivo', 'link', 'ordem', 'is_active'];
+    protected $fillable = ['aula_id', 'modulo_id', 'titulo', 'descricao', 'arquivo', 'link', 'ordem', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -43,6 +43,11 @@ class Material extends Model
     {
         return $this->belongsTo('App\Models\Aula');
     }
+
+    public function modulo()
+    {
+        return $this->belongsTo('App\Models\Modulo');
+    }    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

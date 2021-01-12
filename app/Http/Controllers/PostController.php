@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\PostCriado;
 
 class PostController extends Controller
 {
@@ -34,22 +35,36 @@ class PostController extends Controller
         return $this->show($curso);
     }    
 
-    public function show($curso)
+    public function show($curso, Request $request)
     {
-        
-        $aulas = [];
-        $curso = \App\Models\Curso::find($curso);
-        
-        $erros = $this->valida($curso);
-        
+        $empresa_id = "";
         $posts = [];
+        $empresas = [];
+        $requestData = $request->all();
+        $curso = \App\Models\Curso::find($curso);
+        $erros = $this->valida($curso);
 
         if($erros) return view('posts.index',compact('posts', 'curso'))->withErrors($erros);
-        
-        $posts = \App\Models\Post::whereNull("post_id")->orderBy('created_at', 'desc')
-            ->paginate(10); 
 
-        return view('posts.index',compact('posts', 'curso'))
+        $user = auth()->user();
+
+        $posts = \App\Models\Post::whereNull("post_id")
+            ->where("curso_id", "=", $curso->id)
+            ->orderBy('created_at', 'desc');
+
+        if($user->hasRole('Admin')){
+            $empresas = \App\Models\Empresa::orderBy("nome")->get();
+            if(isset($requestData["empresa_id"]) && intval($requestData["empresa_id"]) > 0){
+                $posts->where("empresa_id", "=", $requestData["empresa_id"]);
+                $empresa_id = $requestData["empresa_id"];
+            }
+        }else{
+            $posts->where("empresa_id", "=", $user->empresa_id);
+        }
+
+        $posts = $posts->paginate(10); 
+
+        return view('posts.index',compact('posts', 'curso', 'empresas', 'empresa_id'))
             ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
@@ -59,8 +74,14 @@ class PostController extends Controller
         $requestData = $request->all();
 
         $requestData["user_id"] = auth()->user()->id;
+        $requestData["empresa_id"] = auth()->user()->empresa_id;
         
         $post = \App\Models\Post::create($requestData);
+
+        $loggedUser = auth()->user();
+        $curso = \App\Models\Curso::find($post->curso_id);
+        $userDestinatario = \App\Models\User::find(1);
+        $userDestinatario->notify(new PostCriado($loggedUser, $loggedUser->empresa, $curso, $post));
 
         return redirect()->route('posts.show', $requestData["curso_id"])
             ->with('success', 'Post criado com sucesso.');        

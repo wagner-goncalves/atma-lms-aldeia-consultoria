@@ -90,7 +90,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <div class="form-group">
-                                <strong>Carga horária:</strong>
+                                <strong>Carga horária (minutos inteiros):</strong>
                                 {!! Form::input('number', 'carga_horaria', $aula->carga_horaria, ['placeholder' => '', 'class' => 'form-control col-12']) !!}
                             </div>
                         </div>   
@@ -110,20 +110,28 @@
                         'descricao']) !!}
                     </div>
                 </div>
+
+
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <strong>Link YOUTUBE:</strong>
-                        {!! Form::textarea('link', $aula->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
-                        'link']) !!}
-                        <p class="small">Exemplo de link (copie, cole e troque o link do vídeo indicado em negrito).</p>
-                        <p>
-
-                            {{ '<iframe class="embed-responsive-item"' }} {!!'src="<strong>https://www.youtube.com/embed/XXXXXXXXXX?controls=1</strong>" '!!} {{'frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' }}
-
-                        </p>
+                    <div class="form-row">
+                        <div class="form-group  col-md-6">
+                            <strong>Link YOUTUBE:</strong>
+                            {!! Form::text('link', $aula->link, ['placeholder' => '', 'class' => 'form-control', 'id' =>
+                            'link']) !!}
+                            <p class="small">Exemplo de link (copie APENAS a parte em NEGRITO do youtube). <br />
+                                {{ '<iframe class="embed-responsive-item"' }} {!!'src="https://www.youtube.com/embed/<strong>XXXXXXXXXX</strong>?controls=1" '!!} {{'frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' }}
+    
+                            </p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @if($aula->link != "") 
+                            <div class="mx-2">{!!$linkFormatado!!}</div>
+                            @endif
+                        </div>                           
                     </div>
                 </div>
             </div>
+                
 
             <div class="form-group row">
                 <div class="col-sm-10">

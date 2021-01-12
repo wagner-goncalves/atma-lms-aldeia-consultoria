@@ -53,13 +53,13 @@
             @csrf
             <div class="row">
                 @php
-                $curso_id = intval($material->id) == 0 ? 0 : $material->aula->modulo->curso->id ;
+                $curso_id = intval($material->id) == 0 ? 0 : $material->modulo->curso->id ;
                 @endphp
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="curso_id"><strong>Curso</strong></label>
+                            <label for="curso_id"><strong>Curso:</strong></label>
                             <select id="curso_id" name="curso_id" class="form-control">
                                 @foreach ($cursos as $curso)
                                     <option value="{{ $curso->id }}" {{ $curso_id == $curso->id ? 'selected' : '' }}>
@@ -69,11 +69,11 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="modulo_id"><strong>Módulo</strong></label>
+                            <label for="modulo_id"><strong>Módulo:</strong></label>
                             <select id="modulo_id" name="modulo_id" class="form-control">
                                 @if($curso_id > 0)
-                                <option value="{{ $material->aula->modulo->id }}" selected>
-                                    {{ $material->aula->modulo->nome }}
+                                <option value="{{ $material->modulo->id }}" selected>
+                                    {{ $material->modulo->nome }}
                                 </option>
                                 @endif
                             </select>
@@ -82,9 +82,9 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Aula:</strong>
+                        <strong>Aula <span class="small">(Deixe em branco para cadastrar o material diretamente no módulo.)</span></strong>
                         <select id="aula_id" name="aula_id" class="form-control">
-                            @if($curso_id > 0)
+                            @if(intval($material->aula_id) > 0)
                             <option value="{{ $material->aula_id }}" selected>{{ $material->aula->titulo }}</option>
                             @endif
                         </select>

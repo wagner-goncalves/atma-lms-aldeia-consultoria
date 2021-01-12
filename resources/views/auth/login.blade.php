@@ -5,24 +5,22 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
     <script>
-
-        $( document ).ready(function() {
+        $(document).ready(function() {
             $("input.telefone")
-            .mask("(99) 9999-9999?9")
-            .focusout(function (event) {  
-                var target, phone, element;  
-                target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
-                phone = target.value.replace(/\D/g, '');
-                element = $(target);  
-                element.unmask();  
-                if(phone.length > 10) {  
-                    element.mask("(99) 99999-999?9");  
-                } else {  
-                    element.mask("(99) 9999-9999?9");  
-                }  
-            });
+                .mask("(99) 9999-9999?9")
+                .focusout(function(event) {
+                    var target, phone, element;
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);
+                    element.unmask();
+                    if (phone.length > 10) {
+                        element.mask("(99) 99999-999?9");
+                    } else {
+                        element.mask("(99) 9999-9999?9");
+                    }
+                });
         });
-
 
     </script>
 
@@ -38,8 +36,8 @@
                         <div class="card-body">
 
 
-                            <div class="card-title titulo-destaque"><i class="fas fa-vote-yea"></i>
-                                {{ __('Entre e Participe') }}
+                            <div class="card-title titulo-destaque text-center">
+                                PROGRAMA CORPORATIVO GESTANTES E FUTUROS PAIS
                             </div>
                             <hr />
 
@@ -55,11 +53,9 @@
                                     <div class="col-md-6">
 
 
-  
-                                            <input id="email"
-                                                class="form-control @error('email') is-invalid @enderror"
-                                                name="email" value="{{ old('email') }}" required autocomplete="email"
-                                                autofocus>
+
+                                        <input id="email" class="form-control @error('email') is-invalid @enderror"
+                                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
 
 
@@ -119,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
 

@@ -86,7 +86,8 @@ class AulaAdministracaoController extends Controller
         $cursos = \App\Models\Curso::all()->sortBy("nome");
 
         $aula = new Aula();
-        return view('aulas.edit', compact('aula', 'cursos'))->with([
+        $linkFormatado = "";
+        return view('aulas.edit', compact('aula', 'cursos', 'linkFormatado'))->with([
             'validator' => $validator,
         ]);
     }
@@ -136,7 +137,9 @@ class AulaAdministracaoController extends Controller
             ->sortBy("nome");
 
         $aula = Aula::find($id);
-        return view('aulas.edit', compact('aula', 'cursos'))->with([
+        $linkFormatado = $this->formataLink($aula->link);
+        
+        return view('aulas.edit', compact('aula', 'cursos', 'linkFormatado'))->with([
             'validator' => $validator,
         ]);
     }
@@ -190,5 +193,10 @@ class AulaAdministracaoController extends Controller
         $retorno["selected"] = "";
 
         return response()->json($retorno);
+    }
+
+    private function formataLink($codigoVideo){
+        if($codigoVideo == "") return "";
+        return sprintf('<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/%s?controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', $codigoVideo);
     }
 }

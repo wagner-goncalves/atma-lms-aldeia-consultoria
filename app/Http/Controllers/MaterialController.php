@@ -18,7 +18,8 @@ class MaterialController extends Controller
 
     protected $validationRules = [
         'titulo' => 'required',
-        'aula_id' => 'required',
+        'modulo_id' => 'required',
+        'curso_id' => 'required',
         //'email' => 'required|email|unique:users,email',
         //'password' => 'required|same:confirm-password',
         'ordem' => 'required',
@@ -27,7 +28,7 @@ class MaterialController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        
     }
 
     /**
@@ -37,6 +38,9 @@ class MaterialController extends Controller
      */
     public function index(Request $request)
     {
+
+            $this->middleware('role:Admin');
+
             $filter = $request->query('filter');
             $curso_id = $request->query('curso_id');
             $modulo_id = $request->query('modulo_id');    
@@ -44,14 +48,14 @@ class MaterialController extends Controller
             $materiais = "";
 
             $materiais = Material::sortable()
-                    ->join("aulas", "aulas.id", "=", "materiais.aula_id")
-                    ->join("modulos", "modulos.id", "=", "aulas.modulo_id")
-                    ->join("cursos", "cursos.id", "=", "modulos.curso_id")
+                    ->leftJoin("aulas", "aulas.id", "=", "materiais.aula_id")
+                    ->leftJoin("modulos", "modulos.id", "=", "materiais.modulo_id")
+                    ->leftJoin("cursos", "cursos.id", "=", "modulos.curso_id")
                     ->orderBy('id', 'desc')
                     ->select("materiais.*", "cursos.nome as curso_nome");
 
             if(intval($aula_id) > 0) $materiais->where('materiais.aula_id', '=', $aula_id);
-            if(intval($modulo_id) > 0) $materiais->where('aulas.modulo_id', '=', $modulo_id);
+            if(intval($modulo_id) > 0) $materiais->where('materiais.modulo_id', '=', $modulo_id);
             if(intval($curso_id) > 0) $materiais->where('modulos.curso_id', '=', $curso_id);                    
     
             if (!empty($filter)) {
@@ -105,6 +109,10 @@ class MaterialController extends Controller
      */
     public function store(Request $request)
     {
+
+
+
+
         $this->validate($request, $this->validationRules);
         $requestData = $request->all();
 

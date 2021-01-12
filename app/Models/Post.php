@@ -28,7 +28,7 @@ class Post extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'curso_id', 'post_id', 'post', 'created_at', 'is_active'];
+    protected $fillable = ['user_id', 'curso_id', 'post_id', 'empresa_id', 'post', 'created_at', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

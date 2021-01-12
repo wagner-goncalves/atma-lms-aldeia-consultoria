@@ -20,13 +20,15 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
 
-                        <a href="{{route('home')}}" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-save"></i> Voltar para o início</a>
+                        <a href="{{route('home')}}" class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i class="fas fa-check"></i> ACESSAR CURSO</a>
 
                     </div>    
                 </div>            
             @else
                 <div class="alert alert-danger">
-                    Sua senha expirou, por favor, troque-a abaixo.
+                    Este é o seu primeiro acesso. Para sua segurança, cadastre uma senha personalizada.
+                    <br /><strong>Importante:</strong> o seu próximo acesso será realizado com a senha deste cadastro.
+
                 </div>
 
                 <form class="form-horizontal" method="POST" action="{{ route('password.post_expired') }}">

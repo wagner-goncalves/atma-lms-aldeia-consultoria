@@ -22,7 +22,9 @@
             <div>
                 <div class="row mt-3">
                     <div class="col">
-                        Agradecemos o seu feedback!
+                        <h4>Obrigado por participar do nosso curso.</h4>
+                        <p>Esperamos ter contribuído com o nosso propósito de apoiar famílias a vivenciarem a parentalidade pró ativa, promovendo o vínculo, a segurança e o respeito mútuo.</p>
+                        <a class="btn btn-success" href="{{ route('certificado.download', ['curso' => $curso->id]) }}"><i class="fa fa-file" aria-hidden="true"></i>  CLIQUE PARA REALIZAR O DOWNLOAD DO SEU CERTIFICADO</a>
                     </div>
                 </div>
                 

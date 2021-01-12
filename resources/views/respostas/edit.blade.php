@@ -6,9 +6,9 @@
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
                     @if (!isset($resposta->id) || intval($resposta->id) == 0)
-                        <i class="fas fa-plus"></i> Novo resposta
+                        <i class="fas fa-plus"></i> Nova opção de resposta
                     @else
-                        <i class="fas fa-edit"></i> Editar resposta
+                        <i class="fas fa-edit"></i> Editar opção de resposta
                     @endif
                 </div>
             </div>

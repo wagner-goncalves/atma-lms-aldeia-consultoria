@@ -61,6 +61,10 @@ class Empresa extends Model
             ->count();
         return $quantidadeAlunosMatriculados;
     }
+
+    public function alunosRestantes(){
+        
+    }
     
     public function atingiuMaximoContratado($empresa_id, $plano_id, $curso_id){
         return $this->quantidadeAlunosMatriculados($empresa_id, $plano_id, $curso_id) >= $this->maximoAlunosPlano($empresa_id, $plano_id, $curso_id);

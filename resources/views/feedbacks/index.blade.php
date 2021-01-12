@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    <i class="fas fa-file-signature"></i> Gerenciar matrículas
+                    <i class="fas fa-file-signature"></i> Visualizar feedbacks dos alunos
                 </div>
             </div>
         </div>
@@ -13,14 +13,7 @@
 
     <div class="row">
         <div class="col-lg-12 mb-3">
-            <div class="row">
-                <div class="col-lg-12 col-sm-12">
-                    <div class="form-group">
-                        <a href="{{ route('matriculas.create') }}" class="btn btn-success"><i class="fas fa-plus"></i>
-                            Matricula</a>
-                    </div>
-                </div>
-            </div>
+
             <form method="GET" action="{{ \Request::getRequestUri() }}" enctype='multipart/form-data'>
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
@@ -60,12 +53,18 @@
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="form-group col">
-                                <label for="filter" class="small"><strong>Palavra-chave</strong></label>
-                                <input type="text" class="form-control form-control-sm" id="filter" name="filter"
-                                    placeholder="Palavra-chave" value="{{ $filter }}">
+                                <label for="user_id" class="small"><strong>Aluno</strong></label>
+                                <select id="user_id" name="user_id" class="form-control form-control-sm">
+                                    <option value="">Todos</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}" {{ $user_id == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+
                             <div class="form-group col">
                                 <label class="small"><strong>&nbsp;</strong></label>
                                 <div>
@@ -142,22 +141,12 @@
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-body small">
-                            <h5 class="card-title">Importar arquivo de matrículas</h5>
-                            <p class="card-text">Obrigatóriamente, use os filtros acima para indicar em qual curso serão realizadas as matrículas importadas. Veja o <a href="{{ asset('docs/Exemplo_Importacao_Matriculas.xlsx') }}">exemplo</a> de arquivo de matrículas.</p>
-                            <p class="card-text"><input name="arquivo" type="file" id="arquivo_matricula"></p>
-                            <button id="btn-importar" type="submit" class="btn btn-sm btn-primary mb-2"><i
-                                    class="fas fa-file-import fa-lg"></i> Importar</button>
-                        </div>
-                    </div>
-
 
                     {!! Form::close() !!}
                 </div>
 
-                <div class="col-lg-6 col-sm-6">
-                    {!! Form::open(['route' => 'matriculas.exportar', 'method' => 'post', 'id' => 'form-exportar']) !!}
+                <div class="col-lg-12 col-sm-12">
+                    {!! Form::open(['route' => 'feedbacks.exportar', 'method' => 'post', 'id' => 'form-exportar']) !!}
                     <script>
                         $(document).ready(function() {
                             $('#form-exportar').on('submit', function(e) {
@@ -165,10 +154,12 @@
                                 var empresa = parseInt($("#empresa_id").val());
                                 var plano = parseInt($("#plano_id").val());
                                 var curso = parseInt($("#curso_id").val());
+                                var user = parseInt($("#user_id").val());
 
                                 $("#empresa_id_exportar").val(empresa);
                                 $("#plano_id_exportar").val(plano);
                                 $("#curso_id_exportar").val(curso);
+                                $("#user_id_exportar").val(user);
 
                                 return;
 
@@ -182,19 +173,16 @@
                     {!! Form::hidden('empresa_id', null, ['id' => 'empresa_id_exportar']) !!}
                     {!! Form::hidden('plano_id', null, ['id' => 'plano_id_exportar']) !!}
                     {!! Form::hidden('curso_id', null, ['id' => 'curso_id_exportar']) !!}
-
-
+                    {!! Form::hidden('user_id', null, ['id' => 'user_id_exportar']) !!}
 
                     <div class="card">
                         <div class="card-body small">
-                            <h5 class="card-title">Exportar dados de alunos e matrículas</h5>
+                            <h5 class="card-title">Exportar feedback de alunos.</h5>
                             <p class="card-text">Opcionalmente, use os filtros acima para personalizar o relatório.</p>
                             <button id="btn-exportar" type="submit" class="btn btn-sm btn-primary mb-2"><i
                                     class="fas fa-file-excel fa-lg"></i> Exportar</button>
                         </div>
                     </div>
-
-
 
                     {!! Form::close() !!}
                 </div>
@@ -208,44 +196,25 @@
                             <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
                         </div>
                     @endif
-                    
-                    @if ($quantidadeAlunosMatriculados != "")
-                    <hr />
-                        <h4 class="pull-right">{{$quantidadeAlunosMatriculados}} de {{$quantidadePermitida}} matrículas.</h4>
-                    @endif
 
                     <table class="table table-bordered">
                         <tr>
                             <th>#</th>
-                            <th>@sortablelink('empresa_nome', 'Empresa') / @sortablelink('plano_nome', 'Plano') /
-                                @sortablelink('curso_nome', 'Curso')</th>
-                            <th>Matrícula</th>
                             <th>Aluno</th>
-                            <th>@sortablelink('data_limite', 'Data limite')</th>
-                            <th>@sortablelink('data_conclusao', 'Data de conclusão')</th>
-                            <th>Ações</th>
+                            <th>Curso</th>
+                            <th>Questionário</th>
+                            <th>Pergunta</th>
+                            <th>Resposta do aluno</th>
                         </tr>
-                        @forelse ($matriculas as $matricula)
+                        @forelse ($feedbacks as $feedback)
                             <tr>
                                 <td>{{ ++$i }}</td>
-                                <td class="small"><b>Empresa:</b> {{ $matricula->empresa->nome }}<br />
-                                    <b>Plano:</b> {{ $matricula->plano->nome }}<br />
-                                    <b>Curso:</b> {{ $matricula->curso->nome }}
+                                <td class="small">{{ $feedback->aluno }}<br />{{ $feedback->cpf }}<br />{{ $feedback->email }}
                                 </td>
-                                <td><a href="{{ route('matriculas.edit', $matricula->id) }}">{{ $matricula->id }}</a></td>
-                                <td><a href="{{ route('matriculas.edit', $matricula->id) }}">{{ $matricula->user->name }}</a>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($matricula->data_limite)->format('d/m/Y') }}</td>
-                                <td>{{ empty($matricula->data_conclusao) ? 'Não concluído' : \Carbon\Carbon::parse($matricula->data_conclusao)->format('d/m/Y') }}
-                                </td>
-                                <td nowrap>
-                                    <a class="btn btn-sm btn-primary" href="{{ route('matriculas.edit', $matricula->id) }}"><i
-                                            class="fas fa-edit"></i></a>
-                                    {!! Form::open(['method' => 'DELETE', 'route' => ['matriculas.destroy', $matricula->id],
-                                    'style' => 'display:inline']) !!}
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                    {!! Form::close() !!}
-                                </td>
+                                <td class="small">{{ $feedback->curso }}</td>
+                                <td class="small">{{ $feedback->questionario }}</td>
+                                <td class="small">{{ $feedback->pergunta }}</td>
+                                <td class="small">{{ $feedback->resposta }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -260,7 +229,7 @@
 
     <div class="row">
         <div class="col-lg-12 mb-3">
-            {!! $matriculas->appends(request()->query())->links() !!}
+            {!! $feedbacks->appends(request()->query())->links() !!}
         </div>
     </div>
 
@@ -283,6 +252,15 @@
         $("#curso_id").depdrop({
             url: '/matriculas/cursos',
             depends: ['plano_id', 'empresa_id'],
+            loadingText: 'Carregando...',
+            placeholder: 'Escolha...',
+            //initialize: true,
+            //initDepends: ['curso_id'],
+        });
+
+        $("#user_id").depdrop({
+            url: '/feedbacks/alunos',
+            depends: ['plano_id', 'empresa_id', 'curso_id'],
             loadingText: 'Carregando...',
             placeholder: 'Escolha...',
             //initialize: true,

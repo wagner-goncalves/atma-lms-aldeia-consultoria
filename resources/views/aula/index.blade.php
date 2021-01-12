@@ -33,10 +33,29 @@
                     <div class="row">
                         <div class="col-12 col-md-8 col-sm-12 mb-3">
                             <div class="embed-responsive embed-responsive-16by9">
-                                {!! $aula->link !!}
+                                {!! sprintf('<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/%s?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', $aula->link) !!}
                             </div>
                         </div>
                         <div class="col-12 col-md-4 col-sm-12 mb-3">
+
+                            @if($aula->descricao != "")
+                            <div class="card mb-2" style="width: 100%">
+                                <div class="list-group">
+                                    <span class="list-group-item list-group-item-action flex-column align-items-start active">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Sobre esta aula</h5>
+                                        </div>
+                                    </span>
+
+                                        <span class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                {!! $aula->descricao !!}
+                                            </div>
+                                        </span>
+                                </div>
+                            </div>
+                            @endif
+
                             <div class="card" style="width: 100%">
                                 <div class="list-group">
                                     <span class="list-group-item list-group-item-action flex-column align-items-start active">
@@ -94,6 +113,21 @@
                 <div class="row mt-3">
                     <div class="col-lg-12 mb-3 text-right">
                         {!! $aulas->appends(request()->query())->links() !!}
+                    </div>
+                </div>
+                @endif
+
+                @if(!$aulas->hasMorePages() && !$curso->feedbackRespondido())
+                <div class="row mt-3">
+                    <div class="col-lg-12 mb-3">
+                        <div class="alert alert-success" role="alert">
+                            <i class="fas fa-trophy"></i>
+                            <strong>VOCÊ FINALIZOU TODAS AS AULAS COM SUCESSO.</strong> <br />
+                            Por favor preencha o nosso questionário de avaliação para ter acesso ao seu certificado. <br />
+                            <a href="{{ route('feedback', ['curso' => $curso->id]) }}" class="btn btn-success">
+                            PREENCHER QUESTIONÁRIO
+                            </a>
+                        </div>   
                     </div>
                 </div>
                 @endif

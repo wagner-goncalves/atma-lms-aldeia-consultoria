@@ -36,7 +36,7 @@ class Aula extends Model
     /**
      * @var array
      */
-    protected $fillable = ['modulo_id', 'titulo', 'descricao', 'carga_horaria', 'link', 'ordem', 'created_at', 'updated_at', 'is_active'];
+    protected $fillable = ['modulo_id', 'titulo', 'descricao', 'banner', 'carga_horaria', 'link', 'ordem', 'created_at', 'updated_at', 'is_active'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -51,7 +51,7 @@ class Aula extends Model
      */
     public function materiais()
     {
-        return $this->hasMany('App\Models\Material');
+        return $this->hasMany('App\Models\Material')->orderBy("ordem");
     }
 
     /**

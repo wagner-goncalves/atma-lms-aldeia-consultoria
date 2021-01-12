@@ -20,6 +20,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\QuestionarioController;
 use App\Http\Controllers\PerguntaController;
 use App\Http\Controllers\RespostaController;
+use App\Http\Controllers\FeedbackAdministracaoController;
 
 use App\Http\Controllers\Auth\ExpiredPasswordController;
 
@@ -57,7 +58,7 @@ Route::get('mail', function () {
     $curso = \App\Models\Curso::find(1);
     //$user->notify(new \App\Notifications\AlunoCadastrado());
 
-    return (new \App\Notifications\AlunoCadastrado(
+    return (new \App\Notifications\PostCriado(
             $user, 
             $empresa, 
             $curso
@@ -105,6 +106,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/matriculas/planos', [MatriculaController::class, 'planos'])->name('matriculas.planos')->withoutMiddleware(['csrf']);
     Route::post('/matriculas/cursos', [MatriculaController::class, 'cursos'])->name('matriculas.cursos')->withoutMiddleware(['csrf']);
     Route::post('/matriculas/exportar', [MatriculaController::class, 'exportar'])->name('matriculas.exportar');
+
+    Route::resource('feedbacks', FeedbackAdministracaoController::class);
+    Route::post('/feedbacks/alunos', [FeedbackAdministracaoController::class, 'alunos'])->name('feedbacks.alunos')->withoutMiddleware(['csrf']);
+    Route::post('/feedbacks/exportar', [FeedbackAdministracaoController::class, 'exportar'])->name('feedbacks.exportar');
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

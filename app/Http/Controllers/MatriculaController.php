@@ -90,7 +90,17 @@ class MatriculaController extends Controller
         $planos = intval($empresa_id) > 0 ? \App\Models\Empresa::find($empresa_id)->planos()->get() : [];
         $cursos = intval($plano_id) > 0 ? \App\Models\Plano::find($plano_id)->cursos()->get() : [];
 
-        return view('matriculas.index', compact('matriculas', 'cursos', 'curso_id', 'planos', 'plano_id', 'empresas', 'empresa_id', 'filter'))
+        $empresa = new \App\Models\Empresa();
+
+        $quantidadePermitida = "";
+        $quantidadeAlunosMatriculados = "";
+
+        if(intval($empresa_id) > 0 && intval($plano_id) > 0 && intval($curso_id) > 0){
+            $quantidadePermitida = $empresa->maximoAlunosPlano($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);
+            $quantidadeAlunosMatriculados = $empresa->quantidadeAlunosMatriculados($requestData["empresa_id"], $requestData["plano_id"], $requestData["curso_id"]);
+        }      
+
+        return view('matriculas.index', compact('quantidadePermitida', 'quantidadeAlunosMatriculados', 'matriculas', 'cursos', 'curso_id', 'planos', 'plano_id', 'empresas', 'empresa_id', 'filter'))
             ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
@@ -179,7 +189,6 @@ class MatriculaController extends Controller
             ->orWhere('email', '=', $requestData["email"])
             ->first();
 
-
         if(is_object($userVerified)){
             unset($this->validationRules['email']);
             unset($this->validationRules['cpf']);
@@ -201,7 +210,13 @@ class MatriculaController extends Controller
         $requestData["tempo_acesso"] = $plano->cursos()->find($requestData["curso_id"])->pivot->tempo_acesso;
         $data_conclusao = new \Carbon\Carbon();
         $requestData["data_limite"] = $data_conclusao->addDays(intval($requestData["tempo_acesso"]))->toDateTimeString();
-        $matricula = Matricula::create($requestData);
+        
+        try{
+            //TODO - Em caso de usuário duplicado
+            $matricula = Matricula::create($requestData);
+        }catch(\Exception $e){
+
+        }
 
         //Envia notificação
         if(!is_object($userVerified)) $user->notify(new AlunoCadastrado($user, Empresa::find($matricula->empresa_id), Curso::find($matricula->curso_id)));
@@ -330,13 +345,30 @@ class MatriculaController extends Controller
     public function cursos(Request $request)
     {
         $plano_id = $request->input('depdrop_all_params.plano_id');
+        $empresa_id = $request->input('depdrop_all_params.empresa_id');
+
         $plano = \App\Models\Plano::find($plano_id);
 
-        $cursos = !is_object($plano) ? null : $plano->cursos()->select("id", DB::raw('CONCAT(nome, " (", usuarios, " restantes", ") ") as name'))
-            ->orderBy("nome")
-            ->get(['id', 'name']);
+        $cursos = DB::select(DB::raw("
+        select c.id as id, concat(c.nome, ' (restam ', pc.usuarios - 
+        (SELECT COUNT(*) FROM matriculas m1 WHERE m1.curso_id = c.id AND m1.plano_id = p.id and m1.empresa_id = e.id) , ')') as name 
+        from planos p
+        inner join planos_has_cursos pc on pc.plano_id = p.id
+        inner join cursos c on c.id = pc.curso_id 
+        inner join planos_has_empresas pe on pe.plano_id = p.id
+        inner join empresas e on e.id = pe.empresa_id
+        where p.id = :plano and e.id = :empresa
+        order by c.nome"), array(
+                'plano' => $plano_id,
+                'empresa' => $empresa_id,
+            )
+        );
 
-        $retorno["output"] = !is_object($cursos)? [] : $cursos->toArray();
+        //$cursos = !is_object($plano) ? null : $plano->cursos()->select("id", DB::raw('nome as name'))
+        //    ->orderBy("nome")
+        //    ->get(['id', 'name']);
+
+        $retorno["output"] = $cursos;
         $retorno["selected"] = "";
 
         return response()->json($retorno);

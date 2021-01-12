@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    <i class="fas fa-file-alt"></i> Gerenciar respostas
+                    <i class="fas fa-file-alt"></i> Gerenciar opções de respostas
                 </div>
             </div>
         </div>

@@ -29,5 +29,11 @@
 .bg-banner{
     background-color: rgb(71, 71, 71); 
 }
- 
 
+.bg-aldeia{
+    background-color: #46255d;
+}
+ 
+.bg-info-aldeia{
+    background-color: #c84567;
+}

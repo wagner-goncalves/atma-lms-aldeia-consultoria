@@ -82,7 +82,6 @@
                     <i class="fas fa-exclamation-circle fa-lg"></i> {{ $message }}
                 </div>
             @endif
-
             <table class="table table-bordered">
                 <tr>
                     <th>#</th>
@@ -94,9 +93,12 @@
                 @forelse ($materiais as $material)
                     <tr>
                         <td>{{ ++$i }}</td>
-                        <td class="small"><b>Curso:</b> {{ $material->aula->modulo->curso->nome }}<br />
-                            <b>Modulo:</b> {{ $material->aula->modulo->nome }}<br />
-                            <b> Aula:</b> {{ $material->aula->titulo }}</td>
+                        <td class="small"><b>Curso:</b> {{ $material->modulo->curso->nome }}<br />
+                            <b>Modulo:</b> {{ $material->modulo->nome }}<br />
+                            @if($material->aula)
+                            <b> Aula:</b> {{ $material->aula->titulo }}
+                            @endif
+                        </td>
                         <td><a href="{{ route('materiais.edit', $material->id) }}">{{ $material->titulo }}</a></td>
                         <td>{!! $material->descricao !!}</td>
                         <td nowrap>

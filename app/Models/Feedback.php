@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * @property integer $id
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
 class Feedback extends Model
 {
 
+    use Sortable;
+    
     protected $table = 'feedbacks';
 
     /**
