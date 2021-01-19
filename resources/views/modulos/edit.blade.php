@@ -5,10 +5,10 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left pb-3">
                 <div class="titulo-destaque">
-                    @if(!isset($modulo->id) || intval($modulo->id) == 0)
-                    <i class="fas fa-plus"></i> Novo módulo
+                    @if (!isset($modulo->id) || intval($modulo->id) == 0)
+                        <i class="fas fa-plus"></i> Novo módulo
                     @else
-                    <i class="fas fa-edit"></i> Editar módulo
+                        <i class="fas fa-edit"></i> Editar módulo
                     @endif
                 </div>
             </div>
@@ -21,10 +21,10 @@
                     <div class="form-group">
                         <a href="{{ route('modulos.index') }}"
                             class="btn btn-success pr-4 pl-4 text-dark font-weight-bold text-uppercase"><i
-                                class="fas fa-chevron-left"></i> Voltar</a> 
-                        @if(intval($modulo->id) > 0)
-                            {!! Form::open(['method' => 'DELETE', 'route' =>
-                            ['modulos.destroy', $modulo->id], 'style' => 'display:inline']) !!}
+                                class="fas fa-chevron-left"></i> Voltar</a>
+                        @if (intval($modulo->id) > 0)
+                            {!! Form::open(['method' => 'DELETE', 'route' => ['modulos.destroy', $modulo->id], 'style' =>
+                            'display:inline']) !!}
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                             {!! Form::close() !!}
                         @endif
@@ -44,8 +44,9 @@
             @endif
 
 
-            @if(!isset($modulo->id) || intval($modulo->id) == 0)
-                {!! Form::open(['route' => 'modulos.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'edit-form']) !!}
+            @if (!isset($modulo->id) || intval($modulo->id) == 0)
+                {!! Form::open(['route' => 'modulos.store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' =>
+                'edit-form']) !!}
             @else
                 {!! Form::model($modulo, ['method' => 'PATCH', 'enctype' => 'multipart/form-data', 'id' => 'edit-form',
                 'route' => ['modulos.update', isset($modulo->id) ? $modulo->id : 0]]) !!}
@@ -78,19 +79,37 @@
                                 {!! Form::text('nome', $modulo->nome, ['placeholder' => '', 'class' => 'form-control']) !!}
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             <div class="form-group">
                                 <strong>Ordem:</strong>
-                                {!! Form::input('number', 'ordem', $modulo->ordem, ['placeholder' => '', 'class' => 'form-control col-6']) !!}
+                                {!! Form::input('number', 'ordem', $modulo->ordem, ['placeholder' => '', 'class' =>
+                                'form-control col-6']) !!}
                             </div>
                         </div>
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>Módulo bônus?</strong>
+                                <p>
+                                    <input type="radio" id="modulo_padrao_0" name="modulo_padrao" value="0"
+                                        {{ $modulo->modulo_padrao == 0 ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="modulo_padrao_0"> Sim </label>
+                                    <input type="radio" id="modulo_padrao_1" name="modulo_padrao" value="1"
+                                        {{ $modulo->modulo_padrao != 0 ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="modulo_padrao_1"> Não </label>
+                                </p>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Descrição:</strong>
-                        {!! Form::textarea('descricao', $modulo->descricao, ['placeholder' => '', 'class' => 'form-control', 'id' =>
-                        'descricao']) !!}
+                        {!! Form::textarea('descricao', $modulo->descricao, ['placeholder' => '', 'class' => 'form-control',
+                        'id' => 'descricao']) !!}
                     </div>
                 </div>
             </div>

@@ -44,7 +44,10 @@ class CertificadoController extends Controller
 
         $texto1 = utf8_decode($dadosCertificado["empresa"]);
         $texto2 = utf8_decode("pela participação no " . $dadosCertificado["nome_curso"] . " \n concluido em " . utf8_encode(strftime('%d/%m/%Y', strtotime($dadosCertificado["data_conclusao"]))) . " com carga horária total de " . $dadosCertificado["carga_horaria"] . " horas.");
-        $texto3 = utf8_decode("Belo Horizonte, " . strftime('%d de %B de %Y', strtotime($dadosCertificado["data_conclusao"])));
+        
+        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+        date_default_timezone_set('America/Sao_Paulo');
+        $texto3 = utf8_decode(strftime('%d de %B de %Y', strtotime($dadosCertificado["data_conclusao"])));
 
         //$pdf = new AlphaPDF();
 
@@ -61,23 +64,25 @@ class CertificadoController extends Controller
         //$pdf->SetAlpha(1);
 
         // Mostrar texto no topo
-        $pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
-        $pdf->SetXY(109, 46); //Parte chata onde tem que ficar ajustando a posição X e Y
-        $pdf->MultiCell(265, 10, $texto1, '', 'L', 0); // Tamanho width e height e posição
+        //$pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
+        //$pdf->SetXY(109, 46); //Parte chata onde tem que ficar ajustando a posição X e Y
+        //$pdf->MultiCell(265, 10, $texto1, '', 'L', 0); // Tamanho width e height e posição
 
         // Mostrar o nome
         $pdf->SetFont('Arial', '', 30); // Tipo de fonte e tamanho
+        $pdf->SetTextColor(72, 32, 89);
         $pdf->SetXY(20, 86); //Parte chata onde tem que ficar ajustando a posição X e Y
         $pdf->MultiCell(265, 10, utf8_decode($dadosCertificado["nome_aluno"]), '', 'C', 0); // Tamanho width e height e posição
 
         // Mostrar o corpo
-        $pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
-        $pdf->SetXY(20, 110); //Parte chata onde tem que ficar ajustando a posição X e Y
-        $pdf->MultiCell(265, 10, $texto2, '', 'C', 0); // Tamanho width e height e posição
+        //$pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
+        //$pdf->SetXY(20, 110); //Parte chata onde tem que ficar ajustando a posição X e Y
+        //$pdf->MultiCell(265, 10, $texto2, '', 'C', 0); // Tamanho width e height e posição
 
         // Mostrar a data no final
         $pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
-        $pdf->SetXY(25, 172); //Parte chata onde tem que ficar ajustando a posição X e Y
+        $pdf->SetTextColor(72, 32, 89);
+        $pdf->SetXY(40, 154); //Parte chata onde tem que ficar ajustando a posição X e Y
         $pdf->MultiCell(165, 10, $texto3, '', 'L', 0); // Tamanho width e height e posição
 
         $pdfdoc = $pdf->Output('D', 'Certificado ' . ($dadosCertificado["nome_curso"]) . '.pdf', true);

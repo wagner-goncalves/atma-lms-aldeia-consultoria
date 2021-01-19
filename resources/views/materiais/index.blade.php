@@ -93,8 +93,13 @@
                 @forelse ($materiais as $material)
                     <tr>
                         <td>{{ ++$i }}</td>
-                        <td class="small"><b>Curso:</b> {{ $material->modulo->curso->nome }}<br />
+                        <td class="small"><b>Curso:</b> 
+                            @if($material->modulo)
+                            {{ $material->modulo->curso->nome }}<br />
+                            @endif
+                            @if($material->modulo)
                             <b>Modulo:</b> {{ $material->modulo->nome }}<br />
+                            @endif
                             @if($material->aula)
                             <b> Aula:</b> {{ $material->aula->titulo }}
                             @endif

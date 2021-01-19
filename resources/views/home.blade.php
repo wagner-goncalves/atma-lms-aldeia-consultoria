@@ -13,9 +13,9 @@
                 @role('Aluno')
                 <div>
                     @forelse ($cursos as $curso)
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-9">
-                                <h1>{{ $curso->nome }}</h1>
+                                <!-- <h1>{{ $curso->nome }}</h1> -->
                             </div>
                             <div class="col-3 text-right">
                                 <a href="{{ route('posts.show', ['post' => $curso->id]) }}" class="btn btn-danger pull-right"><i
@@ -74,8 +74,12 @@
 
                             <div class="row no-gutters mb-4">
                                 <div class="col-md-4 p-3 mb-2 bg-info-aldeia text-white">
+                                    @if($modulo->modulo_padrao == 1)
                                     <h3 class="font-weight-bold">Módulo {{ $modulo->ordem }}</h3>
                                     <h5>{{ $modulo->nome }}</h5>
+                                    @else
+                                    <h3 class="font-weight-bold">{{ $modulo->nome }}</h3>
+                                    @endif
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

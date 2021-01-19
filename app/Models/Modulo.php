@@ -29,7 +29,7 @@ class Modulo extends Model
     /**
      * @var array
      */
-    protected $fillable = ['curso_id', 'nome', 'descricao', 'ordem'];
+    protected $fillable = ['curso_id', 'nome', 'descricao', 'ordem', 'modulo_padrao'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

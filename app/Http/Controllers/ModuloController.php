@@ -78,6 +78,7 @@ class ModuloController extends Controller
         $cursos = \App\Models\Curso::all()->sortBy("nome");
 
         $modulo = new Modulo();
+        $modulo->modulo_padrao = 1;
         return view('modulos.edit', compact('modulo', 'cursos'))->with([
             'validator' => $validator,
         ]);
@@ -149,13 +150,7 @@ class ModuloController extends Controller
         $modulo = Modulo::find($id);
         $requestData = $request->all();
 
-        if(isset($requestData->arquivo)){
-            $caminho = $request->file('arquivo')->store('modulos');
-            $requestData["arquivo"] = $caminho;
-        }else{
-            $requestData["arquivo"] = $modulo->arquivo;
-        }
-
+        
         $modulo->update($requestData);
 
         return redirect()->route('modulos.index')

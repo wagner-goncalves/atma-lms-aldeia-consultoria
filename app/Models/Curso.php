@@ -28,7 +28,7 @@ class Curso extends Model
     /**
      * @var array
      */
-    protected $fillable = ['nome', 'descricao', 'certificado', 'base_certificado', 'is_active'];
+    protected $fillable = ['nome', 'descricao', 'certificado', 'base_certificado', 'is_active', 'mensagem_conclusao'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

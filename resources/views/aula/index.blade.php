@@ -122,7 +122,8 @@
                     <div class="col-lg-12 mb-3">
                         <div class="alert alert-success" role="alert">
                             <i class="fas fa-trophy"></i>
-                            <strong>VOCÊ FINALIZOU TODAS AS AULAS COM SUCESSO.</strong> <br />
+                            {!! $curso->mensagem_conclusao !!}
+                            <br />
                             Por favor preencha o nosso questionário de avaliação para ter acesso ao seu certificado. <br />
                             <a href="{{ route('feedback', ['curso' => $curso->id]) }}" class="btn btn-success">
                             PREENCHER QUESTIONÁRIO
