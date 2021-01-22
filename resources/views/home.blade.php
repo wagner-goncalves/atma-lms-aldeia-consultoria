@@ -14,10 +14,11 @@
                 <div>
                     @forelse ($cursos as $curso)
                         <div class="row mb-2">
-                            <div class="col-9">
-                                <!-- <h1>{{ $curso->nome }}</h1> -->
+                            <!-- <div class="col-9">
+                                <h1>{{ $curso->nome }}</h1>
                             </div>
-                            <div class="col-3 text-right">
+                        -->
+                            <div class="col-12 text-right">
                                 <a href="{{ route('posts.show', ['post' => $curso->id]) }}" class="btn btn-danger pull-right"><i
                                         class="fa fa-users"></i> Fórum de
                                     discussão</a>
@@ -142,8 +143,8 @@
                                                                         class="fa fa-video"></i>
                                                                 @endif
                                                                 {{ $aula->titulo }} <span
-                                                                    class="badge badge-secondary">{{ $aula->carga_horaria }}
-                                                                    {{ Str::plural('hora', $aula->carga_horaria) }}</span>
+                                                                    class="badge badge-secondary">{{ round($aula->carga_horaria / 60, 2) }}
+                                                                    {{ Str::plural('hora',  round($aula->carga_horaria / 60, 0)) }}</span> 
                                                                 @endif
                                                         </td>
                                                         @if ($linkAberto)
@@ -252,10 +253,12 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
+                                                    @if ($feedbackRespondido)
                                                     <a class="btn btn-sm btn-primary"
                                                         href="{{ route('certificado.download', ['curso' => $curso->id]) }}"><i
                                                             class="fas fa-download" aria-hidden="true"></i></a>
                                                     </form>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>{{ config('app.name', 'SIPAT 2020') }}</title>
+<title>{{ config('app.name', 'Aldeia Contultoria') }}</title>
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
 <!-- Fonts -->
@@ -14,3 +14,5 @@
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 <meta name="google" content="notranslate">
 <script src="https://kit.fontawesome.com/2c7146b1c7.js" crossorigin="anonymous"></script>
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">

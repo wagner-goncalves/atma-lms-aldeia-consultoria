@@ -27,7 +27,12 @@
                 @forelse ($aulas as $aula)
                     <div class="row">
                         <div class="col-12">
-                            <h3>Módulo {{ $aula->modulo->ordem }} - Aula: {{ $aula->titulo }}</h3>
+                            <h3>
+                                @if($aula->modulo->modulo_padrao == 1)
+                                Módulo {{ $aula->modulo->ordem }} - 
+                                @endif
+                                Aula: {{ $aula->titulo }}
+                            </h3>
                         </div>
                     </div>
                     <div class="row">

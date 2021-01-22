@@ -33,8 +33,19 @@ class CertificadoController extends Controller
         return $info;
     }
 
+    private function valida($curso_id){
+        $curso = \App\Models\Curso::find($curso_id); 
+        if(!is_object($curso)) abort(403, 'Acesso negado.');
+        $percentualConclusao = $curso->percentualConclusao();
+        $feedbackRespondido = $curso->feedbackRespondido();
+        if($percentualConclusao < 100 || !$feedbackRespondido) abort(403, 'Acesso negado.');
+    }
+
     public function download($curso)
     {
+
+        $this->valida($curso);
+
         $user = auth()->user();
         $certificado = ["user_id" => $user->id, "curso_id" => $curso];
         \App\Models\Certificado::create($certificado);
