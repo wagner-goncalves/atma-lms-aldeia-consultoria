@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-aldeia">
+<nav class="navbar navbar-expand-lg navbar-light bg-aldeia">
     @guest
         <a class="navbar-brand" href="{{ url('/') }}">
             <img class="img-fluid" style="width:100%" src="{{ asset('images/logo-aldeia.png') }}" />

@@ -44,7 +44,7 @@ class Modulo extends Model
      */
     public function aulas()
     {
-        return $this->hasMany('App\Models\Aula', 'modulo_id');
+        return $this->hasMany('App\Models\Aula', 'modulo_id')->orderBy('ordem');
     }
 
     public function materiais()

@@ -1,5 +1,7 @@
-php artisan krlove:generate:model Empresas --output-path=Models --namespace=App\Models
-php artisan make:controller CertificadoController
-
-Comitê de crise com NARA
-Marcar reunião com gerentes
+1 - https://king.host/wiki/artigo/como-acessar-o-ftp-do-meu-site-por-ssh/
+2 - https://king.host/wiki/artigo/como-instalar-o-composer/
+3 - https://king.host/wiki/artigo/como-instalar-o-laravel-em-seu-site/
+4 - git clone https://github.com/wagner-goncalves/atma-lms-aldeia-consultoria lms-hom
+5 - Configurar .env
+6 - php ../../composer.phar install --no-dev
+7 - git pull origin master

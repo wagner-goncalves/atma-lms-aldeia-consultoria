@@ -133,8 +133,8 @@
                                                                 @endif
                                                                 <i class="fa fa-fw fa-video"></i> <a
                                                                     href="{{ route('aula', ['curso' => $curso->id, 'page' => $aula->ordem]) }}">{{ $aula->titulo }}</a>
-                                                                <span class="badge badge-secondary">{{ round($aula->carga_horaria / 60, 2) }}
-                                                                    {{ Str::plural('hora', round($aula->carga_horaria / 60, 0)) }}</span>
+                                                                <span class="badge badge-secondary">{{ $aula->carga_horaria }}
+                                                                    {{ Str::plural('minuto', $aula->carga_horaria) }}</span>
                                                             @else
                                                                 @if ($tempoRestanteCurso < 0 && $aula->ordem <= $ultimaOrdemVisualizada)
                                                                     <i class="fa fa-fw fa-check text-success"></i>
@@ -143,8 +143,8 @@
                                                                         class="fa fa-video"></i>
                                                                 @endif
                                                                 {{ $aula->titulo }} <span
-                                                                    class="badge badge-secondary">{{ round($aula->carga_horaria / 60, 2) }}
-                                                                    {{ Str::plural('hora',  round($aula->carga_horaria / 60, 0)) }}</span> 
+                                                                    class="badge badge-secondary">{{ $aula->carga_horaria }}
+                                                                    {{ Str::plural('minuto',  $aula->carga_horaria) }}</span> 
                                                                 @endif
                                                         </td>
                                                         @if ($linkAberto)

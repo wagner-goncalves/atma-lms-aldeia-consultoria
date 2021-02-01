@@ -81,7 +81,7 @@ class CertificadoController extends Controller
 
         // Mostrar o nome
         $pdf->SetFont('Arial', '', 30); // Tipo de fonte e tamanho
-        $pdf->SetTextColor(72, 32, 89);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetXY(20, 86); //Parte chata onde tem que ficar ajustando a posição X e Y
         $pdf->MultiCell(265, 10, utf8_decode($dadosCertificado["nome_aluno"]), '', 'C', 0); // Tamanho width e height e posição
 
@@ -92,7 +92,7 @@ class CertificadoController extends Controller
 
         // Mostrar a data no final
         $pdf->SetFont('Arial', '', 15); // Tipo de fonte e tamanho
-        $pdf->SetTextColor(72, 32, 89);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetXY(40, 154); //Parte chata onde tem que ficar ajustando a posição X e Y
         $pdf->MultiCell(165, 10, $texto3, '', 'L', 0); // Tamanho width e height e posição
 
