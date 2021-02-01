@@ -31,7 +31,7 @@
                                 @if($aula->modulo->modulo_padrao == 1)
                                 Módulo {{ $aula->modulo->ordem }} - 
                                 @endif
-                                Aula: {{ $aula->titulo }}
+                                {{ $aula->titulo }}
                             </h3>
                         </div>
                     </div>
