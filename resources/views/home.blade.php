@@ -98,7 +98,7 @@
                                         $materiais = $modulo->materiais()->get();
                                         @endphp  
 
-                                        @if (count($materiais) > 1)                                      
+                                        @if (count($materiais) > 0)                                      
                                         <div class="media mb-3">
                                             <i class="fa fa-2x fa-fw fa-download"></i>
                                             <div class="media-body ml-3">

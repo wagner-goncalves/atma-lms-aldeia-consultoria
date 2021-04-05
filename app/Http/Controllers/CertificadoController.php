@@ -44,6 +44,29 @@ class CertificadoController extends Controller
     public function download($curso)
     {
 
+        /**
+         * 
+         * 
+         * 
+Step 1. Download all the variant's of your font (Regular, Bold, Italic, Bold-Italic)
+
+Step 2. Convert all the fonts to font-name.php and font-name.z from http://www.fpdf.org/makefont/
+
+Step 3. Copy all *.php and *.z files in fonts/ folder which is in root directory of fpdf.php. [You can rename *.php files, but don't rename *.z once you converted them from ttf].
+
+Step 4. Use this code to import the font into your pdf:
+
+//Importing Font and it's variations
+$fpdf->AddFont('Gotham','','Gotham-Book.php'); //Regular
+$fpdf->AddFont('Gotham','B','Gotham-Book-bold.php'); //Bold
+$fpdf->AddFont('Gotham','I','Gotham-Book-italic.php'); //Italic
+$fpdf->AddFont('Gotham','BI','Gotham-Book-bold-italic.php'); //Bold_Italic
+
+//Now use it as normal font
+$fpdf->SetFont('Gotham','B',11);
+         * 
+         */
+
         $this->valida($curso);
 
         $user = auth()->user();
@@ -80,7 +103,8 @@ class CertificadoController extends Controller
         //$pdf->MultiCell(265, 10, $texto1, '', 'L', 0); // Tamanho width e height e posição
 
         // Mostrar o nome
-        $pdf->SetFont('Arial', '', 30); // Tipo de fonte e tamanho
+        $pdf->AddFont('Allura','','Allura-Regular.php'); //Regular
+        $pdf->SetFont('Allura', '', 50); // Tipo de fonte e tamanho
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetXY(20, 86); //Parte chata onde tem que ficar ajustando a posição X e Y
         $pdf->MultiCell(265, 10, utf8_decode($dadosCertificado["nome_aluno"]), '', 'C', 0); // Tamanho width e height e posição

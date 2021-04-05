@@ -175,8 +175,7 @@ class MaterialController extends Controller
 
         $material = Material::find($id);
         $requestData = $request->all();
-
-        if(isset($requestData->arquivo)){
+        if(isset($requestData["arquivo"])){
             $caminho = $request->file('arquivo')->store('materiais');
             $requestData["arquivo"] = $caminho;
         }else{
@@ -239,4 +238,4 @@ class MaterialController extends Controller
 
         return response()->json($retorno);
     }    
-}
+}		
